@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="public/notepage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+    <script src="public/syncscroll/syncscroll.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <title>FastNote</title>
+</head>
+<body>
+    <script>
+        function mdSwitch() {
+            var mdValue = document.getElementById("md-area").value;
+            var converter = new showdown.Converter();
+            var html = converter.makeHtml(mdValue);
+            document.getElementById("show-area").innerHTML = html;
+        }
+    </script>
+    <script src="public/js/jquery.js"></script>
+    
+    <script type="text/javascript">
+
+        document.onkeydown=function() {
+        if (event.keyCode == 8) {
+            if (document.activeElement.type == "text"||document.activeElement.type == "textarea"||document.activeElement.type == "password") {
+                if (document.activeElement.readOnly == false)
+                    m = document.getElementById("md-area");
+                    m.style.height='auto';
+                    m.style.height = m.scrollHeight + 'px';
+                    return true;
+            }
+            
+            return false;
+        }
+    }
+    </script>
+    <div id="bg">
+        <div id="left"  class=syncscroll name=myElements> 
+            <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"></textarea>
+            <div style="height: 40%;"></div>
+        </div>
+        <div id="right" class=syncscroll name=myElements>
+            <div id="show-area">
+                <div style="height: 20px;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

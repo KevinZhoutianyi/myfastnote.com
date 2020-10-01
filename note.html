@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>md转换为html</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+    <link  rel="stylesheet" type="text/css" href="public/style.css">
+    
+</head>
+
+<body>
+    <div style="font-size: 20px;height: 30px; text-align: center;color: #009689; font-weight: bold;">Markdown转换为HTML的Demo</div>
+
+    <script>
+    function mdSwitch() {
+        var mdValue = document.getElementById("md-area").value;
+        var converter = new showdown.Converter();
+        var html = converter.makeHtml(mdValue);
+        document.getElementById("show-area").innerHTML = html;
+    }
+    </script>
+    <div id="area">
+        <table>
+            <tr>
+                <td><textarea name="" id="md-area" onkeyup=mdSwitch()></textarea></td>
+                <td>
+                    <div id="show-area" class="clearfix"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h1>1231331</h1>
+</body>
+
+</html>
