@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
 })
  
 
-app.post('/process_get',urlencodedParser, function (req, res) {
+app.post('/notepage',urlencodedParser, function (req, res) {
    console.log("in pro get")
    // 输出 JSON 格式
    var response = {
