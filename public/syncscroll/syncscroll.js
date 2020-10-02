@@ -31,6 +31,7 @@
 
     var reset = function() {
         var elems = document.getElementsByClassName('sync'+scroll);
+       
 
         // clearing existing listeners
         var i, j, el, found, name;
@@ -90,37 +91,40 @@
 
                         el.eX = scrollX;
                         el.eY = scrollY;
-
-                        for (;i < elems[length];) {
-                            otherEl = elems[i++];
-                            if (otherEl != el) {
-                                if (updateX &&
-                                    Math_round(
-                                        otherEl[scroll+Left] -
-                                        (scrollX = otherEl.eX =
-                                         Math_round(xRate *
-                                             (otherEl[scroll+Width] -
-                                              otherEl[client+Width]))
+                        
+                        if(localStorage.islock == 1){
+                            for (;i < elems[length];) {
+                                otherEl = elems[i++];
+                                if (otherEl != el) {
+                                    if (updateX &&
+                                        Math_round(
+                                            otherEl[scroll+Left] -
+                                            (scrollX = otherEl.eX =
+                                             Math_round(xRate *
+                                                 (otherEl[scroll+Width] -
+                                                  otherEl[client+Width]))
+                                            )
                                         )
-                                    )
-                                ) {
-                                    otherEl[scroll+Left] = scrollX;
-                                }
-                                
-                                if (updateY &&
-                                    Math_round(
-                                        otherEl[scroll+Top] -
-                                        (scrollY = otherEl.eY =
-                                         Math_round(yRate *
-                                             (otherEl[scroll+Height] -
-                                              otherEl[client+Height]))
+                                    ) {
+                                        otherEl[scroll+Left] = scrollX;
+                                    }
+                                    
+                                    if (updateY &&
+                                        Math_round(
+                                            otherEl[scroll+Top] -
+                                            (scrollY = otherEl.eY =
+                                             Math_round(yRate *
+                                                 (otherEl[scroll+Height] -
+                                                  otherEl[client+Height]))
+                                            )
                                         )
-                                    )
-                                ) {
-                                    otherEl[scroll+Top] = scrollY;
+                                    ) {
+                                        otherEl[scroll+Top] = scrollY;
+                                    }
                                 }
                             }
                         }
+                        
                     }, 0
                 );
             })(el, name);

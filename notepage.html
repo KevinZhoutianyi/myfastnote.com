@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <script src="public/syncscroll/syncscroll.js"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>localStorage.islock= 1;</script>
     <title>FastNote</title>
 </head>
 <body>
@@ -14,12 +15,16 @@
         function mdSwitch() {
             var mdValue = document.getElementById("md-area").value;
             var converter = new showdown.Converter();
+            converter.setOption('simpleLineBreaks', true);
             var html = converter.makeHtml(mdValue);
+            for (let index = 0; index < 10; index++) {
+                html += "<br>";
+            }
+            
             document.getElementById("show-area").innerHTML = html;
         }
     </script>
     <script src="public/js/jquery.js"></script>
-    
     <script type="text/javascript">
 
         document.onkeydown=function() {
@@ -28,7 +33,7 @@
                 if (document.activeElement.readOnly == false)
                     m = document.getElementById("md-area");
                     m.style.height='auto';
-                    m.style.height = m.scrollHeight + 'px';
+                    m.style.height = m.scrollHeight - 50 + 'px';
                     return true;
             }
             
@@ -36,16 +41,37 @@
         }
     }
     </script>
+  
+    <script type="text/javascript">
+        function lock(){
+            if(localStorage.islock == 1){
+                localStorage.islock = 0;
+                $("#locked").hide();
+                $("#notlocked").show();
+            }else{
+                localStorage.islock = 1;
+                $("#locked").show();
+                $("#notlocked").hide();
+            }            
+        }
+    </script>
+    <div id="topbar"></div>
     <div id="bg">
         <div id="left"  class=syncscroll name=myElements> 
             <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"></textarea>
-            <div style="height: 40%;"></div>
+            <div style="height: 50%;"></div>
+            <Img src="public/downarrow.png" onclick="" id="downarrow" ></Img>
         </div>
         <div id="right" class=syncscroll name=myElements>
             <div id="show-area">
                 <div style="height: 20px;"></div>
             </div>
+            <Img src="public/locker.png" onclick="lock()" id="locked" ></Img>
+
+            <Img src="public/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
+           
         </div>
     </div>
+    <div id="bottombar"></div>
 </body>
 </html>
