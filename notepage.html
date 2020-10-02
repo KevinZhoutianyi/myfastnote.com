@@ -7,10 +7,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <script src="public/syncscroll/syncscroll.js"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script>localStorage.islock= 1;</script>
+    <script>localStorage.islock= 1;localStorage.isarrowdown=1; </script>
     <title>FastNote</title>
 </head>
-<body>
+<body onLoad="document.getElementById('md-area').focus();">
+    
+    <!-- markdown interpretion -->
     <script>
         function mdSwitch() {
             var mdValue = document.getElementById("md-area").value;
@@ -25,6 +27,10 @@
         }
     </script>
     <script src="public/js/jquery.js"></script>
+
+
+    
+    <!-- adjust height of the md-area -->
     <script type="text/javascript">
 
         document.onkeydown=function() {
@@ -42,6 +48,7 @@
     }
     </script>
   
+    <!-- lock button event -->
     <script type="text/javascript">
         function lock(){
             if(localStorage.islock == 1){
@@ -55,23 +62,70 @@
             }            
         }
     </script>
+
+     <!-- arrow button event -->
+     <script type="text/javascript">
+        function arrow(){
+            if(localStorage.isarrowdown == 1){
+                localStorage.isarrowdown = 0;
+                $("#downarrow").hide();
+                $("#uparrow").show();
+                $("#pop").show();
+            }else{
+                localStorage.isarrowdown = 1;
+                $("#downarrow").show();
+                $("#uparrow").hide();
+                $("#pop").hide();
+                document.getElementById('md-area').focus();
+            }            
+        }
+    </script>
+
+
+
+    <div id="pop"  style="display: none;">
+
+        <img src="public/avator.png" id="avator" alt="">
+        <div style="width: 30%; height: 100%; z-index: 12;" onclick="arrow()"></div>
+        <div id="menu">
+            <div id="menutextarea">
+                <br><h1>什么是</h1><br>12313<h3>这里是目录哦<h3>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313
+                
+            </div>
+            
+
+        </div>
+        <div style="width: 30%; height: 100%;z-index: 12;"onclick="arrow()"></div>
+
+    </div>
+
+
     <div id="topbar"></div>
+
+
     <div id="bg">
         <div id="left"  class=syncscroll name=myElements> 
             <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"></textarea>
             <div style="height: 50%;"></div>
-            <Img src="public/downarrow.png" onclick="" id="downarrow" ></Img>
+            <Img src="public/downarrow.png" onclick="arrow()" id="downarrow" ></Img>
+            <Img src="public/uparrow.png" onclick="arrow()" id="uparrow" hidden></Img>
         </div>
         <div id="right" class=syncscroll name=myElements>
             <div id="show-area">
-                <div style="height: 20px;"></div>
+                <div style="height: 20px;">
+                    
+                
+                </div>
             </div>
             <Img src="public/locker.png" onclick="lock()" id="locked" ></Img>
-
             <Img src="public/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
            
         </div>
     </div>
+
+
+
     <div id="bottombar"></div>
+
 </body>
 </html>
