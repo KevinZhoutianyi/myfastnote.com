@@ -1,10 +1,14 @@
 
 <html>
-<body>
-<form action="http://myfastnote.com/notepage" method="POST">
-my last Name: <input type="text" name="username">  <br>
-my first Name: <input type="text" name="password">
-<input type="submit" value="Submit">
-</form>
-</body>
-</html>
+    <body>
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>localStorage.username = $("#name").value</script>
+    <form action="http://myfastnote.com/main" method="POST">
+    my last Name: <input type="text" name="username" id = "name">  <br>
+    my first Name: <input type="text" name="password">
+    <input type="submit" value="Submit" id="btn">
+    </form>
+    </body>
+    </html>
+    
+    <!-- 存localstorage username不行。 应该在onclick事件时候 保存 -->

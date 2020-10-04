@@ -5,6 +5,7 @@ var mysql      = require('mysql');
 var dbConfig = require('./database/DBConfig');//数据库登陆信息
 var querySql = require('./database/querysql');//
 var bodyParser = require('body-parser');
+const { send } = require('process');
 var pool = mysql.createPool( dbConfig.mysql );//创建数据库池
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var app = express();
@@ -38,10 +39,14 @@ app.get('/', function (req, res) {
    console.log( req.ip + "visit your server");
    res.sendFile( __dirname + "/" + "index.html" );
 })
+app.get('/notepage/getdata', function (req, res) {
+   console.log("get data get~!");
+   res.send('12313');
+})
  
 
-app.post('/notepage',urlencodedParser, function (req, res) {
-   console.log("in pro get")
+app.post('/main',urlencodedParser, function (req, res) {
+   console.log(req.body.username+","+req.body.password+"   login ing")
    // 输出 JSON 格式
    var response = {
        "username":req.body.username,
@@ -53,24 +58,21 @@ app.post('/notepage',urlencodedParser, function (req, res) {
       var params = [];
       params[0] = response["username"];
       params[1] = response["password"];
-      var qu = "select username from user where username = '"+params[0]+"' and password = '"+params[1]+"'";
+      var qu = "select userid from user where username = '"+params[0]+"' and password = '"+params[1]+"'";
       connection.query(qu,function(err,result){
-         connection.release();
          if(result.length==1){
             console.log("login success")
+            connection.release();
             res.sendFile( __dirname + "/" + "notepage.html" );
          }
          else{
             console.log("login fail")
+            connection.release();
             res.sendFile( __dirname + "/" + "index.html" );
          }    
          })
       })
 })
- 
-
-
-
 
 
 

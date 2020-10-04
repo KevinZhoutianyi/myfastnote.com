@@ -10,7 +10,7 @@
     <script>localStorage.islock= 1;localStorage.isarrowdown=1; </script>
     <title>FastNote</title>
 </head>
-<body onLoad="document.getElementById('md-area').focus(); mdSwitch();">
+<body onLoad="document.getElementById('md-area').focus();  loadData(); ">
     
     <!-- markdown interpretion -->
     <script>
@@ -26,9 +26,29 @@
             document.getElementById("show-area").innerHTML = html;
         }
     </script>
+
     <script src="public/js/jquery.js"></script>
 
+    <script type="text/javascript">
+        function loadData() {
+            console.log(localStorage.username)
+            $.ajax({
+                url:"notepage/getdata",
+                type: "get",
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    $("#md-area").val(returnValue);
+                    mdSwitch();
+                },
+                error: function (returnValue) {
+                    alert("对不起！数据加载失败！");
+                    mdSwitch();
+                }
+            })
+            
+        }
 
+    </script>
     
     <!-- adjust height of the md-area -->
     <script type="text/javascript">
@@ -105,8 +125,7 @@
 
     <div id="bg">
         <div id="left"  class=syncscroll name=myElements> 
-            <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"># This is just some test
-            # xD</textarea>
+            <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"># loading ...</textarea>
             <div style="height: 50%;"></div>
             <Img src="public/downarrow.png" onclick="arrow()" id="downarrow" ></Img>
             <Img src="public/uparrow.png" onclick="arrow()" id="uparrow" hidden></Img>
