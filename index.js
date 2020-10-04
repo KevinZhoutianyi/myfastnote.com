@@ -39,8 +39,8 @@ app.get('/', function (req, res) {
    console.log( req.ip + "visit your server");
    res.sendFile( __dirname + "/" + "index.html" );
 })
-app.get('/notepage/getdata', function (req, res) {
-   console.log("get data get~!");
+app.post('/notepage/getdata', function (req, res) {
+   console.log("post: data get~!");
    res.send('12313');
 })
  

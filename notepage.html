@@ -31,12 +31,13 @@
 
     <script type="text/javascript">
         function loadData() {
-            console.log(localStorage.username)
+            // to do : get the real data
+            console.log("username: "+localStorage.username)
             $.ajax({
                 url:"notepage/getdata",
-                type: "get",
+                type: "post",
                 success: function (returnValue) {
-                    console.log(returnValue)
+                    console.log("dataloaded:"+returnValue)
                     $("#md-area").val(returnValue);
                     mdSwitch();
                 },
