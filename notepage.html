@@ -10,7 +10,7 @@
     <script>localStorage.islock= 1;localStorage.isarrowdown=1; </script>
     <title>FastNote</title>
 </head>
-<body onLoad="document.getElementById('md-area').focus();">
+<body onLoad="document.getElementById('md-area').focus(); mdSwitch();">
     
     <!-- markdown interpretion -->
     <script>
@@ -89,7 +89,7 @@
         <div style="width: 30%; height: 100%; z-index: 12;" onclick="arrow()"></div>
         <div id="menu">
             <div id="menutextarea">
-                <br><h1>什么是</h1><br>12313<h3>这里是目录哦<h3>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313<br>12313
+                <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3><h4>文章名<h4></h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3></h3>
                 
             </div>
             
@@ -105,7 +105,8 @@
 
     <div id="bg">
         <div id="left"  class=syncscroll name=myElements> 
-            <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"></textarea>
+            <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"># This is just some test
+            # xD</textarea>
             <div style="height: 50%;"></div>
             <Img src="public/downarrow.png" onclick="arrow()" id="downarrow" ></Img>
             <Img src="public/uparrow.png" onclick="arrow()" id="uparrow" hidden></Img>
