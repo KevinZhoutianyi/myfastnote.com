@@ -29,6 +29,7 @@
 
     <script src="public/js/jquery.js"></script>
 
+    <!-- loaddata -->
     <script type="text/javascript">
         function loadData() {
             // to do : get the real data
@@ -38,8 +39,12 @@
                 type: "post",
                 data:{username : localStorage.username},
                 success: function (returnValue) {
-                    console.log("dataloaded:"+returnValue)
-                    $("#md-area").val(returnValue);
+                    console.log("dataloaded:"+ JSON.stringify(returnValue) )
+                    document.getElementById("md-area").innerHTML= returnValue.content;
+                    localStorage.nowopenfileid = returnValue.id;
+                    m = document.getElementById("md-area");
+                    m.style.height='auto';
+                    m.style.height = m.scrollHeight + 50 + 'px';
                     mdSwitch();
                 },
                 error: function (returnValue) {
@@ -48,11 +53,17 @@
                 }
             })
             $.ajax({
-                url:"notepage/getcontent",
+                url:"notepage/getcatalogue",
                 type: "post",
                 data:{username : localStorage.username},
                 success: function (returnValue) {
-                    console.log("dataloaded:"+returnValue)
+                    var content = JSON.stringify(returnValue);
+                    var showhtml = "";
+                    for (let index = 0; index < returnValue.length; index++) {
+                        showhtml += '<h3>' + returnValue[index].filename+ '</h3>';
+                        
+                    }
+                    document.getElementById("menutextarea").innerHTML = showhtml;
                 },
                 error: function (returnValue) {
                     alert("对不起！数据加载失败！");
@@ -75,11 +86,39 @@
                     m.style.height = m.scrollHeight - 50 + 'px';
                     return true;
             }
-            
+            m = document.getElementById("md-area");
+            m.style.height='auto';
+            m.style.height = m.scrollHeight - 50 + 'px';
             return false;
         }
+       
+        
     }
     </script>
+    <!-- ctrl s to save -->
+    <script language="JavaScript">
+        window.addEventListener("keydown", function(e) {
+                //可以判断是不是mac，如果是mac,ctrl变为花键
+                //event.preventDefault() 方法阻止元素发生默认的行为。
+                if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                    e.preventDefault();
+                    // Process event...
+                    m = document.getElementById("md-area").value;
+                    $.ajax({
+                        url:"notepage/savedata",
+                        type: "post",
+                        data:{content : m,id :localStorage.nowopenfileid},
+                        success: function (returnValue) {
+                            alert("保存成功");
+                        },
+                        error: function (returnValue) {
+                            console.log("save fail")
+                        }
+                    })
+                }
+             
+            }, false);
+            </script>
   
     <!-- lock button event -->
     <script type="text/javascript">

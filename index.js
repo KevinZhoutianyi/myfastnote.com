@@ -44,7 +44,7 @@ app.get('/query' , function(req,res,next){
 
 
 app.get('/', function (req, res) {
-   console.log( req.ip + "visit your server");
+   console.log( req.ip + "visit your server  \n");
    res.sendFile( __dirname + "/" + "index.html" );
 })
 
@@ -60,24 +60,25 @@ app.post('/notepage/getdata',urlencodedParser, function (req, res) {
    console.log("username:"+username+" is ask for data");
 
    pool.getConnection(function(err,connection){
-      console.log("connection to sql success \n")
+      console.log("getdata : connection to sql success")
       var qu = "select lastopenfileid from user where username = '"+username+"'";
       connection.query(qu,function(err,result){
          if(result.length==1){
             qu = "select content from note where fileid = '"+result[0].lastopenfileid+"'";
             connection.query(qu,function(err,result2){
                if(result.length>=1){
-                  res.send(result2[0].content);
+                  var x = {content:result2[0].content,id:result[0].lastopenfileid}
+                  res.send(x);
                }
                else{
-                  console.log("connection to mysql fail")
+                  console.log("getdata : connection to mysql fail")
                }    
                })
             connection.release();
-            console.log("mysql release \n")
+            console.log("getdata : mysql release")
          }
          else{
-            console.log("connection to mysql fail")
+            console.log("getdata : connection to mysql fail")
             connection.release();
          }    
          })
@@ -89,31 +90,54 @@ app.post('/notepage/getdata',urlencodedParser, function (req, res) {
 
 
 
-app.post('/notepage/getcontent',urlencodedParser, function (req, res) {
+app.post('/notepage/getcatalogue',urlencodedParser, function (req, res) {
    var username = req.body.username;
    console.log("username:"+username+" is ask for content");
 
    pool.getConnection(function(err,connection){
-      console.log("connection to sql success \n")
+      console.log("getcatalogue: connection to sql success")
       var qu = "select userid from user where username = '"+username+"'";
       connection.query(qu,function(err,result){
          if(result.length>=1){
-            qu = "select filename,isnote,level from note where userid = '"+result[0].userid+"'";
+            qu = "select filename,isnote,level from catalogue where userid = "+result[0].userid;
             connection.query(qu,function(err,result2){
                if(result.length>=1){
-                  console.log(result2)
+                  res.send(result2)
                }
                else{
-                  console.log("connection to mysql fail")
+                  console.log("getcatalogue:  connection to mysql fail")
                }    
                })
             connection.release();
-            console.log("mysql release \n")
+            console.log("getcatalogue:  mysql release")
          }
          else{
-            console.log("connection to mysql fail")
+            console.log("getcatalogue:  connection to mysql fail")
             connection.release();
          }    
+         })
+      })
+
+})
+
+
+
+app.post('/notepage/savedata',urlencodedParser, function (req, res) {
+   var content = req.body.content;
+   var id = req.body.id;
+   console.log("is saving data for file " + id);
+
+   pool.getConnection(function(err,connection){
+      console.log("savedata : connection to sql success")
+      var qu = "update note set content ='" + content + "'where fileid ="+id;
+      connection.query(qu,function(err,result){
+         if(err){
+            console.log('[UPDATE ERROR] - ',err.message);
+            return;
+         } 
+         connection.release();
+         console.log("savedata : mysql release")
+         res.send("success");
          })
       })
 
@@ -134,7 +158,7 @@ app.post('/main',urlencodedParser, function (req, res) {
        "password":req.body.password
    };
    pool.getConnection(function(err,connection){
-      console.log("connection to sql success")
+      console.log("userlogin : connection to sql success")
       //var params = req.query || req.params;        //前端传的参数（暂时写这里，在这个例子中没用）
       var params = [];
       params[0] = response["username"];
@@ -144,13 +168,13 @@ app.post('/main',urlencodedParser, function (req, res) {
          if(result.length==1){
             console.log("login success")
             connection.release();
-            console.log("mysql release \n")
+            console.log("userlogin : mysql release")
             res.sendFile( __dirname + "/" + "notepage.html" );
          }
          else{
             console.log("login fail")
             connection.release();
-            console.log("mysql release \n")
+            console.log("userlogin : mysql release")
             res.sendFile( __dirname + "/" + "index.html" );
          }    
          })
@@ -169,5 +193,5 @@ app.post('/main',urlencodedParser, function (req, res) {
 
 
 var server = app.listen(80, function () {
-   console.log("server start!! lets get it")
+   console.log("server start!! lets get it \n\n")
 })
