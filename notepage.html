@@ -47,6 +47,17 @@
                     mdSwitch();
                 }
             })
+            $.ajax({
+                url:"notepage/getcontent",
+                type: "post",
+                data:{username : localStorage.username},
+                success: function (returnValue) {
+                    console.log("dataloaded:"+returnValue)
+                },
+                error: function (returnValue) {
+                    alert("对不起！数据加载失败！");
+                }
+            })
             
         }
 

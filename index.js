@@ -66,8 +66,42 @@ app.post('/notepage/getdata',urlencodedParser, function (req, res) {
          if(result.length==1){
             qu = "select content from note where fileid = '"+result[0].lastopenfileid+"'";
             connection.query(qu,function(err,result2){
-               if(result.length==1){
+               if(result.length>=1){
                   res.send(result2[0].content);
+               }
+               else{
+                  console.log("connection to mysql fail")
+               }    
+               })
+            connection.release();
+            console.log("mysql release \n")
+         }
+         else{
+            console.log("connection to mysql fail")
+            connection.release();
+         }    
+         })
+      })
+
+})
+
+
+
+
+
+app.post('/notepage/getcontent',urlencodedParser, function (req, res) {
+   var username = req.body.username;
+   console.log("username:"+username+" is ask for content");
+
+   pool.getConnection(function(err,connection){
+      console.log("connection to sql success \n")
+      var qu = "select userid from user where username = '"+username+"'";
+      connection.query(qu,function(err,result){
+         if(result.length>=1){
+            qu = "select filename,isnote,level from note where userid = '"+result[0].userid+"'";
+            connection.query(qu,function(err,result2){
+               if(result.length>=1){
+                  console.log(result2)
                }
                else{
                   console.log("connection to mysql fail")
