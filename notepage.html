@@ -109,7 +109,7 @@
                         type: "post",
                         data:{content : m,id :localStorage.nowopenfileid},
                         success: function (returnValue) {
-                            alert("保存成功");
+                            $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
                         },
                         error: function (returnValue) {
                             console.log("save fail")
@@ -152,8 +152,6 @@
             }            
         }
     </script>
-
-
 
     <div id="pop"  style="display: none;">
 
