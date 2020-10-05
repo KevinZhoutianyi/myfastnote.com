@@ -184,7 +184,32 @@ body{
   top:50px;
   right: 70px;
   border-radius: 2em;
+
+  animation-iteration-count:infinite;
+  -webkit-animation-iteration-count:infinite;
+
+  animation-delay: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  -webkit-animation-delay: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+
+
+
+  -moz-animation:myfirst 2s;
+  animation: myfirst 2s;
+  -webkit-animation: myfirst 2s; /* Safari 与 Chrome */
 }
+@keyframes myfirst
+{
+  0%   {	transform:rotateY(0deg);}
+  50%   {	transform:rotateY(15deg);}
+  100%   {	transform:rotateY(0deg);}
+}
+
+
+
 #menutextarea{
   color: rgb(97, 96, 96);
   height: 100%;
