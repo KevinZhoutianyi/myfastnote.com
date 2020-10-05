@@ -17,6 +17,10 @@ app.set('trust proxy', true);// 设置以后，req.ips是ip数组；如果未经
 app.use('/public', express.static('public'));
 
 
+
+
+
+
 //read database
 app.get('/query' , function(req,res,next){
    pool.getConnection(function(err,connection){
@@ -35,18 +39,61 @@ app.get('/query' , function(req,res,next){
 
 
 
+
+
+
+
 app.get('/', function (req, res) {
    console.log( req.ip + "visit your server");
    res.sendFile( __dirname + "/" + "index.html" );
 })
-app.post('/notepage/getdata', function (req, res) {
-   console.log("post: data get~!");
-   res.send('12313');
+
+
+
+
+
+
+
+
+app.post('/notepage/getdata',urlencodedParser, function (req, res) {
+   var username = req.body.username;
+   console.log("username:"+username+" is ask for data");
+
+   pool.getConnection(function(err,connection){
+      console.log("connection to sql success \n")
+      var qu = "select lastopenfileid from user where username = '"+username+"'";
+      connection.query(qu,function(err,result){
+         if(result.length==1){
+            qu = "select content from note where fileid = '"+result[0].lastopenfileid+"'";
+            connection.query(qu,function(err,result2){
+               if(result.length==1){
+                  res.send(result2[0].content);
+               }
+               else{
+                  console.log("connection to mysql fail")
+               }    
+               })
+            connection.release();
+            console.log("mysql release \n")
+         }
+         else{
+            console.log("connection to mysql fail")
+            connection.release();
+         }    
+         })
+      })
+
 })
+
+
+
+
+
+
  
 
 app.post('/main',urlencodedParser, function (req, res) {
-   console.log(req.body.username+","+req.body.password+"   login ing")
+   console.log(req.body.username+","+req.body.password+"   login ing \n\n")
    // 输出 JSON 格式
    var response = {
        "username":req.body.username,
@@ -63,11 +110,13 @@ app.post('/main',urlencodedParser, function (req, res) {
          if(result.length==1){
             console.log("login success")
             connection.release();
+            console.log("mysql release \n")
             res.sendFile( __dirname + "/" + "notepage.html" );
          }
          else{
             console.log("login fail")
             connection.release();
+            console.log("mysql release \n")
             res.sendFile( __dirname + "/" + "index.html" );
          }    
          })

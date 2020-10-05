@@ -36,6 +36,7 @@
             $.ajax({
                 url:"notepage/getdata",
                 type: "post",
+                data:{username : localStorage.username},
                 success: function (returnValue) {
                     console.log("dataloaded:"+returnValue)
                     $("#md-area").val(returnValue);
