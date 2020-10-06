@@ -100,7 +100,7 @@ app.post('/notepage/getcatalogue',urlencodedParser, function (req, res) {
       var qu = "select userid from user where username = '"+username+"'";
       connection.query(qu,function(err,result){
          if(result.length>=1){
-            qu = "select filename,isnote,level from catalogue where userid = "+result[0].userid;
+            qu = "select filename,isnote,level,fileid,fatherid from catalogue where userid = "+result[0].userid;
             connection.query(qu,function(err,result2){
                if(result.length>=1){
                   res.send(result2)

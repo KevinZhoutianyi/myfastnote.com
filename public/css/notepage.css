@@ -144,6 +144,21 @@ body{
     word-break: break-all;
 }
 
+#folder{
+  display:flex;
+  flex-direction:column;
+  justify-content: start;
+  align-items: center;
+  margin: 2em;
+}
+#foldername{
+  
+  cursor: pointer;
+}
+#file{
+  cursor: pointer;
+}
+
 #downarrow,#uparrow{
   position: absolute;
   right: 51.5%;

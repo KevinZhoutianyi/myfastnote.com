@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="public/notepage.css">
+    <link rel="stylesheet" href="public/css/notepage.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <script src="public/syncscroll/syncscroll.js"></script>
@@ -12,172 +12,13 @@
 </head>
 <body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue();">
     
-    <!-- markdown interpretion -->
-    <script>
-        function mdSwitch() {
-            var mdValue = document.getElementById("md-area").value;
-            var converter = new showdown.Converter();
-            converter.setOption('simpleLineBreaks', true);
-            var html = converter.makeHtml(mdValue);
-            for (let index = 0; index < 10; index++) {
-                html += "<br>";
-            }
-            
-            document.getElementById("show-area").innerHTML = html;
-        }
-    </script>
 
-    <script src="public/js/jquery.js"></script>
-
-    <!-- loaddata -->
-    <script type="text/javascript">
-        function loadData() {
-            // to do : get the real data
-            console.log("username: "+localStorage.username)
-            $.ajax({
-                url:"notepage/getdata",
-                type: "post",
-                data:{username : localStorage.username},
-                success: function (returnValue) {
-                    console.log("dataloaded:"+ JSON.stringify(returnValue) )
-                    document.getElementById("md-area").innerHTML= returnValue.content;
-                    localStorage.nowopenfileid = returnValue.id;
-                    m = document.getElementById("md-area");
-                    m.style.height='auto';
-                    m.style.height = m.scrollHeight + 50 + 'px';
-                    mdSwitch();
-                },
-                error: function (returnValue) {
-                    alert("对不起！数据加载失败！");
-                    mdSwitch();
-                }
-            })
-            
-            
-        }
-        function loadcatalogue() {
-            // to do : get the real data
-            console.log("username: "+localStorage.username)
-            $.ajax({
-                url:"notepage/getcatalogue",
-                type: "post",
-                data:{username : localStorage.username},
-                success: function (returnValue) {
-                    var content = JSON.stringify(returnValue);
-                    var showhtml = "<br><br>";
-                    for (let index = 0; index < returnValue.length; index++) {
-                        showhtml += '<h3>' + returnValue[index].filename+ '</h3>';
-                        
-                    }
-                    document.getElementById("menutextarea").innerHTML = showhtml;
-                },
-                error: function (returnValue) {
-                    alert("对不起！数据加载失败！");
-                }
-            })
-            
-        }
-
-    </script>
-    
-    <!-- adjust height of the md-area -->
-    <script type="text/javascript">
-
-        document.onkeydown=function() {
-        if (event.keyCode == 8) {
-            if (document.activeElement.type == "text"||document.activeElement.type == "textarea"||document.activeElement.type == "password") {
-                if (document.activeElement.readOnly == false)
-                    m = document.getElementById("md-area");
-                    m.style.height='auto';
-                    m.style.height = m.scrollHeight - 50 + 'px';
-                    return true;
-            }
-            m = document.getElementById("md-area");
-            m.style.height='auto';
-            m.style.height = m.scrollHeight - 50 + 'px';
-            return false;
-        }
-       
-        
-    }
-    </script>
-    <!-- ctrl s to save -->
-    <script language="JavaScript">
-        window.addEventListener("keydown", function(e) {
-                //可以判断是不是mac，如果是mac,ctrl变为花键
-                //event.preventDefault() 方法阻止元素发生默认的行为。
-                if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                    e.preventDefault();
-                    // Process event...
-                    m = document.getElementById("md-area").value;
-                    $.ajax({
-                        url:"notepage/savedata",
-                        type: "post",
-                        data:{content : m,id :localStorage.nowopenfileid},
-                        success: function (returnValue) {
-                            $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
-                        },
-                        error: function (returnValue) {
-                            console.log("save fail")
-                        }
-                    })
-                }
-             
-            }, false);
-            </script>
-  
-    <!-- lock button event -->
-    <script type="text/javascript">
-        function lock(){
-            if(localStorage.islock == 1){
-                localStorage.islock = 0;
-                $("#locked").hide();
-                $("#notlocked").show();
-            }else{
-                localStorage.islock = 1;
-                $("#locked").show();
-                $("#notlocked").hide();
-            }            
-        }
-    </script>
-
-     <!-- arrow button event -->
-     <script type="text/javascript">
-        function arrow(){
-            if(localStorage.isarrowdown == 1){
-                localStorage.isarrowdown = 0;
-                $("#downarrow").hide();
-                $("#uparrow").show();
-                $("#pop").show();
-            }else{
-                localStorage.isarrowdown = 1;
-                $("#downarrow").show();
-                $("#uparrow").hide();
-                $("#pop").hide();
-                // document.getElementById('md-area').focus();
-            }            
-        }
-    </script>
-    <!-- questionmark button event -->
-    <script type="text/javascript">
-    function question(){
-        if(localStorage.showhelp == 1){
-            localStorage.showhelp = 0;
-            $("#question").css('z-index',5);
-            $("#questionpop").hide();
-        }else{
-            localStorage.showhelp = 1;
-            $("#question").css('z-index', 12);
-            $("#questionpop").show();
-            // document.getElementById('md-area').focus();
-        }            
-    }
-    </script>
-
+    <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;">
 
-        <img src="public/avator.png" id="avator" alt="">
+        <img src="public/png/avator.png" id="avator" alt="">
         <div style="width: 30%; height: 100%; z-index: 12;" onclick="arrow()"></div>
+        <!-- its actually catalogue -->
         <div id="menu">
             <div id="menutextarea">
                 <br><h1>loading</h1><br>
@@ -207,8 +48,8 @@
         <div id="left"  class=syncscroll name=myElements> 
             <textarea name="" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"># loading ...</textarea>
             <div style="height: 50%;"></div>
-            <Img src="public/downarrow.png" onclick="arrow()" id="downarrow" ></Img>
-            <Img src="public/uparrow.png" onclick="arrow()" id="uparrow" hidden></Img>
+            <Img src="public/png/downarrow.png" onclick="arrow()" id="downarrow" ></Img>
+            <Img src="public/png/uparrow.png" onclick="arrow()" id="uparrow" hidden></Img>
         </div>
         <div id="right" class=syncscroll name=myElements>
             <div id="show-area">
@@ -217,9 +58,9 @@
                 
                 </div>
             </div>
-            <Img src="public/locker.png" onclick="lock()" id="locked" ></Img>
-            <Img src="public/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
-            <Img src="public/questionmark.png" onclick="question()" id="question" ></Img>
+            <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
+            <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
+            <Img src="public/png/questionmark.png" onclick="question()" id="question" ></Img>
            
         </div>
     </div>
