@@ -64,6 +64,7 @@ app.post('/notepage/getdata',urlencodedParser, function (req, res) {
       var qu = "select lastopenfileid from user where username = '"+username+"'";
       connection.query(qu,function(err,result){
          if(result.length==1){
+            // console.log(result) 这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
             qu = "select content from note where fileid = '"+result[0].lastopenfileid+"'";
             connection.query(qu,function(err,result2){
                if(result.length>=1){

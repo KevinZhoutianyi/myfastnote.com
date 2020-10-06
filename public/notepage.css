@@ -104,15 +104,23 @@ body{
 }
 #locked,#notlocked{
   position: fixed;
-  right: 15px;
+  right: 22px;
   bottom: 15px;
-  height: 3em;
-  width: 3em;
+  height: 2.5em;
+  width: 2.5em;
 }
 #notlocked{
-  right:7px;
+  right:16px;
   bottom: 15px;
-  width: 3.2em;
+  height: 2.5em;
+  width: 2.6em;
+}
+#question{
+  position: fixed;
+  right: 22px;
+  top: 13px;
+  height: 2em;
+  width: 2.0em;
 }
 #md-area {
   line-height: 1.7em;
@@ -146,7 +154,7 @@ body{
 }
 
 
-#pop{
+#pop,#questionpop{
   height: 100%;
   width: 100%;
   z-index:10;
@@ -160,22 +168,22 @@ body{
   justify-content: center;
   align-items: center;
 }
-#menu{
+#menu,#helpmenu{
   border-radius: 50px;
   height: 70%;
   width: 30%;
   background-color: white;
   z-index: 12;
-  -moz-box-shadow: 10px 10px 5px #000000; /* 老的 Firefox */
-  box-shadow: 10px 10px 5px #000000;
+  -moz-box-shadow: 10px 10px 5px #3b3b3b; /* 老的 Firefox */
+  box-shadow: 10px 10px 5px #3b3b3b;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items:flex-end;
 
 
-
 }
+
 #avator{
   height: 6em;
   width: 6em;
@@ -210,7 +218,7 @@ body{
 
 
 
-#menutextarea{
+#menutextarea,#helptext{
   color: rgb(97, 96, 96);
   height: 100%;
   width:97%;
@@ -221,24 +229,24 @@ body{
   /* border:solid 1px black; */
   overflow-y: scroll;
 }
-#menutextarea::-webkit-scrollbar {
+#menutextarea::-webkit-scrollbar,#helptext::-webkit-scrollbar {
   width: 12px;               /* width of the entire scrollbar */
   height: 50px;
 }
-#menutextarea::-webkit-scrollbar-track {
+#menutextarea::-webkit-scrollbar-track,#helptext::-webkit-scrollbar-track {
   background: transparent;      /* color of the tracking area */
 }
-#menutextarea::-webkit-scrollbar-thumb {
+#menutextarea::-webkit-scrollbar-thumb,#helptext::-webkit-scrollbar-thumb {
   background-color: grey;    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
   border: 3px solid white;  /* creates padding around scroll thumb */
 }
-#menutextarea::-webkit-scrollbar-track-piece:end {
+#menutextarea::-webkit-scrollbar-track-piece,#helptext::-webkit-scrollbar-track-piece:end {
   background: transparent;
   margin-bottom: 50px; 
 }
 
-#menutextarea::-webkit-scrollbar-track-piece:start {
+#menutextarea::-webkit-scrollbar-track-piece,#helptext::-webkit-scrollbar-track-piece:start {
   background: transparent;
   margin-top: 50px;
 }
@@ -320,7 +328,8 @@ ul,
 ol,
 dl,
 table {
-  margin: 0.8em 0;
+  margin: 1em 0;
+  line-height: 1.7;
 }
 
 li > ol,
@@ -426,7 +435,7 @@ pre code {
 .alert {
 	display: none;
 	position: fixed;
-	top: 50%;
+	top: 45%;
 	left: 50%;
 	min-width: 250px;
 	max-width: 500px;

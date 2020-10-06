@@ -7,10 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <script src="public/syncscroll/syncscroll.js"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script>localStorage.islock= 1;localStorage.isarrowdown=1; </script>
+    <script>localStorage.islock= 1;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
     <title>FastNote</title>
 </head>
-<body onLoad="document.getElementById('md-area').focus();  loadData(); ">
+<body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue();">
     
     <!-- markdown interpretion -->
     <script>
@@ -52,13 +52,19 @@
                     mdSwitch();
                 }
             })
+            
+            
+        }
+        function loadcatalogue() {
+            // to do : get the real data
+            console.log("username: "+localStorage.username)
             $.ajax({
                 url:"notepage/getcatalogue",
                 type: "post",
                 data:{username : localStorage.username},
                 success: function (returnValue) {
                     var content = JSON.stringify(returnValue);
-                    var showhtml = "";
+                    var showhtml = "<br><br>";
                     for (let index = 0; index < returnValue.length; index++) {
                         showhtml += '<h3>' + returnValue[index].filename+ '</h3>';
                         
@@ -148,9 +154,24 @@
                 $("#downarrow").show();
                 $("#uparrow").hide();
                 $("#pop").hide();
-                document.getElementById('md-area').focus();
+                // document.getElementById('md-area').focus();
             }            
         }
+    </script>
+    <!-- questionmark button event -->
+    <script type="text/javascript">
+    function question(){
+        if(localStorage.showhelp == 1){
+            localStorage.showhelp = 0;
+            $("#question").css('z-index',5);
+            $("#questionpop").hide();
+        }else{
+            localStorage.showhelp = 1;
+            $("#question").css('z-index', 12);
+            $("#questionpop").show();
+            // document.getElementById('md-area').focus();
+        }            
+    }
     </script>
 
     <div id="pop"  style="display: none;">
@@ -159,14 +180,23 @@
         <div style="width: 30%; height: 100%; z-index: 12;" onclick="arrow()"></div>
         <div id="menu">
             <div id="menutextarea">
-                <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3><h4>文章名<h4></h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3> <br><h1>文件夹名字</h1><br>文件夹名字<h3>文章名<h3></h3>
-                
+                <br><h1>loading</h1><br>
             </div>
             
 
         </div>
         <div style="width: 30%; height: 100%;z-index: 12;"onclick="arrow()"></div>
 
+    </div>
+
+    <div id="questionpop"  style="display: none;">
+        <div style="width: 30%; height: 100%; z-index: 12;" onclick="question()"></div>
+        <div id="helpmenu">
+            <div id="helptext">
+                <br><h3><code>ctrl + s </code>  to save<h3>
+            </div>
+        </div>
+        <div style="width: 30%; height: 100%;z-index: 12;"onclick="question()"></div>
     </div>
 
 
@@ -189,6 +219,7 @@
             </div>
             <Img src="public/locker.png" onclick="lock()" id="locked" ></Img>
             <Img src="public/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
+            <Img src="public/questionmark.png" onclick="question()" id="question" ></Img>
            
         </div>
     </div>
