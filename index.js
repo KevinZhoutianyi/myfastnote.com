@@ -90,6 +90,41 @@ app.post('/notepage/getdata',urlencodedParser, function (req, res) {
 
 
 
+app.post('/notepage/getfile',urlencodedParser, function (req, res) {
+   var username = req.body.username;
+   var fileid = req.body.fileid;
+   console.log("username:"+username+" is ask for file" + fileid);
+
+   pool.getConnection(function(err,connection){
+      console.log("getfile : connection to sql success")
+      var qu = "select userid from user where username = '"+username+"'";
+      connection.query(qu,function(err,result){
+         if(result.length==1){
+            qu = "select content from note where userid = '"+result[0].userid+"' and fileid ='" +fileid +"'";
+            connection.query(qu,function(err,result2){
+               if(result.length>=1){
+                  var x = {content:result2[0].content,fileid:fileid}
+                  res.send(x);
+               }
+               else{
+                  console.log("getfile : connection to mysql fail")
+               }    
+               })
+            connection.release();
+            console.log("getfile : mysql release")
+         }
+         else{
+            console.log("getfile : connection to mysql fail")
+            connection.release();
+         }    
+         })
+      })
+
+})
+
+
+
+
 
 app.post('/notepage/getcatalogue',urlencodedParser, function (req, res) {
    var username = req.body.username;
@@ -122,7 +157,7 @@ app.post('/notepage/getcatalogue',urlencodedParser, function (req, res) {
 })
 
 
-
+// 这里假设fileid唯一
 app.post('/notepage/savedata',urlencodedParser, function (req, res) {
    var content = req.body.content;
    var id = req.body.id;
@@ -138,6 +173,29 @@ app.post('/notepage/savedata',urlencodedParser, function (req, res) {
          } 
          connection.release();
          console.log("savedata : mysql release")
+         res.send("success");
+         })
+      })
+
+})
+
+
+app.post('/notepage/savecatalogue',urlencodedParser, function (req, res) {
+   var filename = req.body.filename;
+   var fileid = req.body.fileid;
+
+   console.log("is saving catalogue for file " + fileid);
+
+   pool.getConnection(function(err,connection){
+      console.log("savecatalogue : connection to sql success")
+      var qu = "update catalogue set filename ='" + filename + "'where fileid ="+fileid;
+      connection.query(qu,function(err,result){
+         if(err){
+            console.log('[UPDATE ERROR] - ',err.message);
+            return;
+         } 
+         connection.release();
+         console.log("savecatalogue : mysql release")
          res.send("success");
          })
       })

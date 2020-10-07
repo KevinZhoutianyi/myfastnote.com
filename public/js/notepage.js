@@ -15,16 +15,41 @@
 // 加载上次编辑文档
     function loadData() {
         // to do : get the real data
-        console.log("username: "+localStorage.username)
+        console.log("username: "+localStorage.username + "loading data")
         $.ajax({
             url:"notepage/getdata",
             type: "post",
             data:{username : localStorage.username},
         
             success: function (returnValue) {
-                console.log("dataloaded:"+ JSON.stringify(returnValue) )
+                // console.log("dataloaded:"+ JSON.stringify(returnValue) )
                 document.getElementById("md-area").innerHTML= returnValue.content;
                 localStorage.nowopenfileid = returnValue.id;
+                m = document.getElementById("md-area");
+                m.style.height='auto';
+                m.style.height = m.scrollHeight + 50 + 'px';
+                mdSwitch();
+            },
+            error: function (returnValue) {
+                alert("对不起！数据加载失败！");
+                mdSwitch();
+            }
+        })
+        
+        
+    }
+    function loadfile(id) {
+        // to do : get the real data
+        console.log("username: "+localStorage.username +" loading file id: "+id)
+        $.ajax({
+            url:"notepage/getfile",
+            type: "post",
+            data:{username : localStorage.username, fileid : id},
+        
+            success: function (returnValue) {
+                // console.log("dataloaded:"+ JSON.stringify(returnValue) )
+                document.getElementById("md-area").value= returnValue.content;
+                localStorage.nowopenfileid = returnValue.fileid;
                 m = document.getElementById("md-area");
                 m.style.height='auto';
                 m.style.height = m.scrollHeight + 50 + 'px';
@@ -41,7 +66,7 @@
     // 加载目录
     function loadcatalogue() {
         // to do : get the real data
-        console.log("username: "+localStorage.username)
+        console.log("username: "+localStorage.username+ "loading catalogue")
         $.ajax({
             url:"notepage/getcatalogue",
             type: "post",
@@ -64,11 +89,11 @@
                 console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
                 for (let i = 0; i < foldersfileidarray.length; i++) {
                     showhtml += "<div id='folder' name='" + foldersfileidarray[i]  +"'>";
-                    showhtml += "<h2 id='foldername' onclick='folderclick(this)'>" + foldersfileidarray[i].filename + "</h2>";
+                    showhtml += "<h2 id='foldername' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'>" + foldersfileidarray[i].filename + "</h2>";
                     for (let j = 0; j < returnValue.length; j++) {
                         if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
                         {
-                            showhtml += "<h4 id = 'file' name = "+ returnValue[j].fileid+">" + returnValue[j].filename+ "</h4>";
+                            showhtml += "<h4 id = 'file' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);clickfile(this)'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: none;' >" + returnValue[j].filename+ "</h4>";
                         }
                         
                     }
@@ -87,23 +112,23 @@
     }
 
 // 按键保存 删除时候调整高度
-    document.onkeydown=function() {
-    if (event.keyCode == 8) {
-        if (document.activeElement.type == "text"||document.activeElement.type == "textarea"||document.activeElement.type == "password") {
-            if (document.activeElement.readOnly == false)
-                m = document.getElementById("md-area");
-                m.style.height='auto';
-                m.style.height = m.scrollHeight - 50 + 'px';
-                return true;
-        }
-        m = document.getElementById("md-area");
-        m.style.height='auto';
-        m.style.height = m.scrollHeight - 50 + 'px';
-        return false;
-    }
+//     document.onkeydown=function() {
+//     if (event.keyCode == 8) {
+//         if (document.activeElement.type == "text"||document.activeElement.type == "textarea"||document.activeElement.type == "password") {
+//             if (document.activeElement.readOnly == false)
+//                 m = document.getElementById("md-area");
+//                 m.style.height='auto';
+//                 m.style.height = m.scrollHeight - 50 + 'px';
+//                 return true;
+//         }
+//         m = document.getElementById("md-area");
+//         m.style.height='auto';
+//         m.style.height = m.scrollHeight - 50 + 'px';
+//         return false;
+//     }
    
     
-}
+// }
 
     window.addEventListener("keydown", function(e) {
             //可以判断是不是mac，如果是mac,ctrl变为花键
@@ -111,6 +136,9 @@
             if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                 e.preventDefault();
                 // Process event...
+                m = document.getElementById("md-area");
+                m.style.height='auto';
+                m.style.height = m.scrollHeight + 50 + 'px';
                 m = document.getElementById("md-area").value;
                 $.ajax({
                     url:"notepage/savedata",
@@ -152,7 +180,8 @@
             $("#uparrow").hide();
             $("#pop").hide();
             // document.getElementById('md-area').focus();
-        }            
+        }     
+        // myblur();       
     }
     // 右上角帮助
 function question(){
@@ -168,11 +197,88 @@ function question(){
     }            
 }
 function folderclick(obj) {
-    if($(obj).parent().children("#file").css('display') == 'block'){
+    if($(obj).attr("contentEditable")=='false'){
+        if($(obj).parent().children("#file").css('display') == 'block'){
+    
+            $(obj).parent().children("#file").hide();
+        }else{
+            
+            $(obj).parent().children("#file").show();
+        }
 
-        $(obj).parent().children("#file").hide();
-    }else{
-        
-        $(obj).parent().children("#file").show();
     }
 }
+function clickfile(obj) {
+    loadfile($(obj).attr('name'));
+}
+
+// $(function(){
+//     setInterval(function(){
+//         console.log("123")
+//         m = document.getElementById("md-area");
+//         m.style.height='auto';
+//         m.style.height = m.scrollHeight - 50 + 'px';
+//     }, 3000);
+// });
+
+var timeout;//用于存储定时器的变量
+// 长按
+function mousedown(obj) {
+    timeout= setTimeout(function() {
+        $(obj).attr("contentEditable",true)
+        localStorage.edited = 1;
+        
+        obj.focus();
+    }, 700);//鼠标按下1秒后发生事件
+}
+function mouseup(obj) {
+    clearTimeout(timeout);//清理掉定时器
+}
+
+function mouseout(obj) {
+    
+    // $(obj).attr("contentEditable",false)
+    clearTimeout(timeout);//清理掉定时器 
+}
+
+
+// div失去焦点 分点了一下 点了别的地方 和 编辑之后点了别的地方
+// localedited用来 排除点了一下 div 之后点了别的地方的失去焦点
+// undefined是 div blur的bug
+function myblur(obj) {
+    
+    if($(obj).html()==undefined)
+    return;
+    if(localStorage.edited == 1){
+        
+        localStorage.edited = 0;
+        
+        console.log(localStorage.edited)
+        
+        if($(obj).html().length<=3){
+            alert("too short")
+            loadcatalogue();
+        }else{
+            savecatalogue($(obj).html(),$(obj).attr('name'))
+        }
+        console.log($(obj).html())
+        $(obj).attr("contentEditable",false)
+        }
+}
+function savecatalogue(filename,fileid) {
+    console.log("username: "+localStorage.username +" save file id: "+fileid)
+        $.ajax({
+            url:"notepage/savecatalogue",
+            type: "post",
+            data:{username : localStorage.username, fileid : fileid,filename:filename},
+        
+            success: function (returnValue) {
+                console.log("save catalogue success")
+                loadcatalogue();
+            },
+            error: function (returnValue) {
+                alert("对不起！数据加载失败！");
+            }
+        })
+}
+

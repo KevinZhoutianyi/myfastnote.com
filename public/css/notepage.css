@@ -158,7 +158,7 @@ body{
 #file{
   cursor: pointer;
 }
-
+[contenteditable]:focus{outline:none;}
 #downarrow,#uparrow{
   position: absolute;
   right: 51.5%;
