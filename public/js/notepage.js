@@ -31,7 +31,7 @@
                 mdSwitch();
             },
             error: function (returnValue) {
-                alert("对不起！数据加载失败！");
+                alert("lose connection");
                 mdSwitch();
             }
         })
@@ -50,13 +50,14 @@
                 // console.log("dataloaded:"+ JSON.stringify(returnValue) )
                 document.getElementById("md-area").value= returnValue.content;
                 localStorage.nowopenfileid = returnValue.fileid;
+                localStorage.userid = returnValue.userid;
                 m = document.getElementById("md-area");
                 m.style.height='auto';
                 m.style.height = m.scrollHeight + 50 + 'px';
                 mdSwitch();
             },
             error: function (returnValue) {
-                alert("对不起！数据加载失败！");
+                alert("lose connection");
                 mdSwitch();
             }
         })
@@ -74,7 +75,6 @@
             success: function (returnValue) {
                 var content = JSON.stringify(returnValue);
                 var showhtml = "<br><br>";
-
                 var foldersfileidarray =[];
                 for (let index = 0; index < returnValue.length; index++) {
                     if(returnValue[index].level == 0){
@@ -89,11 +89,11 @@
                 console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
                 for (let i = 0; i < foldersfileidarray.length; i++) {
                     showhtml += "<div id='folder' name='" + foldersfileidarray[i]  +"'>";
-                    showhtml += "<h2 id='foldername' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'>" + foldersfileidarray[i].filename + "</h2>";
+                    showhtml += "<h2 ondrop='drop(event,this)' ondragover='allowDrop(event)' id='foldername' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'>" + foldersfileidarray[i].filename + "</h2>";
                     for (let j = 0; j < returnValue.length; j++) {
                         if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
                         {
-                            showhtml += "<h4 id = 'file' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);clickfile(this)'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: none;' >" + returnValue[j].filename+ "</h4>";
+                            showhtml += "<h4 ondrop='drop(event,this)' ondragover='allowDrop(event)' id = 'file' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);clickfile(this)'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' >" + returnValue[j].filename+ "</h4>";
                         }
                         
                     }
@@ -105,7 +105,7 @@
                 document.getElementById("menutextarea").innerHTML = showhtml;
             },
             error: function (returnValue) {
-                alert("对不起！数据加载失败！");
+                alert("lose connection");
             }
         })
         
@@ -143,7 +143,7 @@
                 $.ajax({
                     url:"notepage/savedata",
                     type: "post",
-                    data:{content : m,id :localStorage.nowopenfileid},
+                    data:{content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
                     success: function (returnValue) {
                         $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
                     },
@@ -277,8 +277,109 @@ function savecatalogue(filename,fileid) {
                 loadcatalogue();
             },
             error: function (returnValue) {
-                alert("对不起！数据加载失败！");
+                alert("lose connection");
+            }
+        })
+}
+function anim(obj) {
+    $(obj).addClass("avaanim");
+    timeout= setTimeout(function() {
+        $(obj).removeClass("avaanim");
+    }, 10000);//鼠标按下1秒后发生事件
+}
+
+function newfolder(obj){
+    console.log("username: "+localStorage.username +" new file ")
+        $.ajax({
+            url:"notepage/newfolder",
+            type: "post",
+            data:{userid : localStorage.userid},
+        
+            success: function (returnValue) {
+                console.log(returnValue)
+                loadcatalogue();
+            },
+            error: function (returnValue) {
+                alert("lose connection");
             }
         })
 }
 
+function dragStart(event,op) {
+    event.dataTransfer.setData("Text", op);
+}
+function allowDrop(event) {
+    event.preventDefault();
+}
+function drop(event,obj) {
+    event.preventDefault();
+    console.log($(obj).attr('id'))
+    var data = event.dataTransfer.getData("Text");
+    console.log(data)
+
+    if(data=="delete"){
+        if($(obj).attr('id')=='foldername'){
+            //提示是否要删除文件和文件夹下所有内容
+            var r=confirm("是否要删除文件夹下所有内容?");
+            if (r==true){
+                //ajax删除文件夹 和它下面的所有文件
+                $.ajax({
+                    url:"notepage/deletefile",
+                    type: "post",
+                    data:{fileid : $(obj).attr('name'),userid:localStorage.userid},
+                
+                    success: function (returnValue) {
+                        console.log(returnValue)
+                        loadcatalogue();
+                    },
+                    error: function (returnValue) {
+                        alert("lose connection");
+                    }
+                })
+            }
+            else{
+            }
+        }
+        else if($(obj).attr('id')=='file'){
+            //提示是否要删除文件
+            var rr=confirm("是否要删除文件?");
+            if (rr==true){
+                $.ajax({
+                    url:"notepage/deletefile",
+                    type: "post",
+                    data:{fileid : $(obj).attr('name'),userid:localStorage.userid},
+                
+                    success: function (returnValue) {
+                        console.log(returnValue)
+                        loadcatalogue();
+                    },
+                    error: function (returnValue) {
+                        alert("lose connection");
+                    }
+                })
+            }
+            else{
+            }
+
+        }
+
+    }else if(data == "new"){
+        if($(obj).attr('id')=='foldername'){
+            $.ajax({
+                url:"notepage/newfile",
+                type: "post",
+                data:{userid : localStorage.userid,folderid:$(obj).attr('name')},
+            
+                success: function (returnValue) {
+                    console.log(returnValue)
+                    loadcatalogue();
+                },
+                error: function (returnValue) {
+                    alert("lose connection");
+                }
+            })
+        }
+    }
+    
+}
+//用localstorage在loadcatalogue之后展开folder
