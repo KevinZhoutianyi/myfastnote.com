@@ -115,7 +115,7 @@ body{
   height: 2.5em;
   width: 2.6em;
 }
-#question{
+#questionxD{
   position: fixed;
   right: 22px;
   top: 13px;
@@ -144,18 +144,18 @@ body{
     word-break: break-all;
 }
 
-#folder{
+#folderxD{
   display:flex;
   flex-direction:column;
   justify-content: start;
   align-items: center;
   margin: 2em;
 }
-#foldername{
+#foldernamexD{
   
   cursor: pointer;
 }
-#file{
+#filexD{
   cursor: pointer;
 }
 [contenteditable]:focus{outline:none;}
@@ -191,12 +191,12 @@ body{
   justify-content: center;
   align-items: center;
 }
-#menu{
+#menuxD{
   position: fixed;
   border-top-left-radius: 50px;
   border-top-right-radius	: 50px;
-  border-bottom-left-radius	: 20px;
-  border-bottom-right-radius: 20px;
+  border-bottom-left-radius	: 50px;
+  border-bottom-right-radius:50px;
   height: 70%;
   width: 30%;
   background-color: white;
@@ -259,7 +259,7 @@ body{
   justify-content: start;
   align-items: center;
   /* border:solid 1px black; */
-  overflow-y: scroll;
+  overflow: auto;
 }
 #menutextarea::-webkit-scrollbar,#helptext::-webkit-scrollbar {
   width: 12px;               /* width of the entire scrollbar */
@@ -275,7 +275,7 @@ body{
 }
 #menutextarea::-webkit-scrollbar-track-piece,#helptext::-webkit-scrollbar-track-piece:end {
   background: transparent;
-  margin-bottom: 30px; 
+  margin-bottom: 50px; 
 }
 
 #menutextarea::-webkit-scrollbar-track-piece,#helptext::-webkit-scrollbar-track-piece:start {
@@ -504,4 +504,40 @@ pre code {
     color: #a94442;
     background-color: #f2dede;
     border-color: #ebccd1;
+}
+.custom-context-menu{
+    display : flex;
+    flex-direction:row;
+    justify-content:start;
+    align-items: center;
+    position:fixed;
+    z-index:19;
+    background-color: rgba(124, 123, 123, 0.657);
+    border-radius: 10px;
+    padding-left: 18px;
+    padding-top:12px;
+    padding-bottom:12px;
+    
+}
+#icon{
+  padding-right: 18px;
+}
+.newfile{
+  height:1.1em;
+  width:1.1em;   
+   margin-left: 2px;
+   display:none;
+
+}
+.newfolder{
+  height:1.1em;
+  width:1.1em;   
+   margin-left: 2px;
+   display:none;
+
+}
+.trash{
+  height: 1.3em;
+    width: 1.3em;
+    display:none;
 }

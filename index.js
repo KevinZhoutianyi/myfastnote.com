@@ -203,6 +203,7 @@ app.post('/notepage/deletefile',urlencodedParser, function (req, res) {
                return;
             } 
             
+            console.log("delete a file in catalogue")
          })
          var qu3 = "delete from note where fatherid = " +fileid+ " and userid="+userid+";";
          connection.query(qu3,function(err3,result3){
@@ -212,9 +213,18 @@ app.post('/notepage/deletefile',urlencodedParser, function (req, res) {
             } 
             res.send("success");
          })
-         connection.release();
          })
-      })
+         var qu4 = "delete from note where file = " +fileid+ " and userid="+userid+";";
+         connection.query(qu4,function(err4,result4){
+            if(err4){
+               console.log('[UPDATE ERROR] - ',err4.message);
+               return;
+            } 
+            res.send("success");
+         })
+         connection.release();
+    })
+      
 
 })
 
@@ -268,7 +278,7 @@ app.post('/notepage/newfolder',urlencodedParser, function (req, res) {
 app.post('/notepage/newfile',urlencodedParser, function (req, res) {
    var userid = req.body.userid;
    var folderid = req.body.folderid;
-   console.log("new a folder for  user:" + userid);
+   console.log("new a  file for  user:" + userid);
 
    pool.getConnection(function(err,connection){
       console.log("newfolder : connection to sql success")
@@ -285,7 +295,6 @@ app.post('/notepage/newfile',urlencodedParser, function (req, res) {
                console.log('[UPDATE ERROR] - ',err2.message);
                return;
             } 
-            
             })
          var qu3 = "insert into note values("+(result[0]["max(fileid)"]+1)+",'#newfile',"+userid+","+folderid +");";
          connection.query(qu3,function(err3,result3){
