@@ -320,7 +320,7 @@ app.post('/notepage/newfile',urlencodedParser, function (req, res) {
 app.post('/notepage/savecatalogue',urlencodedParser, function (req, res) {
    var filename = req.body.filename;
    var fileid = req.body.fileid;
-
+   filename.
    console.log("is saving catalogue for file " + fileid);
 
    pool.getConnection(function(err,connection){

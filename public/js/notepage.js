@@ -142,6 +142,9 @@
                 
 
                 m = m.replace(/\\/g,"\\\\");
+
+                m = m.replace(/\"/g,"\'\'");
+                m = m.replace(/\'/g,"\'\'");
                 $.ajax({
                     url:"notepage/savedata",
                     type: "post",
