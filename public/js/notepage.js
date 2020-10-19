@@ -1,12 +1,13 @@
 // 转md
     function mdSwitch() {
         var mdValue = document.getElementById("md-area").value;
+        mdValue = mdValue.replace(/\\/g,"\\\\");
         var html = marked(mdValue);
         for (let index = 0; index < 10; index++) {
             html += "<br>";
         }
-        
         document.getElementById("show-area").innerHTML = html;
+        MathJax.typeset();
     }
 
 
@@ -138,6 +139,9 @@
                 m.style.height='auto';
                 m.style.height = m.scrollHeight + 50 + 'px';
                 m = document.getElementById("md-area").value;
+                
+
+                m = m.replace(/\\/g,"\\\\");
                 $.ajax({
                     url:"notepage/savedata",
                     type: "post",
@@ -257,9 +261,14 @@ function myblur(obj) {
             alert("too short")
             loadcatalogue();
         }else{
-            savecatalogue($(obj).html(),$(obj).attr('name'))
+            var s = "";
+            s = $(obj).html();
+            s = s.replace(/<div>/g, "");
+            s = s.replace(/<\/div>/g, "");
+            savecatalogue(s,$(obj).attr('name'));
         }
         console.log($(obj).html())
+        
         $(obj).attr("contentEditable",false)
         }
 }

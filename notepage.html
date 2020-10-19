@@ -4,16 +4,33 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="public/css/notepage.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
-    <script src="public/syncscroll/syncscroll.js"></script>
+    <script src="public/js/syncscroll/syncscroll.js"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>localStorage.islock= 1;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="public/js/marked.js"></script>
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+            displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+                      
+          },
+          
+        };
+    </script>
+    <!-- <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+    });
+    </script> -->
+    <script   id="MathJax-script" src="https://cdn.bootcss.com/mathjax/3.0.5/es5/tex-mml-chtml.js"></script>
+   
     <title>FastNote</title>
 </head>
 <body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue();">
-    
-
     <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;"  onmousedown="myblur()">
         <div id="avatorbg">
