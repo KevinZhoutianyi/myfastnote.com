@@ -139,8 +139,6 @@
                 m.style.height='auto';
                 m.style.height = m.scrollHeight + 50 + 'px';
                 m = document.getElementById("md-area").value;
-                
-
                 m = m.replace(/\\/g,"\\\\");
 
                 m = m.replace(/\"/g,"\'\'");
@@ -389,7 +387,7 @@ function opfile(data) {
 }
 //用localstorage在loadcatalogue之后展开folder
 document.addEventListener("contextmenu", (e) => {
-    console.log(e.path[0].id)
+    // console.log(e.path[0].id)
     let x = e.path[0].id
     
     $(".newfile").css("display","none");
@@ -415,6 +413,8 @@ document.addEventListener("contextmenu", (e) => {
         localStorage.contextmenufileid = $(e.path[0]).attr("id");
         e.preventDefault();
         showMenu(e);
+    }else{
+        hideMenu();
     }
   });
 

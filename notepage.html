@@ -9,29 +9,17 @@
  
     <script>localStorage.islock= 1;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
     <script src="public/js/marked.js"></script>
-    <script>
-        MathJax = {
-          tex: {
-            inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
-            displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
-                      
-          },
-          
-        };
-    </script>
-    <!-- <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex: {
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-            displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-        }
-    });
-    </script> -->
+    <link rel="stylesheet" href="public/highlight/styles/qtcreator_dark.css">
+    <script src="public/highlight/highlight.pack.js"></script>
+    
+    <script type="text/javascript" src="public/js/notepageload.js"></script>
+  
     <script   id="MathJax-script" src="https://cdn.bootcss.com/mathjax/3.0.5/es5/tex-mml-chtml.js"></script>
    
     <title>FastNote</title>
 </head>
 <body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue();">
+
     <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;"  onmousedown="myblur()">
         <div id="avatorbg">

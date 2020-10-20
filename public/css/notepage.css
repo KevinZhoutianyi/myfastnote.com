@@ -229,8 +229,8 @@ body{
   width: 6em;
   z-index: 14;
   position: absolute;
-  top:50px;
-  right: 70px;
+  top:40px;
+  right: 50px;
   border-radius: 2em;
 
 }
@@ -406,8 +406,9 @@ hr {
   height: 2px;
   padding: 0;
   margin: 16px 0;
-  background-color: var(--light-trait-100);
-  border: 0 none;
+  border-style: inset;
+  border-width: 1px;
+
   overflow: hidden;
   box-sizing: content-box;
 }
@@ -483,8 +484,8 @@ tt, code, kbd, samp {
     white-space: -pre-wrap;      /* Opera 4-6 */
     white-space: -o-pre-wrap;    /* Opera 7 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
-    background-color: #696666;
-    border: 1px solid #696666;
+    background-color: #4b4343;
+    border: 1px solid #4b4343;
     margin-top: 1.5em;
     margin-bottom: 1.5em;
     padding: 0.125rem 0.3125rem 0.0625rem;
