@@ -12,9 +12,32 @@ var app = express();
 const multiparty = require('multiparty');
 const fs = require('fs');
 
+let query = function( sql, values ) {
+   // 返回一个 Promise
+   // console.log(sql)
+   return new Promise(( resolve, reject ) => {
+     pool.getConnection(function(err, connection) {
+       if (err) {
+         reject( err )
+       } else {
+         connection.query(sql, values, ( err, rows) => {
+ 
+           if ( err ) {
+             reject( err )
+           } else {
+             resolve( rows )
+           }
+           // 结束会话
+           connection.release()
+         })
+       }
+     })
+   })
+ }
+
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
-
 app.set('trust proxy', true);// 设置以后，req.ips是ip数组；如果未经过代理，则为[]. 若不设置，则req.ips恒为[]
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());//数据JSON类型
@@ -24,19 +47,12 @@ app.use(bodyParser.json());//数据JSON类型
 
 
 
+
+
 //read database
-app.get('/query' , function(req,res,next){
-   pool.getConnection(function(err,connection){
-   //var params = req.query || req.params;        //前端传的参数（暂时写这里，在这个例子中没用）
-   connection.query(querySql.read,function(err,result){
-      if(err){
-         console.log('[SELECT ERROR] - ',err.message);
-         return;
-       }
-      console.log(result);
-      res.end(JSON.stringify(result));
-      })
-   })
+app.get('/query' , async (req, res) => {
+   const rows = await query(querySql.read);
+   res.end(JSON.stringify(rows));
 })
 
 
@@ -58,37 +74,21 @@ app.get('/', function (req, res) {
 
 
 
-app.post('/notepage/getdata',urlencodedParser, function (req, res) {
+app.post('/notepage/getdata',urlencodedParser, async (req, res) => {
    var username = req.body.username;
    console.log("username:"+username+" is ask for data");
 
-   pool.getConnection(function(err,connection){
-      console.log("getdata : connection to sql success")
-      var qu = "select lastopenfileid from user where username = '"+username+"'";
-      connection.query(qu,function(err,result){
-         if(result.length==1){
-            // console.log(result) 这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
-            qu = "select content from note where fileid = '"+result[0].lastopenfileid+"'";
-            connection.query(qu,function(err,result2){
-               if(result.length>=1){
-                  var x = {content:result2[0].content,id:result[0].lastopenfileid}
-                  res.send(x);
-               }
-               else{
-                  console.log("getdata : connection to mysql fail")
-               }    
-               })
-            connection.release();
-            console.log("getdata : mysql release")
-         }
-         else{
-            console.log("getdata : connection to mysql fail")
-            connection.release();
-         }    
-         })
-      })
-
-})
+   const result = await query("select lastopenfileid from user where username = '"+username+"'");
+   
+   if(result.length==1){
+      // console.log(result) 这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
+      const result2 = await query("select content from note where fileid = '"+result[0].lastopenfileid+"'");
+      if(result2.length>=1){
+         var x = {content:result2[0].content,id:result[0].lastopenfileid}
+         res.send(x);
+      }
+   }
+});
 
 
 
@@ -129,36 +129,26 @@ app.post('/notepage/getfile',urlencodedParser, function (req, res) {
 
 
 
-app.post('/notepage/getcatalogue',urlencodedParser, function (req, res) {
+app.post('/notepage/getcatalogue',urlencodedParser,  async (req, res) => {
    var username = req.body.username;
    console.log("username:"+username+" is ask for content");
 
-   pool.getConnection(function(err,connection){
-      console.log("getcatalogue: connection to sql success")
-      var qu = "select userid from user where username = '"+username+"'";
-      connection.query(qu,function(err,result){
-         if(result.length>=1){
-            qu = "select filename,isnote,level,fileid,fatherid from catalogue where userid = "+result[0].userid;
-            connection.query(qu,function(err,result2){
-               if(result.length>=1){
-                  res.send(result2)
-               }
-               else{
-                  console.log("getcatalogue:  connection to mysql fail")
-               }    
-               })
-            connection.release();
-            console.log("getcatalogue:  mysql release")
-         }
-         else{
-            console.log("getcatalogue:  connection to mysql fail")
-            connection.release();
-         }    
-         })
-      })
 
+   const result = await query("select userid from user where username = '"+username+"'");
+
+   if(result.length>=1){
+      const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+result[0].userid);
+      if(result2.length>=1){
+         res.send(result2)
+      }  
+      else{
+         console.log(result2)
+      }
+   }   
+   else{
+      console.log(result)
+   }
 })
-
 
 app.post('/notepage/savedata',urlencodedParser, function (req, res) {
    var content = req.body.content;
@@ -355,12 +345,66 @@ app.post('/notepage/savecatalogue',urlencodedParser, function (req, res) {
 
 
 
-app.post("/main/upload",  function (req, res) {
+app.post("/main/upload",urlencodedParser,  async (req, res) => {
    let form = new multiparty.Form();
-  form.parse(req, function(err,fields,file){
-    console.log(fields);
-    console.log(file);
-    res.send('数据已接收');
+   form.parse(req, async(err,fields,file)=>{
+      const result = await query("select max(fileid) from catalogue where userid="+fields["userid"])
+      var maxindex = (result[0]["max(fileid)"])
+      console.log("maxindex now  ：  "+maxindex)
+      if(fields["folderid"]==-1){//不是目录，先创建一个目录
+         result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+1)+",'newfolder',0,0,null)")
+         for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
+            result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+file["file"][index-2]["originalFilename"]+"',1,1,"+(maxindex+1)+")")
+            var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
+            result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(maxindex+1)+")")
+         }
+      }
+
+  
+
+   //             
+                  // **************************************************************************
+         //          connection.query(qu,function(err3,result){//然后创建文件
+         //             if(err3){
+         //                console.log('[UPDATE ERROR] - ',err3.message);
+         //                return;
+         //             } 
+
+         //          })
+         //       }
+
+         //    })
+         // }else{
+
+         // }
+
+
+
+
+         
+
+
+
+
+
+
+
+   //    })
+   // })
+
+
+    
+
+
+     
+      
+   //     }
+
+
+
+
+
+   //  console.log(data);
   });
  });
 

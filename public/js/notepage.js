@@ -1,3 +1,4 @@
+
 // 转md
     function mdSwitch() {
         var mdValue = document.getElementById("md-area").value;
@@ -395,8 +396,15 @@ function doUpload() {
     var formData = new FormData();
     var file = $("#uploadbutton")[0].files;
     formData.append('size', file.length);
+    formData.append('userid', localStorage.userid);
+    if(localStorage.contextmenufileid=="foldernamexD"){
+        formData.append('folderid', localStorage.contextmenufilename);
+
+    }else{
+        formData.append('folderid', -1);
+    }
     for (let index = 0; index < file.length; index++) {
-        formData.append('file'+index, file[index]);
+        formData.append('file', file[index]);
     }
     // console.log(formData)
     $.ajax({  
@@ -409,10 +417,9 @@ function doUpload() {
          processData:false,
          mimeType:"multipart/form-data",
          success: function (returndata) {  
-             alert(returndata);  
+             loadcatalogue();
          },  
          error: function (returndata) {  
-             alert(returndata);  
          }  
     });  
 }  
@@ -447,6 +454,7 @@ document.addEventListener("contextmenu", (e) => {
         
         localStorage.contextmenufilename = $(e.path[0]).attr("name");
         localStorage.contextmenufileid = $(e.path[0]).attr("id");
+        console.log(localStorage.contextmenufilename+","+localStorage.contextmenufileid)
         e.preventDefault();
         showMenu(e);
     }else{
