@@ -540,30 +540,33 @@ pre code {
     z-index:19;
     background-color: rgba(80, 79, 79, 0.657);
     border-radius: 10px;
-    padding-left: 18px;
+    padding-left: 15px;
     padding-top:12px;
     padding-bottom:12px;
     
 }
 #icon{
-  padding-right: 18px;
+  padding-right: 15px;
+  height:18px;
+  width:18px;
 }
 .newfile{
-  height:1.1em;
-  width:1.1em;   
-   margin-left: 2px;
+   display:none;
+   height:15px !important;
+   width:15px !important;
+   padding-left:3px;
+
+}
+.newfolder{   
    display:none;
 
 }
-.newfolder{
-  height:1.1em;
-  width:1.1em;   
-   margin-left: 2px;
+.upload{  
+  height:20px !important;
+  width:22px !important;
    display:none;
 
 }
 .trash{
-  height: 1.3em;
-    width: 1.3em;
     display:none;
 }

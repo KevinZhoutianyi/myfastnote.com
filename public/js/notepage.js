@@ -393,16 +393,19 @@ document.addEventListener("contextmenu", (e) => {
     $(".newfile").css("display","none");
     $(".newfolder").css("display","none");
     $(".trash").css("display","none");
+    $(".upload").css("display","none");
     if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"){//右键在file上
         
 
         if(x=="foldernamexD"){
             $(".trash").css("display","block");
             $(".newfile").css("display","block");
+            $(".upload").css("display","block");
         }
         
         else if(x=="menutextarea"){
             $(".newfolder").css("display","block");
+            $(".upload").css("display","block");
         }
         
         else if(x=="filexD"){
@@ -475,6 +478,13 @@ document.addEventListener("contextmenu", (e) => {
         class: "newfolder",
         onClick: function (e) {
             newfolder();
+        },
+      },
+      {
+        name: "public/png/upload.png",
+        class: "upload",
+        onClick: function (e) {
+            
         },
       },
       
