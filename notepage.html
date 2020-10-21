@@ -16,6 +16,7 @@
   
     <script   id="MathJax-script" src="https://cdn.bootcss.com/mathjax/3.0.5/es5/tex-mml-chtml.js"></script>
    
+    <link rel="stylesheet" href="public/css/avator.css">
     <title>FastNote</title>
 </head>
 <body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue();">
@@ -23,7 +24,21 @@
     <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;"  onmousedown="myblur()">
         <div id="avatorbg">
-            <img src="public/png/avator.png" id="avator" onmouseover="anim(this)" alt="">
+            <!-- <img src="public/png/avator.png" id="avator" onmouseover="anim(this)" alt=""> -->
+            <div class="col" ontouchstart="this.classList.toggle('hover');">
+				<div class="container">
+					<div class="front" style="background-image: url(public/png/avator.png);">
+						
+					</div>
+					<div class="back">
+						<div class="inner">
+						  <p id="LINE">HomePage</p>
+						</div>
+					</div>
+				</div>
+			</div>
+        
+        
         </div>
         
         <div style="width: 35%; height: 100%; z-index: 12; position:fixed; left :0px;" onclick="arrow()"></div>
