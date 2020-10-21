@@ -9,12 +9,15 @@ const { send } = require('process');
 var pool = mysql.createPool( dbConfig.mysql );//创建数据库池
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var app = express();
+const multiparty = require('multiparty');
+const fs = require('fs');
 
 
-
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.set('trust proxy', true);// 设置以后，req.ips是ip数组；如果未经过代理，则为[]. 若不设置，则req.ips恒为[]
 app.use('/public', express.static('public'));
+app.use(bodyParser.json());//数据JSON类型
 
 
 
@@ -347,6 +350,33 @@ app.post('/notepage/savecatalogue',urlencodedParser, function (req, res) {
 
 
 
+
+
+
+
+
+app.post("/main/upload",  function (req, res) {
+   let form = new multiparty.Form();
+  form.parse(req, function(err,fields,file){
+    console.log(fields);
+    console.log(file);
+    res.send('数据已接收');
+  });
+ });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 
 app.post('/main',urlencodedParser, function (req, res) {
@@ -379,6 +409,8 @@ app.post('/main',urlencodedParser, function (req, res) {
          })
       })
 })
+
+
 
 
 

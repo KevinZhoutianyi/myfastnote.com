@@ -562,9 +562,11 @@ pre code {
 
 }
 .upload{  
-  height:20px !important;
-  width:22px !important;
    display:none;
+   margin-bottom: 1px;
+   height: 16px !important;
+   width: 18px !important;
+   margin-left: 1px;
 
 }
 .trash{

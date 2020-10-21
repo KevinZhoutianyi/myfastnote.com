@@ -385,6 +385,39 @@ function opfile(data) {
     }
     
 }
+
+function upload() {
+    $("#uploadbutton").trigger("click");
+}
+
+function doUpload() {  
+    // var formData = new FormData($( "#uploadForm" )[0]); 
+    var formData = new FormData();
+    var file = $("#uploadbutton")[0].files;
+    formData.append('size', file.length);
+    for (let index = 0; index < file.length; index++) {
+        formData.append('file'+index, file[index]);
+    }
+    // console.log(formData)
+    $.ajax({  
+         url: 'http://myfastnote.com/main/upload' ,  
+         type: 'POST',  
+         data:formData,
+         dataType: "formData",
+         cache: false,
+         contentType: false,
+         processData:false,
+         mimeType:"multipart/form-data",
+         success: function (returndata) {  
+             alert(returndata);  
+         },  
+         error: function (returndata) {  
+             alert(returndata);  
+         }  
+    });  
+}  
+
+
 //用localstorage在loadcatalogue之后展开folder
 document.addEventListener("contextmenu", (e) => {
     // console.log(e.path[0].id)
@@ -484,7 +517,7 @@ document.addEventListener("contextmenu", (e) => {
         name: "public/png/upload.png",
         class: "upload",
         onClick: function (e) {
-            
+            upload();
         },
       },
       
