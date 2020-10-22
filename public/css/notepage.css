@@ -155,10 +155,12 @@ body{
   color: rgb(56, 56, 56) !important;
   font-size:2.0em !important;
   cursor: pointer;
+  text-align:center;
 }
 #filexD{
   color: rgb(85, 85, 85) !important;
   cursor: pointer;
+  text-align:center;
 }
 [contenteditable]:focus{outline:none;}
 #downarrow{
@@ -285,7 +287,8 @@ body{
   justify-content: start;
   align-items: center;
   /* border:solid 1px black; */
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 #menutextarea::-webkit-scrollbar,#helptext::-webkit-scrollbar {
   width: 12px;               /* width of the entire scrollbar */
@@ -538,7 +541,7 @@ pre code {
     align-items: center;
     position:fixed;
     z-index:19;
-    background-color: rgba(80, 79, 79, 0.657);
+    background-color: rgba(80, 79, 79, 0);
     border-radius: 10px;
     padding-left: 15px;
     padding-top:12px;
@@ -546,29 +549,52 @@ pre code {
     
 }
 #icon{
-  padding-right: 15px;
-  height:18px;
-  width:18px;
+  margin-right: 5px;
+  height: 30px;
+  width: 30px;
+  border-radius: 7px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items: center;
 }
 .newfile{
    display:none;
-   height:15px !important;
-   width:15px !important;
-   padding-left:3px;
-
+}
+.newfileimg{
+  margin-bottom: 0.3px;
+  margin-left: 3px;
+  height:15px !important;
+  width:15px !important;
 }
 .newfolder{   
    display:none;
 
 }
+.newfolderimg{
+  
+  height: 16px !important;
+  width: 17px !important;
+  margin-bottom: 1px;
+}
+
+
 .upload{  
    display:none;
-   margin-bottom: 1px;
-   height: 16px !important;
-   width: 18px !important;
-   margin-left: 1px;
-
 }
+.uploadimg{
+  margin-bottom: 1px;
+  height: 16px !important;
+  width: 18px !important;
+}
+
+
+
 .trash{
     display:none;
+}
+.trashimg{
+  margin-bottom: 1px;
+  height: 16px !important;
+  width: 18px !important;
 }

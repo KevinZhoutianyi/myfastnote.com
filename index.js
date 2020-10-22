@@ -163,12 +163,21 @@ app.post('/notepage/savedata',urlencodedParser, function (req, res) {
          if(err){
             console.log('[UPDATE ERROR] - ',err.message);
             return;
-         } 
-         connection.release();
+         }  
+         var qu2 = "update user set lastopenfileid ='" + id + "'where userid ="+userid+";";
+         connection.query(qu2,function(err2,result2){
+            if(err2){
+               console.log('[UPDATE ERROR] - ',err.message);
+               return;
+            } 
+            connection.release();
+            console.log("savedata : mysql release")
+            res.send("success");
+            })
          console.log("savedata : mysql release")
-         res.send("success");
          })
       })
+     
 
 })
 
@@ -204,10 +213,9 @@ app.post('/notepage/deletefile',urlencodedParser, function (req, res) {
                console.log('[UPDATE ERROR] - ',err3.message);
                return;
             } 
-            res.send("success");
          })
          })
-         var qu4 = "delete from note where file = " +fileid+ " and userid="+userid+";";
+         var qu4 = "delete from note where fileid = " +fileid+ " and userid="+userid+";";
          connection.query(qu4,function(err4,result4){
             if(err4){
                console.log('[UPDATE ERROR] - ',err4.message);
@@ -354,57 +362,30 @@ app.post("/main/upload",urlencodedParser,  async (req, res) => {
       if(fields["folderid"]==-1){//不是目录，先创建一个目录
          result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+1)+",'newfolder',0,0,null)")
          for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
-            result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+file["file"][index-2]["originalFilename"]+"',1,1,"+(maxindex+1)+")")
+            filename = file["file"][index-2]["originalFilename"];
+            filename = filename.substring(0,filename.indexOf("."))
+            result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+")")
             var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
+            data = data.replace(/\\/g,"\\\\");
+                data = data.replace(/\"/g,"\'\'");
+                data =data.replace(/\'/g,"\"");
             result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(maxindex+1)+")")
+            res.send("success")
+         }
+      }else{
+         for (let index = 1; index < (parseInt(fields["size"])+1); index++) {//每个文件存入该目录  
+            filename = file["file"][index-1]["originalFilename"];
+            filename = filename.substring(0,filename.indexOf("."))
+            fatherid = fields["folderid"]
+            result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+")")
+            var data = fs.readFileSync(file["file"][index-1]["path"], 'utf-8');
+            data = data.replace(/\\/g,"\\\\");
+                data = data.replace(/\"/g,"\'\'");
+                data =data.replace(/\'/g,"\"");
+            result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(fatherid)+")")
+            res.send("success")
          }
       }
-
-  
-
-   //             
-                  // **************************************************************************
-         //          connection.query(qu,function(err3,result){//然后创建文件
-         //             if(err3){
-         //                console.log('[UPDATE ERROR] - ',err3.message);
-         //                return;
-         //             } 
-
-         //          })
-         //       }
-
-         //    })
-         // }else{
-
-         // }
-
-
-
-
-         
-
-
-
-
-
-
-
-   //    })
-   // })
-
-
-    
-
-
-     
-      
-   //     }
-
-
-
-
-
-   //  console.log(data);
   });
  });
 

@@ -67,6 +67,15 @@
     // 加载目录
     function loadcatalogue() {
         // to do : get the real data
+        $("#folderxD #foldernamexD").each(function(i){
+            folderid =  $(this).attr('name')
+            if($(this).parent().children("#filexD").css('display') == 'block'){
+                localStorage.setItem("folderid"+folderid,0)
+            }else{
+                localStorage.setItem("folderid"+folderid,1)
+            }
+            
+        });
         console.log("username: "+localStorage.username+ "loading catalogue")
         $.ajax({
             url:"notepage/getcatalogue",
@@ -89,23 +98,33 @@
                 console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
                 for (let i = 0; i < foldersfileidarray.length; i++) {
                     showhtml += "<div id='folderxD' name='" + foldersfileidarray[i]  +"'>";
-                    showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'>" + foldersfileidarray[i].filename + "</h2>";
+                    showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'   spellcheck='false'>" + foldersfileidarray[i].filename + "</h2>";
                     for (let j = 0; j < returnValue.length; j++) {
                         if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
                         {
-                            showhtml += "<h4  id = 'filexD' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);' onclick = 'clickfile(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' >" + returnValue[j].filename+ "</h4>";
+                            showhtml += "<h4  id = 'filexD' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);' onclick = 'clickfile(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
                         }
                         
                     }
                     showhtml += "</div>";
                 }
                 
-
+                
                 
                 document.getElementById("menutextarea").innerHTML = showhtml;
-            },
-            error: function (returnValue) {
-                alert("lose connection");
+
+                $("#folderxD #foldernamexD").each(function(i){
+                    folderid = $(this).attr('name')
+                    if((localStorage.getItem("folderid"+folderid)!=null)&&(localStorage.getItem("folderid"+folderid)==1)){
+                        $(this).parent().children("#filexD").hide();
+                    }else{
+                        $(this).parent().children("#filexD").show();
+                    }
+                    
+                });
+
+
+           
             }
         })
         
@@ -135,21 +154,27 @@
             //event.preventDefault() 方法阻止元素发生默认的行为。
             if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
                 e.preventDefault();
+                localStorage.leftscrolltop = $("#left").scrollTop();
+                localStorage.rightscrolltop = $("#right").scrollTop();
                 // Process event...
                 m = document.getElementById("md-area");
                 m.style.height='auto';
                 m.style.height = m.scrollHeight + 50 + 'px';
+
+                $("#left").scrollTop(localStorage.leftscrolltop);
+                $("#right").scrollTop(localStorage.rightscrolltop);
                 m = document.getElementById("md-area").value;
                 m = m.replace(/\\/g,"\\\\");
-
                 m = m.replace(/\"/g,"\'\'");
-                m = m.replace(/\'/g,"\'\'");
+                m = m.replace(/\'/g,"\"");
                 $.ajax({
                     url:"notepage/savedata",
                     type: "post",
                     data:{content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
                     success: function (returnValue) {
+
                         $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
+                        
                     },
                     error: function (returnValue) {
                         console.log("save fail")
@@ -417,9 +442,12 @@ function doUpload() {
          processData:false,
          mimeType:"multipart/form-data",
          success: function (returndata) {  
+             console.log(returndata)
              loadcatalogue();
          },  
          error: function (returndata) {  
+            console.log(returndata)
+            loadcatalogue();
          }  
     });  
 }  
@@ -438,18 +466,18 @@ document.addEventListener("contextmenu", (e) => {
         
 
         if(x=="foldernamexD"){
-            $(".trash").css("display","block");
-            $(".newfile").css("display","block");
-            $(".upload").css("display","block");
+            $(".trash").css("display","flex");
+            $(".newfile").css("display","flex");
+            $(".upload").css("display","flex");
         }
         
         else if(x=="menutextarea"){
-            $(".newfolder").css("display","block");
-            $(".upload").css("display","block");
+            $(".newfolder").css("display","flex");
+            $(".upload").css("display","flex");
         }
         
         else if(x=="filexD"){
-            $(".trash").css("display","block");
+            $(".trash").css("display","flex");
         }
         
         localStorage.contextmenufilename = $(e.path[0]).attr("name");
@@ -473,10 +501,13 @@ document.addEventListener("contextmenu", (e) => {
         const { menus } = options;
         if (menus && menus.length > 0) {
           for (let menu of menus) {
-            const li = document.createElement("img");
-            li.src = menu.name;
+            const li = document.createElement("div");
+            li.style = "background-color:rgba(80, 79, 79, 0.657);";
             $(li).attr("id","icon");
             $(li).attr("class",menu.class);
+
+            $(li).append( "<img src='"+menu.name+"' class='"+menu.class+"img'>")
+
             li.onclick = menu.onClick;
             ul.appendChild(li);
           }
