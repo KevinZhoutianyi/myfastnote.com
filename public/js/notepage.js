@@ -1,5 +1,5 @@
 
-// 转md
+/*转md*/
     function mdSwitch() {
         var mdValue = document.getElementById("md-area").value;
         mdValue = mdValue.replace(/\\/g,"\\\\");
@@ -10,9 +10,9 @@
         document.getElementById("show-area").innerHTML = html;
         MathJax.typeset();
     }
+/*转md*/
 
-
-// 加载上次编辑文档
+/* 加载上次编辑文档 */
     function loadData() {
         // to do : get the real data
         console.log("username: "+localStorage.username + "loading data")
@@ -38,6 +38,9 @@
         
         
     }
+/* 加载上次编辑文档 */
+
+/*用username得到userid存在本地，用读取fileid对应的content*/
     function loadfile(id) {
         // to do : get the real data
         console.log("username: "+localStorage.username +" loading file id: "+id)
@@ -60,16 +63,17 @@
                 alert("lose connection");
                 mdSwitch();
             }
-        })
-        
+        })      
         
     }
-    // 加载目录
+/*用username得到userid存在本地，用读取fileid对应的content*/ 
+
+/*加载目录*/
     function loadcatalogue() {
         // to do : get the real data
         $("#folderxD #foldernamexD").each(function(i){
             folderid =  $(this).attr('name')
-            if($(this).parent().children("#filexD").css('display') == 'block'){
+            if($(this).parent().children("#filecontainer").css('display') == 'flex'){
                 localStorage.setItem("folderid"+folderid,0)
             }else{
                 localStorage.setItem("folderid"+folderid,1)
@@ -99,13 +103,16 @@
                 for (let i = 0; i < foldersfileidarray.length; i++) {
                     showhtml += "<div id='folderxD' name='" + foldersfileidarray[i]  +"'>";
                     showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'   spellcheck='false'>" + foldersfileidarray[i].filename + "</h2>";
+                    showhtml+= "<div id='filecontainer'>"
+                    showhtml+="<div id='rowseperateline'></div>"
                     for (let j = 0; j < returnValue.length; j++) {
                         if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
-                        {
+                        {   
                             showhtml += "<h4  id = 'filexD' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);' onclick = 'clickfile(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
                         }
                         
                     }
+                    showhtml += "</div>";
                     showhtml += "</div>";
                 }
                 
@@ -116,9 +123,9 @@
                 $("#folderxD #foldernamexD").each(function(i){
                     folderid = $(this).attr('name')
                     if((localStorage.getItem("folderid"+folderid)!=null)&&(localStorage.getItem("folderid"+folderid)==1)){
-                        $(this).parent().children("#filexD").hide();
+                        $(this).parent().children("#filecontainer").hide();
                     }else{
-                        $(this).parent().children("#filexD").show();
+                        $(this).parent().children("#filecontainer").show();
                     }
                     
                 });
@@ -130,25 +137,10 @@
         
     }
 
-// 按键保存 删除时候调整高度
-//     document.onkeydown=function() {
-//     if (event.keyCode == 8) {
-//         if (document.activeElement.type == "text"||document.activeElement.type == "textarea"||document.activeElement.type == "password") {
-//             if (document.activeElement.readOnly == false)
-//                 m = document.getElementById("md-area");
-//                 m.style.height='auto';
-//                 m.style.height = m.scrollHeight - 50 + 'px';
-//                 return true;
-//         }
-//         m = document.getElementById("md-area");
-//         m.style.height='auto';
-//         m.style.height = m.scrollHeight - 50 + 'px';
-//         return false;
-//     }
-   
-    
-// }
+/*加载目录*/
 
+
+/*ctrl s = 保存*/
     window.addEventListener("keydown", function(e) {
             //可以判断是不是mac，如果是mac,ctrl变为花键
             //event.preventDefault() 方法阻止元素发生默认的行为。
@@ -162,7 +154,7 @@
                 m.style.height = m.scrollHeight + 50 + 'px';
 
                 $("#left").scrollTop(localStorage.leftscrolltop);
-                $("#right").scrollTop(localStorage.rightscrolltop);
+                $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
                 m = document.getElementById("md-area").value;
                 m = m.replace(/\\/g,"\\\\");
                 m = m.replace(/\"/g,"\'\'");
@@ -172,9 +164,7 @@
                     type: "post",
                     data:{content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
                     success: function (returnValue) {
-
                         $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
-                        
                     },
                     error: function (returnValue) {
                         console.log("save fail")
@@ -183,8 +173,10 @@
             }
          
         }, false);
+/*ctrl s = 保存*/
 
-// 锁
+
+/*锁的切换*/
     function lock(){
         if(localStorage.islock == 1){
             localStorage.islock = 0;
@@ -196,6 +188,40 @@
             $("#notlocked").hide();
         }            
     }
+/*锁的切换*/
+
+
+/*全屏切换*/
+    function fullscreen(){
+
+        if(localStorage.isfull == 1){
+            localStorage.isfull = 0;
+            $("#smallscreen").hide();
+            $("#fullscreen").show();
+            $("#left").show();
+            $("#right").css("width","50%");
+            $("#show-area").css("width","100%");
+            $("#seperateline").show();
+            
+            //防止 全屏 换文件 小屏 后 left高度不对
+            localStorage.rightscrolltop = $("#right").scrollTop();
+            // Process event...
+            m = document.getElementById("md-area");
+            m.style.height='auto';
+            m.style.height = m.scrollHeight + 50 + 'px';
+            $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
+            
+            //防止 全屏 换文件 小屏 后 left高度不对
+        }else{
+            localStorage.isfull = 1;
+            $("#smallscreen").show();
+            $("#fullscreen").hide();
+            $("#left").hide();
+            $("#right").css("width","100%");
+            $("#show-area").css("width","50%");
+            $("#seperateline").hide();
+        }   
+      }
     // 目录 上下
     function arrow(){
         if(localStorage.isarrowdown == 1){
@@ -225,38 +251,44 @@ function question(){
         // document.getElementById('md-area').focus();
     }            
 }
+/*全屏切换*/
+
+
+
+/*展开文件夹*/
 function folderclick(obj) {
     if($(obj).attr("contentEditable")=='false'){
-        if($(obj).parent().children("#filexD").css('display') == 'block'){
-    
-            $(obj).parent().children("#filexD").hide();
+        if($(obj).parent().children("#filecontainer").css('display') == 'flex'){
+            
+            $(obj).parent().children("#filecontainer").hide();
         }else{
             
-            $(obj).parent().children("#filexD").show();
+            $(obj).parent().children("#filecontainer").show();
         }
 
     }
 }
+/*展开文件夹*/
+
+
+
+
+/*读取文件 显示content*/
 function clickfile(obj) {
     loadfile($(obj).attr('name'));
 }
+/*读取文件 显示content*/
 
-// $(function(){
-//     setInterval(function(){
-//         console.log("123")
-//         m = document.getElementById("md-area");
-//         m.style.height='auto';
-//         m.style.height = m.scrollHeight - 50 + 'px';
-//     }, 3000);
-// });
 
+
+
+/*长按重命名*/
 var timeout;//用于存储定时器的变量
 // 长按
 function mousedown(obj) {
     timeout= setTimeout(function() {
         $(obj).attr("contentEditable",true)
         localStorage.edited = 1;
-        
         obj.focus();
     }, 700);//鼠标按下1秒后发生事件
 }
@@ -265,15 +297,16 @@ function mouseup(obj) {
 }
 
 function mouseout(obj) {
-    
     // $(obj).attr("contentEditable",false)
     clearTimeout(timeout);//清理掉定时器 
 }
+/*长按重命名*/
 
 
-// div失去焦点 分点了一下 点了别的地方 和 编辑之后点了别的地方
-// localedited用来 排除点了一下 div 之后点了别的地方的失去焦点
-// undefined是 div blur的bug
+
+/* div失去焦点 分点了一下 点了别的地方 和 编辑之后点了别的地方
+ localedited用来 排除点了一下 div 之后点了别的地方的失去焦点
+ undefined是 div blur的bug*/
 function myblur(obj) {
     
     if($(obj).html()==undefined)
@@ -299,6 +332,14 @@ function myblur(obj) {
         $(obj).attr("contentEditable",false)
         }
 }
+/* div失去焦点 分点了一下 点了别的地方 和 编辑之后点了别的地方
+ localedited用来 排除点了一下 div 之后点了别的地方的失去焦点
+ undefined是 div blur的bug*/
+
+
+
+
+/*保存目录*/
 function savecatalogue(filename,fileid) {
     console.log("username: "+localStorage.username +" save file id: "+fileid)
         $.ajax({
@@ -315,13 +356,10 @@ function savecatalogue(filename,fileid) {
             }
         })
 }
-function anim(obj) {
-    $(obj).addClass("avaanim");
-    timeout= setTimeout(function() {
-        $(obj).removeClass("avaanim");
-    }, 10000);//鼠标按下1秒后发生事件
-}
+/*保存目录*/
 
+
+/*新建文件夹*/
 function newfolder(){
     console.log("username: "+localStorage.username +" new file ")
         $.ajax({
@@ -338,10 +376,12 @@ function newfolder(){
             }
         })
 }
+/*新建文件夹*/
 
 
+
+/*新建文件和删除文件文件夹*/
 function opfile(data) {
-
     if(data=="delete"){
         id = localStorage.contextmenufileid;
         name = localStorage.contextmenufilename;
@@ -411,11 +451,13 @@ function opfile(data) {
     }
     
 }
+/*新建文件和删除文件文件夹*/
 
+
+/*从本地上传md文件*/
 function upload() {
     $("#uploadbutton").trigger("click");
 }
-
 function doUpload() {  
     // var formData = new FormData($( "#uploadForm" )[0]); 
     var formData = new FormData();
@@ -451,19 +493,23 @@ function doUpload() {
          }  
     });  
 }  
+/*从本地上传md文件*/
 
 
-//用localstorage在loadcatalogue之后展开folder
+
+
+
+/*右键的context menu*/
 document.addEventListener("contextmenu", (e) => {
     // console.log(e.path[0].id)
     let x = e.path[0].id
-    
     $(".newfile").css("display","none");
     $(".newfolder").css("display","none");
     $(".trash").css("display","none");
     $(".upload").css("display","none");
-    if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"){//右键在file上
+    if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"|x=="folderxD"|x=="filecontainer"){//右键在file上
         
+        e.preventDefault();
 
         if(x=="foldernamexD"){
             $(".trash").css("display","flex");
@@ -471,7 +517,7 @@ document.addEventListener("contextmenu", (e) => {
             $(".upload").css("display","flex");
         }
         
-        else if(x=="menutextarea"){
+        else if(x=="menutextarea"||x=="folderxD"){
             $(".newfolder").css("display","flex");
             $(".upload").css("display","flex");
         }
@@ -479,17 +525,24 @@ document.addEventListener("contextmenu", (e) => {
         else if(x=="filexD"){
             $(".trash").css("display","flex");
         }
+
+        else if(x=="filecontainer"){
+            $(".newfile").css("display","flex");
+        }
         
         localStorage.contextmenufilename = $(e.path[0]).attr("name");
         localStorage.contextmenufileid = $(e.path[0]).attr("id");
+        if(x=="filecontainer"){
+            localStorage.contextmenufilename = $(e.path[1]).children("#foldernamexD").attr("name");
+            localStorage.contextmenufileid = $(e.path[1]).children("#foldernamexD").attr("id");
+        }
+
         console.log(localStorage.contextmenufilename+","+localStorage.contextmenufileid)
-        e.preventDefault();
         showMenu(e);
     }else{
         hideMenu();
     }
   });
-
   const ContextMenu = function (options) {
     // 唯一实例
     let instance;
@@ -527,8 +580,6 @@ document.addEventListener("contextmenu", (e) => {
       },
     };
   };
-
-
    const menuSinglton = ContextMenu({
     menus: [
       {
@@ -578,8 +629,45 @@ document.addEventListener("contextmenu", (e) => {
   
   document.addEventListener("click", hideMenu);
   document.addEventListener("keypress", hideMenu);
+/*右键的context menu*/
+
+
+
   
-  $(document).on('mousewheel DOMMouseScroll', onMouseScroll);
-  function onMouseScroll(e){
-    hideMenu();
+  
+/*左半边的scroll同步右边*/
+  function syncDivsScrollPos() {
+        var $divs = $('#left');
+        var sync = function(e){
+            if(localStorage.islock==1){
+                var $other =$('#right'), other = $other.get(0);
+                var percentage = this.scrollTop / (this.scrollHeight - this.offsetHeight);
+                other.scrollTop = percentage * (other.scrollHeight - other.offsetHeight);
+
+            }
+        }
+        $divs.on( 'scroll', sync);
   }
+  /*左半边的scroll同步右边*/
+
+
+  
+/*右下角extramenu*/
+  function mouseover() {
+      $("#mouseoverarea").css("width",'0px');
+      $("#extramenu").addClass("slidein");
+      $("#extramenu").removeClass("slideout");
+  }
+  function mouseout() {
+      
+    $("#mouseoverarea").css("width",'4em');
+    $("#extramenu").addClass("slideout");
+    $("#extramenu").removeClass("slidein");
+      
+  }
+  function extramenuload() {
+    $("#extramenu").mouseleave(function(){
+        mouseout();
+    });
+  }
+/*右下角extramenu*/

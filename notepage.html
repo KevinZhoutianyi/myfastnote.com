@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="public/css/notepage.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="public/js/syncscroll/syncscroll.js"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
  
-    <script>localStorage.islock= 1;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
+    <script>localStorage.islock= 1;localStorage.isfull= 0;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
     <script src="public/js/marked.js"></script>
     <link rel="stylesheet" href="public/highlight/styles/qtcreator_dark.css">
     <script src="public/highlight/highlight.pack.js"></script>
@@ -19,12 +18,11 @@
     <link rel="stylesheet" href="public/css/avator.css">
     <title>FastNote</title>
 </head>
-<body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue();">
+<body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue(); syncDivsScrollPos(); extramenuload();">
 
     <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;"  onmousedown="myblur()">
         <div id="avatorbg">
-            <!-- <img src="public/png/avator.png" id="avator" onmouseover="anim(this)" alt=""> -->
             <div class="col" ontouchstart="this.classList.toggle('hover');">
 				<div class="container">
 					<div class="front" style="background-image: url(public/png/avator.png);">
@@ -32,7 +30,7 @@
 					</div>
 					<div class="back">
 						<div class="inner">
-						  <p id="LINE">HomePage</p>
+						  <p id="LINE">home</p>
 						</div>
 					</div>
 				</div>
@@ -70,28 +68,36 @@
 
 
     <div id="bg">
-        <div id="left"  class=syncscroll name=myElements> 
+        <div id="left"  > 
             <textarea name=""   spellcheck="false" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"># loading ...</textarea>
             <div style="height: 50%;"></div>
-            <Img src="public/png/downarrow.png" onclick="arrow() ;" id="downarrow" ></Img>
-            <Img src="public/png/uparrow.png" onclick="arrow();" id="uparrow" hidden></Img>
+            
         </div>
-        <div id="right" class=syncscroll name=myElements>
+        <div id="right" >
             <div id="show-area">
                 <div style="height: 20px;">
                     
                 
                 </div>
             </div>
-            <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
-            <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
+            <!-- <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
+            <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img> -->
             <Img src="public/png/questionmark.png" onclick="question()" id="questionxD" ></Img>
+            <div  id='mouseoverarea' onmouseover="mouseover()"></div>
+            <div  id='extramenu' >
+                <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
+                <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
+                <Img src="public/png/fullscreen.png" id="fullscreen" onclick="fullscreen()"></Img>
+                <Img src="public/png/smallscreen.png" id="smallscreen" onclick="fullscreen()" hidden></Img>
+            </div>
            
         </div>
+        <div id='seperateline'></div>
     </div>
 
 
 
+    <Img src="public/png/downarrow.png" onclick="arrow() ;" id="downarrow" ></Img>
     <div id="bottombar"></div>
     <form    enctype="multipart/form-data" id="formdata" style="visibility:hidden">
     

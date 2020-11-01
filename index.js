@@ -297,7 +297,7 @@ app.post('/notepage/newfile',urlencodedParser, function (req, res) {
                return;
             } 
             })
-         var qu3 = "insert into note values("+(result[0]["max(fileid)"]+1)+",'#newfile',"+userid+","+folderid +");";
+         var qu3 = "insert into note values("+(result[0]["max(fileid)"]+1)+",'# newfile',"+userid+","+folderid +");";
          connection.query(qu3,function(err3,result3){
             if(err3){
                console.log('[UPDATE ERROR] - ',err3.message);
@@ -362,8 +362,11 @@ app.post("/main/upload",urlencodedParser,  async (req, res) => {
       if(fields["folderid"]==-1){//不是目录，先创建一个目录
          result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+1)+",'newfolder',0,0,null)")
          for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
-            filename = file["file"][index-2]["originalFilename"];
-            filename = filename.substring(0,filename.indexOf("."))
+            orifilename = file["file"][index-1]["originalFilename"];
+            filename = orifilename.substring(0,orifilename.indexOf("."))
+            endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
+            if(endname != ".md") 
+               return;
             result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+")")
             var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
             data = data.replace(/\\/g,"\\\\");
@@ -374,8 +377,11 @@ app.post("/main/upload",urlencodedParser,  async (req, res) => {
          }
       }else{
          for (let index = 1; index < (parseInt(fields["size"])+1); index++) {//每个文件存入该目录  
-            filename = file["file"][index-1]["originalFilename"];
-            filename = filename.substring(0,filename.indexOf("."))
+            orifilename = file["file"][index-1]["originalFilename"];
+            filename = orifilename.substring(0,orifilename.indexOf("."))
+            endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
+            if(endname != ".md") 
+               return;
             fatherid = fields["folderid"]
             result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+")")
             var data = fs.readFileSync(file["file"][index-1]["path"], 'utf-8');
