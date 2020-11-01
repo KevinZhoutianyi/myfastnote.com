@@ -64,7 +64,7 @@ app.get('/query' , async (req, res) => {
 
 app.get('/', function (req, res) {
    console.log( req.ip + "visit your server  \n");
-   res.sendFile( __dirname + "/" + "index.html" );
+   res.sendFile( __dirname + "/html/" + "index.html" );
 })
 
 
@@ -429,13 +429,13 @@ app.post('/main',urlencodedParser, function (req, res) {
             console.log("login success")
             connection.release();
             console.log("userlogin : mysql release")
-            res.sendFile( __dirname + "/" + "notepage.html" );
+            res.sendFile( __dirname + "/html/" + "notepage.html" );
          }
          else{
             console.log("login fail")
             connection.release();
             console.log("userlogin : mysql release")
-            res.sendFile( __dirname + "/" + "index.html" );
+            res.sendFile( __dirname + "/html/" + "index.html" );
          }    
          })
       })

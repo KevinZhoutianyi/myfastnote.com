@@ -96,7 +96,7 @@ function loadcatalogue() {
                 for (let j = 0; j < returnValue.length; j++) {
                     if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
                     {   
-                        showhtml += "<h4  id = 'filexD' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);' onclick = 'clickfile(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
+                        showhtml += "<h4  title='"+returnValue[j].filename+"' id = 'filexD' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);' onclick = 'clickfile(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
                     }
                     
                 }
@@ -204,12 +204,11 @@ function mouseover() {
     $("#extramenu").addClass("slidein");
     $("#extramenu").removeClass("slideout");
 }
-function mouseout() {
-    
+function extramenumouseout() {
+
   $("#mouseoverarea").css("width",'4em');
   $("#extramenu").addClass("slideout");
   $("#extramenu").removeClass("slidein");
-    
 }
 function extramenuload() {
   $("#extramenu").mouseleave(function(){

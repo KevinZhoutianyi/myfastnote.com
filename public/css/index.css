@@ -1,0 +1,68 @@
+@import "theme1.css";
+
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,
+form,fieldset,legend,button,input,textarea,th,td,section,p,span,font,div{margin:0;padding:0;font-family: Noto Sans SC;
+  margin: 0;
+  padding: 0;
+  font-weight: 100;
+  z-index: 5;}
+address,cite,dfn,em,var{font-style:normal;}
+code,kbd,pre,samp{font-family: "Noto Sans SC",Georgia, 'Times New Roman', Times, serif;
+  font-weight: 100;}
+small{font-size:10px;}
+ul,ol{list-style:none;}
+a{text-decoration:none;color: white;}
+a:hover{text-decoration: underline;}
+sup{vertical-align:text-top;}
+sub{vertical-align:text-bottom;}
+legend{color:#000;}
+fieldset,img{border:0;}
+button,input,select,textarea{font-size:100%;}
+table{border-collapse:collapse;border-spacing:0;}
+
+
+
+#bg{
+    position:fixed;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+    width:100%;
+    right:0px;
+    top:0px;
+    z-index:10;
+    cursor: pointer;
+    background:rgb(107, 106, 106);
+    color:rgb(255, 255, 255);
+    -webkit-mask: url("/public/png/nature-sprite.png");
+    mask: url("/public/png/nature-sprite.png");
+    -webkit-mask-size: 2300% 100%;
+    mask-size: 2300% 100%;
+    -webkit-animation: ani2 0.7s  forwards;
+    animation: ani2 0.7s  forwards;
+}
+
+ 
+@keyframes ani2 {
+    0%   {background: white;}
+    100% {background: var(--righthalfcolor);}
+}
+
+#myform{
+    height:auto;
+    width:auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+}
+#btn{
+    margin-top:10px;
+    width:100px;
+    height:25px;
+}
+#name{
+    text-align:center;
+}
