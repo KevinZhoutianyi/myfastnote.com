@@ -156,10 +156,10 @@ img{
   bottom: 0px;
   height: 8%;
   width: 3em;
-  border:solid black 1px;
+  /* border:solid black 1px; */
 }
 #extramenu{
-  border:solid black 1px;
+  /* border:solid black 1px; */
   padding-bottom: 10px;
   position: fixed;
   z-index: 9;
