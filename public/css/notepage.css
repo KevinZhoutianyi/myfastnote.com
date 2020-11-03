@@ -42,6 +42,7 @@ body{
   align-items: center;
 }
 img{
+  
   width:50%;
 }
 
@@ -155,14 +156,15 @@ img{
   bottom: 0px;
   height: 8%;
   width: 3em;
+  border:solid black 1px;
 }
 #extramenu{
-  
+  border:solid black 1px;
   padding-bottom: 10px;
   position: fixed;
   z-index: 9;
   height: 15%;
-  width: 5em;
+  width: 5.5em;
   right: -5em;
   bottom: 0px;
   display: flex;
@@ -198,6 +200,7 @@ img{
   }
 }
 #md-area {
+  font-weight:300;
   
   direction: ltr;
   line-height: 1.7em;
@@ -214,6 +217,7 @@ img{
 }
 
 #show-area {
+  font-weight:300;
   line-height: 1.7em;
     margin: 0px;
     font-size:19px;
@@ -263,7 +267,7 @@ img{
 }
 [contenteditable]:focus{outline:none;}
 #filexD:hover{
-  font-weight:500 !important;
+  font-weight:600 !important;
 }
 #filecontainer>#filexD::after{
   display:block;
@@ -410,7 +414,7 @@ img{
 #menutextarea::-webkit-scrollbar-thumb,#helptext::-webkit-scrollbar-thumb {
   background-color: whitesmoke;    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
-  border: 3px solid black;  /* creates padding around scroll thumb */
+  border: 3px solid var(--menucolor);  /* creates padding around scroll thumb */
 }
 #menutextarea::-webkit-scrollbar-track-piece,#helptext::-webkit-scrollbar-track-piece:end {
   background: transparent;

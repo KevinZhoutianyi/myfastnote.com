@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="public/css/avator.css">
     <title>FastNote</title>
 </head>
-<body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue(); syncDivsScrollPos(); extramenuload();">
+<body onLoad="document.getElementById('md-area').focus();  loadData(); loadcatalogue(); syncDivsScrollPos();">
 
     <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;"  onmousedown="myblur()">
@@ -87,7 +87,7 @@
             <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img> -->
             <Img src="public/png/questionmark.png" onclick="question()" id="questionxD" ></Img>
             <div  id='mouseoverarea' onmouseover="mouseover()"></div>
-            <div  id='extramenu' onmouseout="extramenumouseout()">
+            <div  id='extramenu'>
                 <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
                 <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
                 <Img src="public/png/fullscreen.png" id="fullscreen" onclick="fullscreen()"></Img>
