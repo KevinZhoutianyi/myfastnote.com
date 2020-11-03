@@ -208,7 +208,6 @@ function mouseover() {
 $(document).ready(function(){
     console.log("ready")
     $("#extramenu").mouseleave(function(){
-        console.log("mouseleave")
         $("#mouseoverarea").css("width",'4em');
         $("#extramenu").addClass("slideout");
         $("#extramenu").removeClass("slidein");
