@@ -262,7 +262,7 @@ app.post('/notepage/newfolder',urlencodedParser, function (req, res) {
                return;
             } 
             
-            res.send("success");
+            res.json(((result[0]["max(fileid)"]+1)));
             })
          connection.release();
          })
@@ -304,9 +304,11 @@ app.post('/notepage/newfile',urlencodedParser, function (req, res) {
                return;
             } 
             
-            res.send("success");
+            
             })
          connection.release();
+
+         res.json(((result[0]["max(fileid)"]+1)));
          })
       })
 

@@ -90,13 +90,13 @@ function loadcatalogue() {
             console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
             for (let i = 0; i < foldersfileidarray.length; i++) {
                 showhtml += "<div id='folderxD' name='" + foldersfileidarray[i]  +"'>";
-                showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false' onmousedown='mousedown(this);'  onmouseup='mouseup(this);' onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'   spellcheck='false'>" + foldersfileidarray[i].filename + "</h2>";
+                showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false'  tabindex='1' onblur='myblur(this);'   spellcheck='false'>" + foldersfileidarray[i].filename + "</h2>";
                 showhtml+= "<div id='filecontainer'>"
                 showhtml+="<div id='rowseperateline'></div>"
                 for (let j = 0; j < returnValue.length; j++) {
                     if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
                     {   
-                        showhtml += "<h4  title='"+returnValue[j].filename+"' id = 'filexD' name = "+ returnValue[j].fileid+" onmousedown='mousedown(this);' onclick = 'clickfile(this);'  onmouseup='mouseup(this);'zz onmouseout  =' mouseout(this)' tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
+                        showhtml += "<h4  title='"+returnValue[j].filename+"' id = 'filexD' name = "+ returnValue[j].fileid+"  onclick = 'clickfile(this);'   tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
                     }
                     
                 }
@@ -165,6 +165,12 @@ function syncDivsScrollPos() {
 
 /*ctrl s = 保存*/
 window.addEventListener("keydown", function(e) {
+    if(e.keyCode == 13 && localStorage.edited==1){
+        e.preventDefault();
+
+        var obj  = document.getElementsByName(localStorage.contextmenufilename)
+        myblur(obj);
+    }
     //可以判断是不是mac，如果是mac,ctrl变为花键
     //event.preventDefault() 方法阻止元素发生默认的行为。
     if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
@@ -194,6 +200,7 @@ window.addEventListener("keydown", function(e) {
             }
         })
     }
+    
  
 }, false);
 /*ctrl s = 保存*/
@@ -324,7 +331,7 @@ function clickfile(obj) {
 }
 /*读取文件 显示content*/
 
-/*长按重命名*/
+/*长按重命名
 var timeout;//用于存储定时器的变量
 // 长按
 function mousedown(obj) {
@@ -352,11 +359,8 @@ function myblur(obj) {
     if($(obj).html()==undefined)
     return;
     if(localStorage.edited == 1){
-        
         localStorage.edited = 0;
-        
-        console.log(localStorage.edited)
-        
+
         if($(obj).html().length<=3){
             alert("too short")
             loadcatalogue();
@@ -406,6 +410,9 @@ function newfolder(){
             success: function (returnValue) {
                 console.log(returnValue)
                 loadcatalogue();
+
+                localStorage.contextmenufilename = returnValue;
+                setTimeout("rename()", 100 )
             },
             error: function (returnValue) {
                 alert("lose connection");
@@ -476,6 +483,9 @@ function opfile(data) {
                 success: function (returnValue) {
                     console.log(returnValue)
                     loadcatalogue();
+                    localStorage.contextmenufilename = returnValue;
+                    
+                    setTimeout("rename()", 100 )
                 },
                 error: function (returnValue) {
                     alert("lose connection");
@@ -530,6 +540,24 @@ function doUpload() {
 /*从本地上传md文件*/
 
 
+
+
+
+
+
+/* 重命名 */
+function rename() {
+    console.log("renamefor " +(localStorage.contextmenufilename))
+    var obj  = document.getElementsByName(localStorage.contextmenufilename)
+    $(obj).attr("contentEditable",true)
+    localStorage.edited = 1;
+    $(obj).focus();
+}
+
+
+/* 重命名 */
+
+
 /*右键的context menu*/
 document.addEventListener("contextmenu", (e) => {
     // console.log(e.path[0].id)
@@ -538,6 +566,7 @@ document.addEventListener("contextmenu", (e) => {
     $(".newfolder").css("display","none");
     $(".trash").css("display","none");
     $(".upload").css("display","none");
+    $(".rename").css("display","none");
     if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"|x=="folderxD"|x=="filecontainer"){//右键在file上
         
         e.preventDefault();
@@ -546,6 +575,7 @@ document.addEventListener("contextmenu", (e) => {
             $(".trash").css("display","flex");
             $(".newfile").css("display","flex");
             $(".upload").css("display","flex");
+            $(".rename").css("display","flex");
         }
         
         else if(x=="menutextarea"||x=="folderxD"){
@@ -554,6 +584,8 @@ document.addEventListener("contextmenu", (e) => {
         }
         
         else if(x=="filexD"){
+
+            $(".rename").css("display","flex");
             $(".trash").css("display","flex");
         }
 
@@ -639,6 +671,13 @@ document.addEventListener("contextmenu", (e) => {
         class: "upload",
         onClick: function (e) {
             upload();
+        },
+      },
+      {
+        name: "public/png/rename.png",
+        class: "rename",
+        onClick: function (e) {
+            rename();
         },
       },
       

@@ -687,6 +687,8 @@ pre code {
   justify-content:center;
   align-items: center;
 }
+/* icon & newfile表示外面的container */
+/* newfileimg表示里面的图片 */
 .newfile{
    display:none;
 }
@@ -725,4 +727,14 @@ pre code {
   margin-bottom: 1px;
   height: 16px !important;
   width: 18px !important;
+}
+
+.rename{
+  display:none;
+}
+.renameimg{
+  margin-bottom: 0.3px;
+  margin-right: 1px;
+ height:17px !important;
+ width:17px !important;
 }
