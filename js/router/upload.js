@@ -5,57 +5,35 @@ var fs = require('fs');
 var qiniu = require("qiniu");
 //要上传的空间名
 var bucket = 'onlydrinkwater'; 
-var imageUrl = '../../public/png/avator.png'; // 域名名称
+var imageUrl = 'img.myfastnote.com'; // 域名名称
 var accessKey = '3PoDKOO6j9uXap5iTeeb5TE6JsYN4_okFnX9nozI';
 var secretKey = 'mXf52W_o7P8Q01HeT-lf1MehQeUxg0KtH-RnIxzo';
 var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
-var options = {
-  scope: bucket,
-};
-var putPolicy = new qiniu.rs.PutPolicy(options);
-var uploadToken = putPolicy.uploadToken(mac);
+// var options = {
+//   scope: bucket,
+// };
+// var putPolicy = new qiniu.rs.PutPolicy(options);
+// var uploadToken = putPolicy.uploadToken(mac);
 
-var config = new qiniu.conf.Config();
-config.zone = qiniu.zone.Zone_z2;
+// var config = new qiniu.conf.Config();
+// config.zone = qiniu.zone.Zone_z2;
 // 图片上传
-router.post('/upload', function(req, res, next){
-    // 图片数据流
-    var imgData = req.body.imgData;
-    // 构建图片名
-    var fileName = Date.now() + '.png';
-    // 构建图片路径
-    var filePath = './public/tmp/' + fileName;
-    //过滤data:URL
-    var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
-    var dataBuffer = new Buffer(base64Data, 'base64');
-    fs.writeFile(filePath, dataBuffer, function(err) {
-        if(err){
-          res.end(JSON.stringify({status:'102',msg:'文件写入失败'})); 
-        }else{
-
-            var localFile = filePath;
-            var formUploader = new qiniu.form_up.FormUploader(config);
-            var putExtra = new qiniu.form_up.PutExtra();
-            var key = fileName;
-
-            // 文件上传
-            formUploader.putFile(uploadToken, key, localFile, putExtra, function(respErr,
-              respBody, respInfo) {
-              if (respErr) {
-                res.end(JSON.stringify({status:'-1',msg:'上传失败',error:respErr}));   
-              }
-              if (respInfo.statusCode == 200) {
-                var imageSrc = imageUrl + respBody.key;
-                res.end(JSON.stringify({status:'200',msg:'上传成功',imageUrl:imageSrc}));   
-              } else {
-                res.end(JSON.stringify({status:'-1',msg:'上传失败',error:JSON.stringify(respBody)}));  
-              }
-              // 上传之后删除本地文件
-              fs.unlinkSync(filePath);
-            });
-        }
-    });
-})
+router.post('/', function(req, res, next){
+  // 图片数据流
+  let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+  let options = {
+      scope: bucket,
+      expires: 3600 * 24
+  };
+  let putPolicy =  new qiniu.rs.PutPolicy(options);
+  let uploadToken= putPolicy.uploadToken(mac);
+  if(uploadToken){
+    res.send(uploadToken)
+  }
+  else{
+    res.send('fail')
+  }
+  });
 
 module.exports = router;

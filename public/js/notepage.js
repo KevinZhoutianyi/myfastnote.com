@@ -1,7 +1,8 @@
 /* ---------------------------------------加载----------------------------------------*/
 
-/* 加载上次编辑文档 */
+/* 加载上次编辑文档，加载存七牛的token */
 function loadData() {
+    
     // to do : get the real data
     console.log("username: "+localStorage.username + "loading data")
     $.ajax({
@@ -11,7 +12,7 @@ function loadData() {
     
         success: function (returnValue) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
-            document.getElementById("md-area").innerHTML= returnValue.content;
+            document.getElementById("md-area").value= returnValue.content;
             localStorage.nowopenfileid = returnValue.id;
             localStorage.userid = returnValue.userid;
             m = document.getElementById("md-area");
@@ -22,6 +23,24 @@ function loadData() {
         error: function (returnValue) {
             alert("lose connection");
             mdSwitch();
+        }
+    })
+
+    $.ajax({
+        url:"/getqiyuntoken",
+        type: "post",
+        data:{},
+        success: function (returnValue) {
+            if(returnValue=="fail"){
+                alert("fail to get token")
+            }else{
+                console.log(returnValue)
+                localStorage.qiniutoken = returnValue
+
+            }
+        },
+        error: function (returnValue) {
+            console.log(returnValue)
         }
     })
     
@@ -284,6 +303,60 @@ function fullscreen(){
   }
   
 /*全屏切换*/
+
+
+/*截图*/
+function cropimg() {
+    //截图 后上传
+    $("#uploadcropimg").click();
+}
+function inputChange(e){
+    
+    var formData = new FormData();
+    var file = $("#uploadcropimg")[0].files;
+    console.log(file[0])
+    formData.append('token',localStorage.qiniutoken);
+    formData.append('file', file[0]);
+    
+    console.log(localStorage.qiniutoken)
+    $.ajax({  
+         url: 'http://upload-z2.qiniup.com' ,  
+         type: 'POST',  
+         data:formData,
+         dataType: "formData",
+         cache: false,
+         contentType: false,
+         processData:false,
+         mimeType:"multipart/form-data",
+         success: function (returndata) {  
+             
+            //xD明明code是200居然执行error
+         },  
+         error: function (returndata) {  
+            console.log(returndata)
+            hash = JSON.parse(returndata['responseText'])['hash'];
+            
+            console.log(hash)
+            m = document.getElementById("md-area").value;
+            m += "\r\n![](http://img.myfastnote.com/"+ hash+")";
+            document.getElementById("md-area").value = m;
+            localStorage.leftscrolltop = $("#left").scrollTop();
+            localStorage.rightscrolltop = $("#right").scrollTop();
+            m = document.getElementById("md-area")
+            m.style.height='auto';
+            m.style.height = m.scrollHeight + 50 + 'px';
+            mdSwitch();
+            $("#left").scrollTop(localStorage.leftscrolltop);
+            $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
+         }  
+    });  
+
+
+}
+
+/*截图*/
+
+
 
 
 /* 右上角帮助 */

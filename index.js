@@ -26,7 +26,7 @@ app.use(bodyParser.json());//数据JSON类型
 
 
 app.use('/main', require('./js/router/main'));
-app.use('/upload', require('./js/routes/upload'));
+app.use('/getqiyuntoken', require('./js/router/upload'));
 
 
 
