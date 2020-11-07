@@ -247,6 +247,9 @@ img{
   cursor: pointer;
   text-align:start;
 }
+#foldernamexD:hover{
+  font-weight:800 !important;
+}
 #filexD{
   display:flex;
   flex-direction:row;
@@ -263,7 +266,7 @@ img{
   margin-right:25px !important;
   font-size:1.2em !important;
   cursor: pointer;
-  text-align:center;
+  text-align:start;
 }
 [contenteditable]:focus{outline:none;}
 #filexD:hover{
@@ -664,21 +667,24 @@ pre code {
     border-color: #ebccd1;
 }
 .custom-context-menu{
-    display : flex;
-    flex-direction:row;
-    justify-content:start;
-    align-items: center;
-    position:fixed;
-    z-index:19;
-    background-color: rgba(80, 79, 79, 0);
-    border-radius: 10px;
-    padding-left: 15px;
-    padding-top:12px;
-    padding-bottom:12px;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  position: fixed;
+  z-index: 19;
+  background-color: rgba(80, 79, 79, 0);
+  border-radius: 10px;
+  padding-left: 15px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  width: 100px;
     
 }
 #icon{
   margin-right: 5px;
+  margin-top: 5px;
   height: 40px;
   width: 40px;
   border-radius: 7px;

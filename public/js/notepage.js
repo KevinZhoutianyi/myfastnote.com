@@ -13,6 +13,7 @@ function loadData() {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
             document.getElementById("md-area").innerHTML= returnValue.content;
             localStorage.nowopenfileid = returnValue.id;
+            localStorage.userid = returnValue.userid;
             m = document.getElementById("md-area");
             m.style.height='auto';
             m.style.height = m.scrollHeight + 50 + 'px';
@@ -57,17 +58,22 @@ function loadfile(id) {
 /*用username得到userid存在本地，用读取fileid对应的content*/ 
 
 /*加载目录*/
-function loadcatalogue() {
+function loadcatalogue(command) {
+    console.log(command)
+    
+        $("#folderxD #foldernamexD").each(function(i){
+            folderid =  $(this).attr('name')
+            if($(this).parent().children("#filecontainer").css('display') == 'flex'){
+                localStorage.setItem("folderid"+folderid,0)
+            }else{
+                localStorage.setItem("folderid"+folderid,1)
+            }
+            
+        });
+
+    
     // to do : get the real data
-    $("#folderxD #foldernamexD").each(function(i){
-        folderid =  $(this).attr('name')
-        if($(this).parent().children("#filecontainer").css('display') == 'flex'){
-            localStorage.setItem("folderid"+folderid,0)
-        }else{
-            localStorage.setItem("folderid"+folderid,1)
-        }
-        
-    });
+   
     console.log("username: "+localStorage.username+ "loading catalogue")
     $.ajax({
         url:"notepage/getcatalogue",
@@ -107,6 +113,15 @@ function loadcatalogue() {
             
             
             document.getElementById("menutextarea").innerHTML = showhtml;
+
+            if(command == 'first'){//第一次load的时候 把所有folder fold起来
+
+                $("#folderxD #foldernamexD").each(function(i){
+                    folderid =  $(this).attr('name')
+                    localStorage.setItem("folderid"+folderid,1)
+                });
+        
+            }
 
             $("#folderxD #foldernamexD").each(function(i){
                 folderid = $(this).attr('name')
@@ -361,7 +376,7 @@ function myblur(obj) {
     if(localStorage.edited == 1){
         localStorage.edited = 0;
 
-        if($(obj).html().length<=3){
+        if($(obj).html().length<=2){
             alert("too short")
             loadcatalogue();
         }else{

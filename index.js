@@ -81,10 +81,15 @@ app.post('/notepage/getdata',urlencodedParser, async (req, res) => {
    const result = await query("select lastopenfileid from user where username = '"+username+"'");
    
    if(result.length==1){
+
+      const result3 = await query("select userid from user where username = '"+username+"'");
+   
+
+      
       // console.log(result) 这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
       const result2 = await query("select content from note where fileid = '"+result[0].lastopenfileid+"'");
       if(result2.length>=1){
-         var x = {content:result2[0].content,id:result[0].lastopenfileid}
+         var x = {content:result2[0].content,id:result[0].lastopenfileid,userid:result3[0].userid}
          res.send(x);
       }
    }
