@@ -4,10 +4,10 @@ var fs = require('fs');
 // 引入七牛模块  
 var qiniu = require("qiniu");
 //要上传的空间名
-var bucket = ''; 
-var imageUrl = ''; // 域名名称
-var accessKey = '';
-var secretKey = '';
+var bucket = 'onlydrinkwater'; 
+var imageUrl = '../../public/png/avator.png'; // 域名名称
+var accessKey = '3PoDKOO6j9uXap5iTeeb5TE6JsYN4_okFnX9nozI';
+var secretKey = 'mXf52W_o7P8Q01HeT-lf1MehQeUxg0KtH-RnIxzo';
 var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
 var options = {

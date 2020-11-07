@@ -5,7 +5,7 @@ function loadData() {
     // to do : get the real data
     console.log("username: "+localStorage.username + "loading data")
     $.ajax({
-        url:"notepage/getdata",
+        url:"main/getdata",
         type: "post",
         data:{username : localStorage.username},
     
@@ -34,7 +34,7 @@ function loadfile(id) {
     // to do : get the real data
     console.log("username: "+localStorage.username +" loading file id: "+id)
     $.ajax({
-        url:"notepage/getfile",
+        url:"main/getfile",
         type: "post",
         data:{username : localStorage.username, fileid : id},
     
@@ -59,7 +59,6 @@ function loadfile(id) {
 
 /*加载目录*/
 function loadcatalogue(command) {
-    console.log(command)
     
         $("#folderxD #foldernamexD").each(function(i){
             folderid =  $(this).attr('name')
@@ -76,7 +75,7 @@ function loadcatalogue(command) {
    
     console.log("username: "+localStorage.username+ "loading catalogue")
     $.ajax({
-        url:"notepage/getcatalogue",
+        url:"main/getcatalogue",
         type: "post",
         data:{username : localStorage.username},
         success: function (returnValue) {
@@ -204,7 +203,7 @@ window.addEventListener("keydown", function(e) {
         m = m.replace(/\"/g,"\'\'");
         m = m.replace(/\'/g,"\"");
         $.ajax({
-            url:"notepage/savedata",
+            url:"main/savedata",
             type: "post",
             data:{content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
             success: function (returnValue) {
@@ -399,7 +398,7 @@ function myblur(obj) {
 function savecatalogue(filename,fileid) {
     console.log("username: "+localStorage.username +" save file id: "+fileid)
         $.ajax({
-            url:"notepage/savecatalogue",
+            url:"main/savecatalogue",
             type: "post",
             data:{username : localStorage.username, fileid : fileid,filename:filename},
         
@@ -418,7 +417,7 @@ function savecatalogue(filename,fileid) {
 function newfolder(){
     console.log("username: "+localStorage.username +" new file ")
         $.ajax({
-            url:"notepage/newfolder",
+            url:"main/newfolder",
             type: "post",
             data:{userid : localStorage.userid},
         
@@ -447,7 +446,7 @@ function opfile(data) {
             if (r==true){
                 //ajax删除文件夹 和它下面的所有文件
                 $.ajax({
-                    url:"notepage/deletefile",
+                    url:"main/deletefile",
                     type: "post",
                     data:{fileid : name,userid:localStorage.userid},
                 
@@ -468,7 +467,7 @@ function opfile(data) {
             var rr=confirm("是否要删除文件?");
             if (rr==true){
                 $.ajax({
-                    url:"notepage/deletefile",
+                    url:"main/deletefile",
                     type: "post",
                     data:{fileid : name,userid:localStorage.userid},
                 
@@ -491,7 +490,7 @@ function opfile(data) {
         name = localStorage.contextmenufilename;
         if(id=='foldernamexD'){
             $.ajax({
-                url:"notepage/newfile",
+                url:"main/newfile",
                 type: "post",
                 data:{userid : localStorage.userid, folderid:name},
             
