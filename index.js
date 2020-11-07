@@ -9,8 +9,29 @@ const { send } = require('process');
 var pool = mysql.createPool( dbConfig.mysql );//创建数据库池
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var app = express();
+var qiniu = require("qiniu");
 const multiparty = require('multiparty');
 const fs = require('fs');
+
+
+
+
+
+
+var uploadRouter = require('./js/upload');
+app.use('/main', uploadRouter);
+
+
+
+
+
+
+
+
+
+
+
+
 
 let query = function( sql, values ) {
    // 返回一个 Promise
@@ -424,6 +445,7 @@ app.post('/main',urlencodedParser, function (req, res) {
        "username":req.body.username,
        "password":req.body.password
    };
+   //调用uploadFile上传
    pool.getConnection(function(err,connection){
       console.log("userlogin : connection to sql success")
       //var params = req.query || req.params;        //前端传的参数（暂时写这里，在这个例子中没用）
