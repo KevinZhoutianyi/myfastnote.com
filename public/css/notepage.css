@@ -125,26 +125,32 @@ p>img{
   border: 3px solid var(--righthalfcolor);  /* creates padding around scroll thumb */
 }
 #locked{
-  height: 2.5em;
-  width: 2.5em;
+  height: 38px;
+    width: 41px;
 }
 #notlocked{
-  position:relative;
-  left:5px;
-  height: 2.5em;
-  width: 2.6em;
+  position: relative;
+    left: 6px;
+    /* bottom: 1px; */
+    height: 39px;
+    width: 44px;
 }
 #fullscreen{
-  height: 2.3em;
-  width: 2.3em;
-  margin-top: 15px;
-}
-#smallscreen{
-  height: 2.3em;
-  width: 2.3em;
-  margin-top: 15px;
+  height: 36px;
+  width: 36px;
+  margin-top: 13px;
 }
 
+#smallscreen{
+  height: 36px;
+  width: 36px;
+  margin-top: 13px;
+}
+#uploadimg{
+  height: 36px;
+  width: 39px;
+  margin-top: 15px;
+}
 #questionxD{
   position: fixed;
   right: 25px;
@@ -157,7 +163,7 @@ p>img{
   position: fixed;
   right:10px;
   bottom: 0px;
-  height: 8%;
+  height: 14%;
   width: 3em;
   /* border:solid black 1px; */
 }

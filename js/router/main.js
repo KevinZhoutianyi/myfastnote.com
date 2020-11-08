@@ -337,46 +337,65 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
  router.post("/upload",urlencodedParser,  async (req, res) => {
-    let form = new multiparty.Form();
-    form.parse(req, async(err,fields,file)=>{
-       const result = await query("select max(fileid) from catalogue where userid="+fields["userid"])
-       var maxindex = (result[0]["max(fileid)"])
-       console.log("maxindex now  ：  "+maxindex)
-       if(fields["folderid"]==-1){//不是目录，先创建一个目录
-          result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+1)+",'newfolder',0,0,null)")
-          for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
-             orifilename = file["file"][index-1]["originalFilename"];
-             filename = orifilename.substring(0,orifilename.indexOf("."))
-             endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
-             if(endname != ".md") 
-                return;
-             result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+")")
-             var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
-             data = data.replace(/\\/g,"\\\\");
-                 data = data.replace(/\"/g,"\'\'");
-                 data =data.replace(/\'/g,"\"");
-             result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(maxindex+1)+")")
-             res.send("success")
-          }
-       }else{
-          for (let index = 1; index < (parseInt(fields["size"])+1); index++) {//每个文件存入该目录  
-             orifilename = file["file"][index-1]["originalFilename"];
-             filename = orifilename.substring(0,orifilename.indexOf("."))
-             endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
-             if(endname != ".md") 
-                return;
-             fatherid = fields["folderid"]
-             result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+")")
-             var data = fs.readFileSync(file["file"][index-1]["path"], 'utf-8');
-             data = data.replace(/\\/g,"\\\\");
-                 data = data.replace(/\"/g,"\'\'");
-                 data =data.replace(/\'/g,"\"");
-             result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(fatherid)+")")
-             res.send("success")
-          }
-       }
-   });
+   let form = new multiparty.Form();
+   form.parse(req, async(err,fields,file)=>{
+      const result = await query("select max(fileid) from catalogue where userid="+fields["userid"])
+      var maxindex = (result[0]["max(fileid)"])
+      console.log("maxindex now  ：  "+maxindex)
+      if(fields["folderid"]==-1){//不是目录，先创建一个目录
+         result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+1)+",'newfolder',0,0,null)")
+         for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
+            orifilename = file["file"][index-1]["originalFilename"];
+            filename = orifilename.substring(0,orifilename.indexOf("."))
+            endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
+            if(endname != ".md") 
+               return;
+            result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+")")
+            var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
+            data = data.replace(/\\/g,"\\\\");
+                data = data.replace(/\"/g,"\'\'");
+                data =data.replace(/\'/g,"\"");
+            result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(maxindex+1)+")")
+            res.send("success")
+         }
+      }else{
+         for (let index = 1; index < (parseInt(fields["size"])+1); index++) {//每个文件存入该目录  
+            orifilename = file["file"][index-1]["originalFilename"];
+            filename = orifilename.substring(0,orifilename.indexOf("."))
+            endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
+            if(endname != ".md") 
+               return;
+            fatherid = fields["folderid"]
+            result2 = await query( "INSERT INTO catalogue VALUES("+fields["userid"] +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+")")
+            var data = fs.readFileSync(file["file"][index-1]["path"], 'utf-8');
+            data = data.replace(/\\/g,"\\\\");
+                data = data.replace(/\"/g,"\'\'");
+                data =data.replace(/\'/g,"\"");
+            result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+fields["userid"]+","+(fatherid)+")")
+            res.send("success")
+         }
+      }
   });
+ });
+
+ router.post("/uploadimg",urlencodedParser,  async (req, res) => {
+      var userid = req.body.userid;
+      var fileid = req.body.fileid;
+      var size = req.body.size;
+      var hash = req.body.hash;
+      const result = await query("select size from user where userid="+userid)
+      const result2 = await query("update user set size = "+(parseInt(result[0].size)+parseInt(size))+" where userid = "+userid);
+      const result3 = await query("insert into img values("+fileid+","+userid+",'"+hash+"',"+size+") ")
+ });
+
+ router.post("/getleftsize",urlencodedParser,  async (req, res) => {
+   var userid = req.body.userid;
+   const result = await query("select maxsize from user where userid="+userid)
+   const result1 = await query("select size from user where userid="+userid)
+   ret = parseInt(result[0].maxsize) - parseInt(result1[0].size);
+   res.json(ret)
+
+});
  
  
  

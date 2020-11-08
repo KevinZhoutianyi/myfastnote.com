@@ -306,51 +306,101 @@ function fullscreen(){
 
 
 /*截图*/
-function cropimg() {
+function uploadmyimg() {
     //截图 后上传
     $("#uploadcropimg").click();
 }
 function inputChange(e){
-    
+    flag = 1;
     var formData = new FormData();
     var file = $("#uploadcropimg")[0].files;
-    console.log(file[0])
-    formData.append('token',localStorage.qiniutoken);
-    formData.append('file', file[0]);
-    
-    console.log(localStorage.qiniutoken)
-    $.ajax({  
-         url: 'http://upload-z2.qiniup.com' ,  
-         type: 'POST',  
-         data:formData,
-         dataType: "formData",
-         cache: false,
-         contentType: false,
-         processData:false,
-         mimeType:"multipart/form-data",
-         success: function (returndata) {  
-             
-            //xD明明code是200居然执行error
-         },  
-         error: function (returndata) {  
-            console.log(returndata)
-            hash = JSON.parse(returndata['responseText'])['hash'];
-            
-            console.log(hash)
-            m = document.getElementById("md-area").value;
-            m += "\r\n![](http://img.myfastnote.com/"+ hash+"~suoxiao)";
-            document.getElementById("md-area").value = m;
-            localStorage.leftscrolltop = $("#left").scrollTop();
-            localStorage.rightscrolltop = $("#right").scrollTop();
-            m = document.getElementById("md-area")
-            m.style.height='auto';
-            m.style.height = m.scrollHeight + 50 + 'px';
-            mdSwitch();
-            $("#left").scrollTop(localStorage.leftscrolltop);
-            $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
-         }  
-    });  
+    function callback(blob){//回调获取压缩后的Blog
+        if(blob){
+            console.log("压缩成功")
+            let compressedfile = new window.File(
+                    [blob],
+                    file[0]["name"],
+                    { type: blob.type }
+            );
+            formData.append('token',localStorage.qiniutoken);
+            formData.append('file', compressedfile);
+            $.ajax({
+            url:"main/getleftsize",
+            type: "post",
+            data:{userid : localStorage.userid},
+        
+            success: function (returnValue) {
+                console.log(returnValue)
+                if(parseInt(returnValue)<parseInt(compressedfile["size"])){
+                    alert("no enough space :(")
+                }
+                else{
+                    $.ajax({  
+                        url: 'http://upload-z2.qiniup.com' ,  
+                        type: 'POST',  
+                        data:formData,
+                        dataType: "formData",
+                        cache: false,
+                        contentType: false,
+                        processData:false,
+                        mimeType:"multipart/form-data",
+                        success: function (returndata) {  
+                            //xD明明code是200居然执行error
+                        },  
+                        error: function (returndata) { 
+                            
+                            console.log("upload img success") 
+                            hash = JSON.parse(returndata['responseText'])['hash'];
+                            
+                            m = document.getElementById("md-area").value;
+                            m += "\r\n![](http://img.myfastnote.com/"+ hash+"~resize1)";
+                            document.getElementById("md-area").value = m;
+                            localStorage.leftscrolltop = $("#left").scrollTop();
+                            localStorage.rightscrolltop = $("#right").scrollTop();
+                            m = document.getElementById("md-area")
+                            m.style.height='auto';
+                            m.style.height = m.scrollHeight + 50 + 'px';
+                            mdSwitch();
+                            $("#left").scrollTop(localStorage.leftscrolltop);
+                            $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
 
+
+
+                //更新服务器上用户的存储信息
+                            $.ajax({
+                                url:"main/uploadimg",
+                                type: "post",
+                                data:{userid : localStorage.userid, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
+                            
+                                success: function (returnValue) {
+                                    console.log("success")
+                                },
+                                error: function (returnValue) {
+                                    alert("lose connection");
+                                }
+                            })
+
+
+
+
+
+
+                        }  
+                    });  
+                }
+                    
+            },
+            error: function (returnValue) {
+                alert("lose connection");
+            }
+
+        })
+            
+        }
+    }
+    
+    this.compress(file[0], callback);
+    
 
 }
 
@@ -640,8 +690,6 @@ function rename() {
     localStorage.edited = 1;
     $(obj).focus();
 }
-
-
 /* 重命名 */
 
 
@@ -788,3 +836,58 @@ document.addEventListener("contextmenu", (e) => {
 /*右键的context menu*/
 
 /* ---------------------------------------目录----------------------------------------*/
+
+
+
+
+
+
+
+
+
+/* ---------------------------------------lib----------------------------------------*/
+//当图片宽度大于640时 进行等比例压缩，并返回Blob，否则返回false
+function compress(fileObj, callback) {
+    function dataURLtoBlob(dataurl) {//base64格式图片 转为Blob  
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+    if (typeof (FileReader) === 'undefined') {
+        console.log("当前浏览器内核不支持base64图标压缩");
+        return false;
+    } else {
+        try {
+            var reader = new FileReader();
+            var image = new Image();
+            reader.readAsDataURL(fileObj);//开始读取指定的Blob中的内容。返回base64
+            reader.onload = function (ev) {
+                image.src = ev.target.result;
+                image.onload = function () {
+                    var imgWidth = this.width,
+                        imgHeight = this.height; //获取图片宽高
+                    if (imgWidth > 640) {//设置图片的最大宽度为640
+                        imgWidth = 640;
+                        imgHeight = 640 / this.width * imgHeight;//设置等比例高度
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        canvas.width = imgWidth;
+                        canvas.height = imgHeight;
+                        ctx.drawImage(this, 0, 0, imgWidth, imgHeight);//根据宽高绘制图片
+                        var fullQuality = canvas.toDataURL("image/png", 1.0);//canvas转为base64
+                        var blogData=dataURLtoBlob(fullQuality);
+                        callback(blogData);
+                    }else{
+                        callback(false);
+                    }
+                }
+            }
+        } catch (e) {
+            console.log("压缩失败!");
+        }
+    }
+}
+/* ---------------------------------------lib----------------------------------------*/
