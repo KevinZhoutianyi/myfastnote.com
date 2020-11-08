@@ -24,7 +24,7 @@ router.post('/', function(req, res, next){
   let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
   let options = {
       scope: bucket,
-      expires: 3600 * 24
+      expires: 3600
   };
   let putPolicy =  new qiniu.rs.PutPolicy(options);
   let uploadToken= putPolicy.uploadToken(mac);

@@ -42,8 +42,11 @@ body{
   align-items: center;
 }
 img{
-  
-  width:50%;
+  max-width:100%;
+}
+p>img{
+  min-width:51%;
+
 }
 
 

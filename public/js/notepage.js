@@ -338,7 +338,7 @@ function inputChange(e){
             
             console.log(hash)
             m = document.getElementById("md-area").value;
-            m += "\r\n![](http://img.myfastnote.com/"+ hash+")";
+            m += "\r\n![](http://img.myfastnote.com/"+ hash+"~suoxiao)";
             document.getElementById("md-area").value = m;
             localStorage.leftscrolltop = $("#left").scrollTop();
             localStorage.rightscrolltop = $("#right").scrollTop();
