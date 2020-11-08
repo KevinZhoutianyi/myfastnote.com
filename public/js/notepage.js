@@ -846,7 +846,7 @@ document.addEventListener("contextmenu", (e) => {
 
 
 /* ---------------------------------------lib----------------------------------------*/
-//当图片宽度大于640时 进行等比例压缩，并返回Blob，否则返回false
+//当图片宽度大于800时 进行等比例压缩，并返回Blob，否则返回false
 function compress(fileObj, callback) {
     function dataURLtoBlob(dataurl) {//base64格式图片 转为Blob  
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
@@ -869,9 +869,9 @@ function compress(fileObj, callback) {
                 image.onload = function () {
                     var imgWidth = this.width,
                         imgHeight = this.height; //获取图片宽高
-                    if (imgWidth > 640) {//设置图片的最大宽度为640
-                        imgWidth = 640;
-                        imgHeight = 640 / this.width * imgHeight;//设置等比例高度
+                    if (imgWidth > 800) {//设置图片的最大宽度为800
+                        imgWidth = 800;
+                        imgHeight = 800 / this.width * imgHeight;//设置等比例高度
                         var canvas = document.createElement('canvas');
                         var ctx = canvas.getContext('2d');
                         canvas.width = imgWidth;

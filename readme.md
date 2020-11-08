@@ -13,6 +13,15 @@
 把图片用form+ajax传给七牛服务器
 在md区域加入生成的地址
 
+为了防止用户上传过大图片
+在上传到七牛之前用nodejs最下面的lib压缩函数 压缩成一个800的blob
+再在inputchange之中 转变为file之后上传到七牛云
+
+防止用户上传过多图片
+mysql user之后有maxsize和size，size表示他已经上传总图片字节数。max表示他被允许上传最大的字节数。如果max-size比用户新上传的图片小。那么上传失败
+
+mysql之中的img存放用户   在哪个文件下上传的图片(这个没啥用) 和 对应图片的hash,用来批量删除七牛云的图片【比如删除userid0的所有图片】
+
 
 # 文件路径
 凡是前端用到的都丢到了public里
@@ -28,5 +37,8 @@ index 登陆页面，服务器主接口
 # extramenu
 设置一个div在右下角。碰到之后移动menu
 mouseleavemenu之后再移动回去
+
+
+
 
 
