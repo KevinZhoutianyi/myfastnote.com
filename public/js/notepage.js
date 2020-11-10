@@ -219,8 +219,8 @@ window.addEventListener("keydown", function(e) {
         $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
         m = document.getElementById("md-area").value;
         m = m.replace(/\\/g,"\\\\");
-        m = m.replace(/\"/g,"\'\'");
-        m = m.replace(/\'/g,"\"");
+        m = m.replace(/\"/g,"\\\"");
+        m = m.replace(/\'/g,"\\\'");
         $.ajax({
             url:"main/savedata",
             type: "post",
@@ -230,6 +230,7 @@ window.addEventListener("keydown", function(e) {
             },
             error: function (returnValue) {
                 console.log("save fail")
+                alert("fail")
             }
         })
     }
