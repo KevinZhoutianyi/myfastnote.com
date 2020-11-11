@@ -4,43 +4,40 @@
 function loadData() {
     
     // to do : get the real data
-    console.log("username: "+localStorage.username + "loading data")
+    console.log("load lastsavedfile and get qiniuyun token")
     $.ajax({
         url:"main/getdata",
         type: "post",
-        data:{username : localStorage.username},
-    
+        data:{token:localStorage.token},
         success: function (returnValue) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
             document.getElementById("md-area").value= returnValue.content;
             localStorage.nowopenfileid = returnValue.id;
-            localStorage.userid = returnValue.userid;
             m = document.getElementById("md-area");
             m.style.height='auto';
             m.style.height = m.scrollHeight + 50 + 'px';
             mdSwitch();
         },
         error: function (returnValue) {
+                console.log(returnValue.responseText);;
             alert("lose connection");
             mdSwitch();
         }
     })
 
     $.ajax({
-        url:"/getqiyuntoken",
+        url:"/getqiniuyuntoken",
         type: "post",
-        data:{},
+        data:{token:localStorage.token,},
         success: function (returnValue) {
             if(returnValue=="fail"){
                 alert("fail to get token")
             }else{
-                console.log(returnValue)
                 localStorage.qiniutoken = returnValue
-
             }
         },
         error: function (returnValue) {
-            console.log(returnValue)
+                console.log(returnValue);
         }
     })
     
@@ -48,14 +45,12 @@ function loadData() {
 }
 /* 加载上次编辑文档 */
 
-/*用username得到userid存在本地，用读取fileid对应的content*/
+/*用读取fileid对应的content*/
 function loadfile(id) {
-    // to do : get the real data
-    console.log("username: "+localStorage.username +" loading file id: "+id)
     $.ajax({
         url:"main/getfile",
         type: "post",
-        data:{username : localStorage.username, fileid : id},
+        data:{token:localStorage.token, fileid : id},
     
         success: function (returnValue) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
@@ -68,6 +63,7 @@ function loadfile(id) {
             mdSwitch();
         },
         error: function (returnValue) {
+                console.log(returnValue.responseText);;
             alert("lose connection");
             mdSwitch();
         }
@@ -92,11 +88,10 @@ function loadcatalogue(command) {
     
     // to do : get the real data
    
-    console.log("username: "+localStorage.username+ "loading catalogue")
     $.ajax({
         url:"main/getcatalogue",
         type: "post",
-        data:{username : localStorage.username},
+        data:{token:localStorage.token},
         success: function (returnValue) {
             var content = JSON.stringify(returnValue);
             var showhtml = "<br><br>";
@@ -111,7 +106,7 @@ function loadcatalogue(command) {
                 
             }
             
-            console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
+            // console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
             for (let i = 0; i < foldersfileidarray.length; i++) {
                 showhtml += "<div id='folderxD' name='" + foldersfileidarray[i]  +"'>";
                 showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false'  tabindex='1' onblur='myblur(this);'   spellcheck='false'>" + foldersfileidarray[i].filename + "</h2>";
@@ -225,11 +220,12 @@ window.addEventListener("keydown", function(e) {
         $.ajax({
             url:"main/savedata",
             type: "post",
-            data:{content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
+            data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
             success: function (returnValue) {
                 $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
             },
             error: function (returnValue) {
+                console.log(returnValue.responseText);;
                 console.log("save fail")
                 alert("fail")
             }
@@ -318,7 +314,7 @@ function inputChange(e){
     var file = $("#uploadcropimg")[0].files;
     function callback(blob){//回调获取压缩后的Blog
         if(blob){
-            console.log("压缩成功")
+            console.log("compressed ok")
             let compressedfile = new window.File(
                     [blob],
                     file[0]["name"],
@@ -329,10 +325,10 @@ function inputChange(e){
             $.ajax({
             url:"main/getleftsize",
             type: "post",
-            data:{userid : localStorage.userid},
+            data:{token:localStorage.token,userid : localStorage.userid,token : localStorage.token},
         
             success: function (returnValue) {
-                console.log(returnValue)
+                console.log(returnValue+"Byte Space left")//剩余空间大小
                 if(parseInt(returnValue)<parseInt(compressedfile["size"])){
                     alert("no enough space :(")
                 }
@@ -372,12 +368,13 @@ function inputChange(e){
                             $.ajax({
                                 url:"main/uploadimg",
                                 type: "post",
-                                data:{userid : localStorage.userid, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
+                                data:{token:localStorage.token,userid : localStorage.userid, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
                             
                                 success: function (returnValue) {
                                     console.log("success")
                                 },
                                 error: function (returnValue) {
+                console.log(returnValue.responseText);
                                     alert("lose connection");
                                 }
                             })
@@ -393,7 +390,9 @@ function inputChange(e){
                     
             },
             error: function (returnValue) {
+                console.log(returnValue.responseText);;
                 alert("lose connection");
+                
             }
 
         })
@@ -470,25 +469,6 @@ function clickfile(obj) {
 }
 /*读取文件 显示content*/
 
-/*长按重命名
-var timeout;//用于存储定时器的变量
-// 长按
-function mousedown(obj) {
-    timeout= setTimeout(function() {
-        $(obj).attr("contentEditable",true)
-        localStorage.edited = 1;
-        obj.focus();
-    }, 700);//鼠标按下1秒后发生事件
-}
-function mouseup(obj) {
-    clearTimeout(timeout);//清理掉定时器
-}
-
-function mouseout(obj) {
-    // $(obj).attr("contentEditable",false)
-    clearTimeout(timeout);//清理掉定时器 
-}
-/*长按重命名*/
 
 /* div失去焦点 分点了一下 点了别的地方 和 编辑之后点了别的地方
  localedited用来 排除点了一下 div 之后点了别的地方的失去焦点
@@ -510,7 +490,7 @@ function myblur(obj) {
             s = s.replace(/<\/div>/g, "");
             savecatalogue(s,$(obj).attr('name'));
         }
-        console.log($(obj).html())
+        // console.log($(obj).html())
         
         $(obj).attr("contentEditable",false)
         }
@@ -521,17 +501,18 @@ function myblur(obj) {
 
 /*保存目录*/
 function savecatalogue(filename,fileid) {
-    console.log("username: "+localStorage.username +" save file id: "+fileid)
+    // console.log("username: "+localStorage.username +" save file id: "+fileid)
         $.ajax({
             url:"main/savecatalogue",
             type: "post",
-            data:{username : localStorage.username, fileid : fileid,filename:filename},
+            data:{token:localStorage.token, fileid : fileid,filename:filename},
         
             success: function (returnValue) {
                 console.log("save catalogue success")
                 loadcatalogue();
             },
             error: function (returnValue) {
+                console.log(returnValue.responseText);;
                 alert("lose connection");
             }
         })
@@ -544,16 +525,16 @@ function newfolder(){
         $.ajax({
             url:"main/newfolder",
             type: "post",
-            data:{userid : localStorage.userid},
+            data:{token:localStorage.token,userid : localStorage.userid},
         
             success: function (returnValue) {
-                console.log(returnValue)
                 loadcatalogue();
 
                 localStorage.contextmenufilename = returnValue;
                 setTimeout("rename()", 100 )
             },
             error: function (returnValue) {
+                console.log(returnValue.responseText);;
                 alert("lose connection");
             }
         })
@@ -573,13 +554,13 @@ function opfile(data) {
                 $.ajax({
                     url:"main/deletefile",
                     type: "post",
-                    data:{fileid : name,userid:localStorage.userid},
+                    data:{token:localStorage.token,fileid : name,userid:localStorage.userid},
                 
                     success: function (returnValue) {
-                        console.log(returnValue)
                         loadcatalogue();
                     },
                     error: function (returnValue) {
+                console.log(returnValue.responseText);;
                         alert("lose connection");
                     }
                 })
@@ -594,13 +575,13 @@ function opfile(data) {
                 $.ajax({
                     url:"main/deletefile",
                     type: "post",
-                    data:{fileid : name,userid:localStorage.userid},
+                    data:{token:localStorage.token,fileid : name,userid:localStorage.userid},
                 
                     success: function (returnValue) {
-                        console.log(returnValue)
                         loadcatalogue();
                     },
                     error: function (returnValue) {
+                        console.log(returnValue.responseText);;
                         alert("lose connection");
                     }
                 })
@@ -617,16 +598,16 @@ function opfile(data) {
             $.ajax({
                 url:"main/newfile",
                 type: "post",
-                data:{userid : localStorage.userid, folderid:name},
+                data:{token:localStorage.token,userid : localStorage.userid, folderid:name},
             
                 success: function (returnValue) {
-                    console.log(returnValue)
                     loadcatalogue();
                     localStorage.contextmenufilename = returnValue;
                     
                     setTimeout("rename()", 100 )
                 },
                 error: function (returnValue) {
+                console.log(returnValue.responseText);;
                     alert("lose connection");
                 }
             })
@@ -646,7 +627,7 @@ function doUpload() {
     var formData = new FormData();
     var file = $("#uploadbutton")[0].files;
     formData.append('size', file.length);
-    formData.append('userid', localStorage.userid);
+    formData.append('token', localStorage.token);
     if(localStorage.contextmenufileid=="foldernamexD"){
         formData.append('folderid', localStorage.contextmenufilename);
 
@@ -656,7 +637,6 @@ function doUpload() {
     for (let index = 0; index < file.length; index++) {
         formData.append('file', file[index]);
     }
-    // console.log(formData)
     $.ajax({  
          url: 'http://myfastnote.com/main/upload' ,  
          type: 'POST',  
@@ -667,11 +647,11 @@ function doUpload() {
          processData:false,
          mimeType:"multipart/form-data",
          success: function (returndata) {  
-             console.log(returndata)
+            console.log("uploadfile:"+returndata.responseText)
              loadcatalogue();
          },  
          error: function (returndata) {  
-            console.log(returndata)
+            console.log("uploadfile:"+returndata.responseText)
             loadcatalogue();
          }  
     });  

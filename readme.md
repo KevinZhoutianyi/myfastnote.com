@@ -48,4 +48,7 @@ mouseleavemenu之后再移动回去
 改进index界面，加入js，ajax获取token登录成功后跳转
 
 
-用户名密码登录之后ajax传给nodejs的/login，登录成功生成token并返回加载到localstorage之后，返回200，调用/main得到notepage.html。之后用token去解析数据
+用户名密码登录之后ajax传给nodejs的/login，登录成功生成token并返回加载到localstorage之后，返回200，locationhref的get调用/main得到notepage.html。之后用token去解析数据
+
+
+目前只用一个字符串作为私钥加密了id-》token。在jwtjs之中 generate和verify。在mainjs之中调用 用verify得到解码结果再判断是否expire，如果expire直接ressend(expire)前端收到expired之后console一下

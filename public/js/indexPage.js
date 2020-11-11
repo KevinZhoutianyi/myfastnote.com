@@ -1,6 +1,3 @@
-// function input() {
-//     localStorage.username = document.getElementById("name").value;
-// }
 
 function trylogin(){
     $.ajax({
@@ -10,6 +7,7 @@ function trylogin(){
             data: $('#myform').serialize(),
             success: function (result) {
                 location.href = "/main"
+                localStorage.token = result;
             },
             error : function(result) {
                 alert("fail");

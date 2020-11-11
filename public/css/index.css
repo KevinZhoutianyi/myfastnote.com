@@ -63,6 +63,9 @@ table{border-collapse:collapse;border-spacing:0;}
     width:100px;
     height:auto;
 }
-#name{
+#name2{
+    text-align:center;
+}
+#name1{
     text-align:center;
 }

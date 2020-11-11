@@ -12,6 +12,7 @@ var app = express();
 var qiniu = require("qiniu");
 const multiparty = require('multiparty');
 const fs = require('fs');
+const JwtUtil = require('./js/jwt');
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,7 +25,7 @@ app.use(bodyParser.json());//数据JSON类型
 
 
 app.use('/main', require('./js/router/main'));
-app.use('/getqiyuntoken', require('./js/router/upload'));
+app.use('/getqiniuyuntoken', require('./js/router/upload'));
 
 
 
@@ -65,35 +66,20 @@ app.get('/', function (req, res) {
 })
 
 
-app.post('/login',urlencodedParser, function (req, res) {
-  console.log(req.body.username+","+req.body.password+"   login ing \n\n")
-  // 输出 JSON 格式
-  var response = {
-      "username":req.body.username,
-      "password":req.body.password
-  };
-  pool.getConnection(function(err,connection){
-     console.log("userlogin : connection to sql success")
-     //var params = req.query || req.params;        //前端传的参数（暂时写这里，在这个例子中没用）
-     var params = [];
-     params[0] = response["username"];
-     params[1] = response["password"];
-     var qu = "select userid from user where username = '"+params[0]+"' and password = '"+params[1]+"'";
-     connection.query(qu,function(err,result){
-        if(result.length==1){
-           console.log("login success")
-           connection.release();
-           console.log("userlogin : mysql release")
-           res.status(200).send("suc")
-        }
-        else{
-           console.log("login fail")
-           connection.release();
-           console.log("userlogin : mysql release")
-           res.status(400).send("fail")
-        }    
-        })
-     })
+app.post('/login',urlencodedParser, async (req, res) => {
+  console.log(req.body.username+","+req.body.password+" try to login\n")
+  const result = await query("select userid from user where username = '"+req.body.username+"' and password = '"+req.body.password+"'");
+  if(result.length == 1){
+    var content = {id:result[0].userid}
+    let jwt = new JwtUtil(content);
+    let token = jwt.generateToken();
+    console.log("userid "+result[0].userid+" login success"+",his token is "+token)
+    res.status(200).send(token)
+
+  }else{
+    res.status(400).send("fail")
+  }
+     
 })
 
 
