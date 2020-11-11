@@ -9,13 +9,11 @@
     </head>
     <body>
         <div id="bg">
-            <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-            <script>localStorage.username = $("#name").value</script>
-        <form action="http://myfastnote.com/main" method="POST" id="myform">
-            <input type="text" name="username" id = "name" oninput="input()" value="zhou">
+        <form enctype="multipart/form-data" id="myform">
+            <input type="text" name="username" id = "name" value="zhou">
             <input type="password" name="password" id = "name" value="tianyi">
-            <input type="submit" value="Submit" id="btn" onclick="input()">
         </form> 
+        <button type="btn" onclick="trylogin()">Sign in</button>
     </div>
         
     </body>

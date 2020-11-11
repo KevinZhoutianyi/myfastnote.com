@@ -46,3 +46,6 @@ mouseleavemenu之后再移动回去
 
 # 加入token系统
 改进index界面，加入js，ajax获取token登录成功后跳转
+
+
+用户名密码登录之后ajax传给nodejs的/login，登录成功生成token并返回加载到localstorage之后，返回200，调用/main得到notepage.html。之后用token去解析数据

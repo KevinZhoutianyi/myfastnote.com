@@ -402,7 +402,10 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
  
- 
+router.get('/',urlencodedParser, function (req, res) {
+   console.log("!")
+   res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "notepage.html") );
+});
  
  
  
@@ -412,38 +415,6 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
   
  
- router.post('/',urlencodedParser, function (req, res) {
-    console.log(req.body.username+","+req.body.password+"   login ing \n\n")
-    // 输出 JSON 格式
-    var response = {
-        "username":req.body.username,
-        "password":req.body.password
-    };
-    pool.getConnection(function(err,connection){
-       console.log("userlogin : connection to sql success")
-       //var params = req.query || req.params;        //前端传的参数（暂时写这里，在这个例子中没用）
-       var params = [];
-       params[0] = response["username"];
-       params[1] = response["password"];
-       var qu = "select userid from user where username = '"+params[0]+"' and password = '"+params[1]+"'";
-       connection.query(qu,function(err,result){
-          if(result.length==1){
-             console.log("login success")
-             connection.release();
-             console.log("userlogin : mysql release")
-            
-             res.sendFile( path.resolve(__dirname + "/../../public/html/" + "notepage.html") );
-          }
-          else{
-             console.log("login fail")
-             connection.release();
-             console.log("userlogin : mysql release")
-             res.sendFile( __dirname + "/html/" + "index.html" );
-          }    
-          })
-       })
- })
-
-
+ 
 
  module.exports = router;
