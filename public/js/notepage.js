@@ -177,7 +177,8 @@ function mdSwitch() {
         html += "<br>";
     }
     document.getElementById("show-area").innerHTML = html;
-    MathJax.typeset();
+    MathJax.typeset(["#show-area"]);
+    mdValue = ""
 }
 /*转md*/
 

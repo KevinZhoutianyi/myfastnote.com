@@ -42,3 +42,7 @@ mouseleavemenu之后再移动回去
 
 # mysql 存 ' " \的问题
 把文本内容里的 “  \'  ” 替换成  “   \\\'   ” 。加载到mysql之后的时候 变成 “   \'   " 。再load到网页上之后 才能显示成 '
+
+
+# 加入token系统
+改进index界面，加入js，ajax获取token登录成功后跳转

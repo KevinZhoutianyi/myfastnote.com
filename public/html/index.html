@@ -3,20 +3,18 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="public/css/index.css">
-        <script>
-            function input() {
-                localStorage.username = document.getElementById("name").value;
-            }
-        </script>
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="public/js/index.js"></script>
+ 
     </head>
     <body>
         <div id="bg">
             <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
             <script>localStorage.username = $("#name").value</script>
         <form action="http://myfastnote.com/main" method="POST" id="myform">
-        <input type="text" name="username" id = "name" oninput="input()" value="zhou">
-        <input type="text" name="password" id = "name" value="tianyi">
-        <input type="submit" value="Submit" id="btn" onclick="input()">
+            <input type="text" name="username" id = "name" oninput="input()" value="zhou">
+            <input type="password" name="password" id = "name" value="tianyi">
+            <input type="submit" value="Submit" id="btn" onclick="input()">
         </form> 
     </div>
         
