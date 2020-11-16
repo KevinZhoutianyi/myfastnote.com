@@ -15,3 +15,22 @@ function trylogin(){
         });
 
 }
+
+
+
+
+ 
+ $(document).ready(function(){
+    $.ajax({
+        //几个参数需要注意一下
+            type: "POST",
+            url: "/checktoken" ,
+            data:{token:localStorage.token},
+            success: function (result) {
+                location.href = "/main"
+            },
+            error : function(result) {
+                console.log("token expire")
+            }
+        });
+});

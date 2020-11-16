@@ -5,7 +5,7 @@ function loadData() {
     
     // to do : get the real data
     console.log("load lastsavedfile and get qiniuyun token")
-    $.ajax({
+    $.ajax({ cache:false,
         url:"main/getdata",
         type: "post",
         data:{token:localStorage.token},
@@ -20,12 +20,12 @@ function loadData() {
         },
         error: function (returnValue) {
                 console.log(returnValue.responseText);;
-            alert("lose connection");
+            location.href = "/"
             mdSwitch();
         }
     })
 
-    $.ajax({
+    $.ajax({ cache:false,
         url:"/getqiniuyuntoken",
         type: "post",
         data:{token:localStorage.token,},
@@ -47,7 +47,7 @@ function loadData() {
 
 /*用读取fileid对应的content*/
 function loadfile(id) {
-    $.ajax({
+    $.ajax({ cache:false,
         url:"main/getfile",
         type: "post",
         data:{token:localStorage.token, fileid : id},
@@ -63,7 +63,7 @@ function loadfile(id) {
         },
         error: function (returnValue) {
                 console.log(returnValue.responseText);;
-            alert("lose connection");
+            location.href = "/"
             mdSwitch();
         }
     })      
@@ -87,7 +87,7 @@ function loadcatalogue(command) {
     
     // to do : get the real data
    
-    $.ajax({
+    $.ajax({ cache:false,
         url:"main/getcatalogue",
         type: "post",
         data:{token:localStorage.token},
@@ -222,7 +222,7 @@ window.addEventListener("keydown", function(e) {
         m = m.replace(/\\/g,"\\\\");
         m = m.replace(/\"/g,"\\\"");
         m = m.replace(/\'/g,"\\\'");
-        $.ajax({
+        $.ajax({ cache:false,
             url:"main/savedata",
             type: "post",
             data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid},
@@ -327,7 +327,7 @@ function inputChange(e){
             );
             formData.append('token',localStorage.qiniutoken);
             formData.append('file', compressedfile);
-            $.ajax({
+            $.ajax({ cache:false,
             url:"main/getleftsize",
             type: "post",
             data:{token:localStorage.token},
@@ -338,7 +338,7 @@ function inputChange(e){
                     alert("no enough space :(")
                 }
                 else{
-                    $.ajax({  
+                    $.ajax({ cache:false,  
                         url: 'http://upload-z2.qiniup.com' ,  
                         type: 'POST',  
                         data:formData,
@@ -370,7 +370,7 @@ function inputChange(e){
 
 
                 //更新服务器上用户的存储信息
-                            $.ajax({
+                            $.ajax({ cache:false,
                                 url:"main/uploadimg",
                                 type: "post",
                                 data:{token:localStorage.token, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
@@ -379,8 +379,8 @@ function inputChange(e){
                                     console.log("success")
                                 },
                                 error: function (returnValue) {
-                console.log(returnValue.responseText);
-                                    alert("lose connection");
+                                    console.log(returnValue.responseText);
+                                    location.href = "/"
                                 }
                             })
 
@@ -396,7 +396,7 @@ function inputChange(e){
             },
             error: function (returnValue) {
                 console.log(returnValue.responseText);;
-                alert("lose connection");
+                location.href = "/"
                 
             }
 
@@ -507,7 +507,7 @@ function myblur(obj) {
 /*保存目录*/
 function savecatalogue(filename,fileid) {
     // console.log("username: "+localStorage.username +" save file id: "+fileid)
-        $.ajax({
+        $.ajax({ cache:false,
             url:"main/savecatalogue",
             type: "post",
             data:{token:localStorage.token, fileid : fileid,filename:filename},
@@ -518,7 +518,7 @@ function savecatalogue(filename,fileid) {
             },
             error: function (returnValue) {
                 console.log(returnValue.responseText);;
-                alert("lose connection");
+                location.href = "/"
             }
         })
 }
@@ -527,7 +527,7 @@ function savecatalogue(filename,fileid) {
 /*新建文件夹*/
 function newfolder(){
     console.log("username: "+localStorage.username +" new file ")
-        $.ajax({
+        $.ajax({ cache:false,
             url:"main/newfolder",
             type: "post",
             data:{token:localStorage.token},
@@ -540,7 +540,7 @@ function newfolder(){
             },
             error: function (returnValue) {
                 console.log(returnValue.responseText);;
-                alert("lose connection");
+                location.href = "/"
             }
         })
 }
@@ -556,7 +556,7 @@ function opfile(data) {
             var r=confirm("是否要删除文件夹下所有内容?");
             if (r==true){
                 //ajax删除文件夹 和它下面的所有文件
-                $.ajax({
+                $.ajax({cache:false,
                     url:"main/deletefile",
                     type: "post",
                     data:{token:localStorage.token,fileid : name},
@@ -566,7 +566,7 @@ function opfile(data) {
                     },
                     error: function (returnValue) {
                 console.log(returnValue.responseText);;
-                        alert("lose connection");
+                        location.href = "/"
                     }
                 })
             }
@@ -577,7 +577,7 @@ function opfile(data) {
             //提示是否要删除文件
             var rr=confirm("是否要删除文件?");
             if (rr==true){
-                $.ajax({
+                $.ajax({ cache:false,
                     url:"main/deletefile",
                     type: "post",
                     data:{token:localStorage.token,fileid : name},
@@ -587,7 +587,7 @@ function opfile(data) {
                     },
                     error: function (returnValue) {
                         console.log(returnValue.responseText);;
-                        alert("lose connection");
+                        location.href = "/"
                     }
                 })
             }
@@ -600,7 +600,7 @@ function opfile(data) {
         id = localStorage.contextmenufileid;
         name = localStorage.contextmenufilename;
         if(id=='foldernamexD'){
-            $.ajax({
+            $.ajax({ cache:false,
                 url:"main/newfile",
                 type: "post",
                 data:{token:localStorage.token, folderid:name},
@@ -613,7 +613,7 @@ function opfile(data) {
                 },
                 error: function (returnValue) {
                 console.log(returnValue.responseText);;
-                    alert("lose connection");
+                    location.href = "/"
                 }
             })
         }
@@ -642,7 +642,7 @@ function doUpload() {
     for (let index = 0; index < file.length; index++) {
         formData.append('file', file[index]);
     }
-    $.ajax({  
+    $.ajax({ cache:false,  
          url: 'http://myfastnote.com/main/upload' ,  
          type: 'POST',  
          data:formData,

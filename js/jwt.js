@@ -16,7 +16,7 @@ class Jwt {
         let created = Math.floor(Date.now() / 1000);
         const secret = 'zheshiyigesiyao';
         let token = jwt.sign(data, secret, { 
-                          expiresIn: 6000
+                          expiresIn: 60*60*24
                       });
         return token;
     }

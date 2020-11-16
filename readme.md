@@ -52,3 +52,12 @@ mouseleavemenu之后再移动回去
 
 
 目前只用一个字符串作为私钥加密了id-》token。在jwtjs之中 generate和verify。在mainjs之中调用 用verify得到解码结果再判断是否expire，如果expire直接ressend(expire)前端收到expired之后console一下
+
+# 多设备登录问题
+是否需要限制登录？
+目前的ajax操作
+1. 把写的content直接存到对应file里
+2. 改写文件名
+3. 创建上传文件
+4. 上传图片。。
+目前而看多登录不会造成问题

@@ -78,8 +78,30 @@ app.post('/login',urlencodedParser, async (req, res) => {
 
   }else{
     res.status(400).send("fail")
+  }  
+})
+
+
+function getid(token) {
+   
+  var jwt = new JwtUtil(token);
+  var ret;
+  try{
+     ret = jwt.verifyToken().id;
+  }catch(e){
+      ret = "-1";
   }
-     
+  return(ret)
+}
+app.post('/checktoken',urlencodedParser, async (req, res) => {
+  console.log("check tocken for: "+req.body.token)
+  userid = getid(req.body.token)
+  if(userid=="-1"){
+    res.status(400).send("cantverifytoken")
+    return;
+  }
+  console.log("userid:"+userid+" is ask for data");
+  res.status(200).send("tokenverified")
 })
 
 
