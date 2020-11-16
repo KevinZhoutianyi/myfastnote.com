@@ -11,7 +11,7 @@ function loadData() {
         data:{token:localStorage.token},
         success: function (returnValue) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
-            document.getElementById("md-area").value= returnValue.content;
+            document.getElementById("md-area").value = returnValue.content;
             localStorage.nowopenfileid = returnValue.id;
             m = document.getElementById("md-area");
             m.style.height='auto';
@@ -56,7 +56,6 @@ function loadfile(id) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
             document.getElementById("md-area").value= returnValue.content;
             localStorage.nowopenfileid = returnValue.fileid;
-            localStorage.userid = returnValue.userid;
             m = document.getElementById("md-area");
             m.style.height='auto';
             m.style.height = m.scrollHeight + 50 + 'px';
@@ -226,7 +225,7 @@ window.addEventListener("keydown", function(e) {
         $.ajax({
             url:"main/savedata",
             type: "post",
-            data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid,userid : localStorage.userid},
+            data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid},
             success: function (returnValue) {
                 $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
             },
@@ -331,7 +330,7 @@ function inputChange(e){
             $.ajax({
             url:"main/getleftsize",
             type: "post",
-            data:{token:localStorage.token,userid : localStorage.userid,token : localStorage.token},
+            data:{token:localStorage.token},
         
             success: function (returnValue) {
                 console.log(returnValue+"Byte Space left")//剩余空间大小
@@ -374,7 +373,7 @@ function inputChange(e){
                             $.ajax({
                                 url:"main/uploadimg",
                                 type: "post",
-                                data:{token:localStorage.token,userid : localStorage.userid, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
+                                data:{token:localStorage.token, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
                             
                                 success: function (returnValue) {
                                     console.log("success")
@@ -531,7 +530,7 @@ function newfolder(){
         $.ajax({
             url:"main/newfolder",
             type: "post",
-            data:{token:localStorage.token,userid : localStorage.userid},
+            data:{token:localStorage.token},
         
             success: function (returnValue) {
                 loadcatalogue();
@@ -560,7 +559,7 @@ function opfile(data) {
                 $.ajax({
                     url:"main/deletefile",
                     type: "post",
-                    data:{token:localStorage.token,fileid : name,userid:localStorage.userid},
+                    data:{token:localStorage.token,fileid : name},
                 
                     success: function (returnValue) {
                         loadcatalogue();
@@ -581,7 +580,7 @@ function opfile(data) {
                 $.ajax({
                     url:"main/deletefile",
                     type: "post",
-                    data:{token:localStorage.token,fileid : name,userid:localStorage.userid},
+                    data:{token:localStorage.token,fileid : name},
                 
                     success: function (returnValue) {
                         loadcatalogue();
@@ -604,7 +603,7 @@ function opfile(data) {
             $.ajax({
                 url:"main/newfile",
                 type: "post",
-                data:{token:localStorage.token,userid : localStorage.userid, folderid:name},
+                data:{token:localStorage.token, folderid:name},
             
                 success: function (returnValue) {
                     loadcatalogue();
