@@ -164,6 +164,7 @@ function loadcatalogue(command) {
 /* ---------------------------------------主界面----------------------------------------*/
 
 /*转md*/
+var cycle = 10
 function mdSwitch() {
     var mdValue = document.getElementById("md-area").value;
     mdValue = mdValue.replace(/\\/g,"\\\\");
@@ -172,8 +173,13 @@ function mdSwitch() {
         html += "<br>";
     }
     document.getElementById("show-area").innerHTML = html;
+    if(cycle++%20==0){
+        MathJax.typesetClear()
+        console.log("clear")
+    }
     MathJax.typeset(["#show-area"]);
     mdValue = ""
+    html =""
 }
 /*转md*/
 

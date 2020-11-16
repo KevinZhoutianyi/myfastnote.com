@@ -83,7 +83,8 @@ p>img{
     /* display:flex;
     flex-direction: column;
     justify-content: start; */
-    overflow: auto;
+    overflow-y:auto;
+    overflow-x:hidden;
     
     background-color:var(--lefthalfcolor);
 
@@ -111,7 +112,8 @@ p>img{
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    overflow:auto;
+    overflow-y:auto;
+    overflow-x:hidden;
 }
 #right::-webkit-scrollbar {
   width: 10px;               /* width of the entire scrollbar */
