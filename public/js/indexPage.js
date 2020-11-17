@@ -30,7 +30,7 @@ function trylogin(){
                 $("#container").hide();
             setTimeout(() => {
                 location.href = "/main"
-            }, 200);
+            }, 500);
                 
             },
             error : function(result) {

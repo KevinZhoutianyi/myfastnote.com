@@ -19,8 +19,9 @@ function loadData() {
             mdSwitch();
         },
         error: function (returnValue) {
-                console.log(returnValue.responseText);;
+            alert(returnValue.responseText);;
             location.href = "/"
+                                    savecontent();
             mdSwitch();
         }
     })
@@ -62,8 +63,9 @@ function loadfile(id) {
             mdSwitch();
         },
         error: function (returnValue) {
-                console.log(returnValue.responseText);;
+            alert(returnValue.responseText);;
             location.href = "/"
+                                    savecontent();
             mdSwitch();
         }
     })      
@@ -212,7 +214,13 @@ window.addEventListener("keydown", function(e) {
         localStorage.leftscrolltop = $("#left").scrollTop();
         localStorage.rightscrolltop = $("#right").scrollTop();
         // Process event...
-        m = document.getElementById("md-area");
+        savecontent();
+    }
+    
+ 
+}, false);
+function savecontent() {
+    m = document.getElementById("md-area");
         m.style.height='auto';
         m.style.height = m.scrollHeight + 50 + 'px';
 
@@ -235,10 +243,7 @@ window.addEventListener("keydown", function(e) {
                 alert("fail")
             }
         })
-    }
-    
- 
-}, false);
+}
 /*ctrl s = 保存*/
 
 /*右下角extramenu*/
@@ -380,8 +385,9 @@ function inputChange(e){
                                     console.log("success")
                                 },
                                 error: function (returnValue) {
-                                    console.log(returnValue.responseText);
+                                    alert(returnValue.responseText);
                                     location.href = "/"
+                                    savecontent();
                                 }
                             })
 
@@ -396,8 +402,9 @@ function inputChange(e){
                     
             },
             error: function (returnValue) {
-                console.log(returnValue.responseText);;
+                alert(returnValue.responseText);;
                 location.href = "/"
+                                    savecontent();
                 
             }
 
@@ -520,8 +527,9 @@ function savecatalogue(filename,fileid) {
                 loadcatalogue();
             },
             error: function (returnValue) {
-                console.log(returnValue.responseText);;
+                alert(returnValue.responseText);;
                 location.href = "/"
+                                    savecontent();
             }
         })
 }
@@ -542,8 +550,9 @@ function newfolder(){
                 setTimeout("rename()", 100 )
             },
             error: function (returnValue) {
-                console.log(returnValue.responseText);;
+                alert(returnValue.responseText);;
                 location.href = "/"
+                                    savecontent();
             }
         })
 }
@@ -568,8 +577,9 @@ function opfile(data) {
                         loadcatalogue();
                     },
                     error: function (returnValue) {
-                console.log(returnValue.responseText);;
+                alert(returnValue.responseText);;
                         location.href = "/"
+                                    savecontent();
                     }
                 })
             }
@@ -589,8 +599,9 @@ function opfile(data) {
                         loadcatalogue();
                     },
                     error: function (returnValue) {
-                        console.log(returnValue.responseText);;
+                        alert(returnValue.responseText);;
                         location.href = "/"
+                                    savecontent();
                     }
                 })
             }
@@ -615,8 +626,9 @@ function opfile(data) {
                     setTimeout("rename()", 100 )
                 },
                 error: function (returnValue) {
-                console.log(returnValue.responseText);;
+                    alert(returnValue.responseText);;
                     location.href = "/"
+                                    savecontent();
                 }
             })
         }
