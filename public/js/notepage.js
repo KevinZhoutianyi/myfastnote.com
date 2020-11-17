@@ -325,6 +325,7 @@ function inputChange(e){
                     file[0]["name"],
                     { type: blob.type }
             );
+            console.log(blob.type)
             formData.append('token',localStorage.qiniutoken);
             formData.append('file', compressedfile);
             $.ajax({ cache:false,
@@ -338,7 +339,7 @@ function inputChange(e){
                     alert("no enough space :(")
                 }
                 else{
-                    $.ajax({ cache:false,  
+                    $.ajax({ 
                         url: 'http://upload-z2.qiniup.com' ,  
                         type: 'POST',  
                         data:formData,
@@ -348,9 +349,9 @@ function inputChange(e){
                         processData:false,
                         mimeType:"multipart/form-data",
                         success: function (returndata) {  
-                            //xD明明code是200居然执行error
+                            //xD明明code是200居然执行error //jsontype的问题
                         },  
-                        error: function (returndata) { 
+                        error: function (returndata) {
                             
                             console.log("upload img success") 
                             hash = JSON.parse(returndata['responseText'])['hash'];
@@ -402,6 +403,8 @@ function inputChange(e){
 
         })
             
+        }else{
+            alert("jpg/png only")
         }
     }
     
@@ -868,7 +871,16 @@ function compress(fileObj, callback) {
                         var blogData=dataURLtoBlob(fullQuality);
                         callback(blogData);
                     }else{
-                        callback(false);
+                        imgWidth = this.width;
+                        imgHeight =this.height;//设置等比例高度
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        canvas.width = imgWidth;
+                        canvas.height = imgHeight;
+                        ctx.drawImage(this, 0, 0, imgWidth, imgHeight);//根据宽高绘制图片
+                        var fullQuality = canvas.toDataURL("image/png", 1.0);//canvas转为base64
+                        var blogData=dataURLtoBlob(fullQuality);
+                        callback(blogData);
                     }
                 }
             }

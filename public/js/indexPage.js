@@ -27,9 +27,14 @@ function trylogin(){
             url: "/checktoken" ,
             data:{token:localStorage.token},
             success: function (result) {
+                $("#container").hide();
+            setTimeout(() => {
                 location.href = "/main"
+            }, 200);
+                
             },
             error : function(result) {
+                $("#container").show();
                 console.log("token expire")
             }
         });

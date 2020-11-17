@@ -69,3 +69,13 @@ table{border-collapse:collapse;border-spacing:0;}
 #name1{
     text-align:center;
 }
+
+#container{
+    width:100%;
+    height:100%;
+    color:rgba(0, 0, 0, 0);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
