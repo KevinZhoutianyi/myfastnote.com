@@ -22,7 +22,6 @@ function loadData() {
             alert("load data fail");;
             location.href = "/"
                                     savecontent();
-            mdSwitch();
         }
     })
  
@@ -52,7 +51,7 @@ function loadfile(id) {
             alert("load content fail");;
             location.href = "/"
                                     savecontent();
-            mdSwitch();
+                                    
         }
     })      
     
@@ -242,7 +241,14 @@ function mouseover() {
 $(document).ready(function(){
     
     console.log("ready")
-    
+    $("#inpt_search").on('focus', function () {
+	$(this).parent('label').addClass('active');
+});
+
+$("#inpt_search").on('blur', function () {
+	if($(this).val().length == 0)
+		$(this).parent('label').removeClass('active');
+});
     $("#extramenu").mouseleave(function(){
         $("#mouseoverarea").css("width",'4em');
         $("#extramenu").addClass("slideout");
@@ -261,7 +267,7 @@ function lock(){
         localStorage.islock = 1;
         $("#locked").show();
         $("#notlocked").hide();
-    }            
+    }             
 }
 /*锁的切换*/
 
@@ -647,7 +653,7 @@ document.addEventListener("contextmenu", (e) => {
     $(".rename").css("display","none");
     if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"|x=="folderxD"|x=="filecontainer"){//右键在file上
         
-        e.preventDefault();
+        // e.preventDefault();
 
         if(x=="foldernamexD"){
             $(".trash").css("display","flex");
@@ -778,6 +784,51 @@ document.addEventListener("contextmenu", (e) => {
   document.addEventListener("keypress", hideMenu);
 /*右键的context menu*/
 
+
+
+
+/* 搜索*/
+
+function search(val) {
+    $.ajax({
+        cache:false,
+        url:"main/search",
+        type: "post",
+        data:{token:localStorage.token,key:val},
+        success: function (returnValue) {
+            let list = []
+            for (var i=0;i<returnValue.length;i++)
+            { 
+                list.push(returnValue[i]["fileid"])
+            }
+            
+            console.log(list)
+            $("#filecontainer #filexD").each(function(i){
+                $(this).removeClass('findkey');
+            });
+            
+                $("#filecontainer #filexD").each(function(i){
+                    for (var i=0;i<list.length;i++)
+                    { 
+                        if($(this).attr("name") == list[i]){
+                            $(this).addClass('findkey');
+
+                        }
+                    }
+                    
+                });
+            
+        },
+        error: function (returnValue) {
+            alert("load data fail");;
+            location.href = "/"
+            savecontent();
+        }
+    })
+}
+
+
+/* 搜索*/
 /* ---------------------------------------目录----------------------------------------*/
 
 

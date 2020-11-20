@@ -261,23 +261,26 @@ p>img{
 #foldernamexD:hover{
   font-weight:800 !important;
 }
+.findkey{
+  -moz-box-shadow: 5px 5px 5px rgb(10,10,10); /* 老的 Firefox */
+  box-shadow: 5px 5px 5px rgb(10,10,10);
+}
 #filexD{
-  display:flex;
-  flex-direction:row;
-  /* width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; */
-  color:white !important;
-  font-weight: 200 !important;
-  padding-top: 28px !important;
-  margin-top:0px !important;
-  margin-bottom:0px !important;
-  margin-left:25px !important;
-  margin-right:25px !important;
-  font-size:1.2em !important;
-  cursor: pointer;
-  text-align:start;
+  display: flex;
+    flex-direction: row;
+    color: white !important;
+    font-weight: 200 !important;
+    padding-top: 0px !important;
+    /* padding-bottom: 3px !important; */
+    padding-right: 3px !important;
+    /* padding-left: 6px !important; */
+    margin-top: 28px !important;
+    margin-bottom: 0px !important;
+    margin-left: 25px !important;
+    margin-right: 25px !important;
+    font-size: 1.2em !important;
+    cursor: pointer;
+    text-align: start;
 }
 [contenteditable]:focus{outline:none;}
 #filexD:hover{
@@ -755,3 +758,59 @@ pre code {
  height:17px !important;
  width:17px !important;
 }
+.cntr-innr {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+
+/*** STYLES ***/
+.search {
+	display: inline-block;
+	position: relative;
+	height: 35px;
+	width: 35px;
+	box-sizing: border-box;
+	margin: 0px 8px 7px 0px;
+	padding: 7px 9px 0px 9px;
+	border: 3px solid #FFFFFF;
+	border-radius: 25px;
+	transition: all 200ms ease;
+	cursor: text;
+}
+.search:after {
+		content: "";
+		position: absolute;
+		width: 3px;
+		height: 20px;
+		right: -5px;
+		top: 21px;
+		background: #FFFFFF;
+		border-radius: 3px;
+		transform: rotate(-45deg);
+		transition: all 200ms ease;
+	}
+	
+	.search.active,
+	.search:hover {
+		width: 200px;
+		margin-right: 0px;
+  }
+  .search.active:after, .search:hover:after {
+    height: 0px;
+}
+	
+	
+    .search input {
+      color:white;
+      width: 100%;
+      border: none;
+      box-sizing: border-box;
+      font-family: Helvetica; 
+      font-size: 15px;
+      background: transparent;
+      outline-width: 0px;
+  }
+

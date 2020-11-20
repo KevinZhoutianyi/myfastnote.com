@@ -49,13 +49,19 @@
       
         <div id="menucontainer" style="height:100%;width:30%;display:flex;flex-direction:column; justify-content:start;">
             
-        <div style="width: 100%; height: 15%;z-index: 12; "onclick="arrow()"></div>
+        <div style="width: 100%; height: 14%;z-index: 12; "onclick="arrow()"></div>
             <div id="menuxD">
                 <div id="menutextarea" name="notcare">
                     <br><h1>loading</h1><br>
                 </div>
             </div>
-            <div style="width: 100%; height: 15%;z-index: 12; "onclick="arrow()"></div>
+            <div style="width: 100%; height: 16%;z-index: 12; display: table;">
+                    <div class="cntr-innr">
+                      <label class="search" for="inpt_search">
+                            <input id="inpt_search" type="text" onchange='search(this.value);' spellcheck='false'/>
+                        </label>
+                    </div>
+            </div>
         </div>
         
         <div style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;"onclick="arrow()"></div>

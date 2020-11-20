@@ -12,7 +12,7 @@ var qiniu = require("qiniu");
 const multiparty = require('multiparty');
 const fs = require('fs');
 const JwtUtil = require('../jwt');
-let router = express.Router();
+var router = express.Router();
 var app = express();
 //要上传的空间名
 var bucket = 'onlydrinkwater'; 
@@ -361,6 +361,38 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        })
  
  })
+
+
+
+
+  
+ router.post('/search',urlencodedParser, function (req, res) {//rename
+   var key = req.body.key;
+   userid = getid(req.body.token)
+  if(userid=="-1"){
+     res.status(400).send("token expired")
+     return;
+  }
+  console.log("userid:"+userid+" is searching key");
+
+   pool.getConnection(function(err,connection){
+     //  console.log("savecatalogue : connection to sql success")
+      var qu = "select fileid from note where match(content) against('"+key+"' in boolean mode);";
+      connection.query(qu,function(err,result){
+         if(err){
+            console.log('[UPDATE ERROR] - ',err.message);
+            connection.release();
+            res.status(400)
+            return;
+         } 
+        //  console.log("savecatalogue : mysql release")
+         res.status(200).send(result);
+         connection.release();
+         })
+      })
+
+})
+
  
  
  
@@ -496,7 +528,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
    })
 
  
- 
+})
  
  
  
@@ -506,13 +538,5 @@ router.get('/',urlencodedParser, function (req, res) {
 });
  
  
- 
- 
- 
- 
- 
-  
- 
- 
 
- module.exports = router;
+ module.exports = router
