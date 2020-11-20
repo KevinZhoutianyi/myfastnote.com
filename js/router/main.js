@@ -429,6 +429,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       const result = await query("select size from user where userid="+userid)
       const result2 = await query("update user set size = "+(parseInt(result[0].size)+parseInt(size))+" where userid = "+userid);
       const result3 = await query("insert into img values("+fileid+","+userid+",'"+hash+"',"+size+") ")
+      res.status(200)
  });
 
 
