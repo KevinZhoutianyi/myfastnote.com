@@ -1,0 +1,75 @@
+    $.ajax({ cache:false,
+            url:"main/getleftsize",
+            type: "post",
+            data:{token:localStorage.token},
+        
+            success: function (returnValue) {
+                console.log(returnValue+"Byte Space left")//剩余空间大小
+                if(parseInt(returnValue)<parseInt(compressedfile["size"])){
+                    alert("no enough space :(")
+                }
+                else{
+                    $.ajax({ 
+                        url: 'http://upload-z2.qiniup.com' ,  
+                        type: 'POST',  
+                        data:formData,
+                        dataType: "formData",
+                        cache: false,
+                        contentType: false,
+                        processData:false,
+                        mimeType:"multipart/form-data",
+                        success: function (returndata) {  
+                            //xD明明code是200居然执行error //jsontype的问题
+                        },  
+                        error: function (returndata) {
+                            
+                            console.log("upload img success") 
+                            hash = JSON.parse(returndata['responseText'])['hash'];
+                            
+                            m = document.getElementById("md-area").value;
+                            m += "\r\n![](http://img.myfastnote.com/"+ hash+"~resize1)";
+                            document.getElementById("md-area").value = m;
+                            localStorage.leftscrolltop = $("#left").scrollTop();
+                            localStorage.rightscrolltop = $("#right").scrollTop();
+                            m = document.getElementById("md-area")
+                            m.style.height='auto';
+                            m.style.height = m.scrollHeight + 50 + 'px';
+                            mdSwitch();
+                            $("#left").scrollTop(localStorage.leftscrolltop);
+                            $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
+
+
+
+                //更新服务器上用户的存储信息
+                            $.ajax({ cache:false,
+                                url:"main/uploadimg",
+                                type: "post",
+                                data:{token:localStorage.token, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
+                            
+                                success: function (returnValue) {
+                                    console.log("success")
+                                },
+                                error: function (returnValue) {
+                                    alert("upload img fail");
+                                    location.href = "/"
+                                    savecontent();
+                                }
+                            })
+
+
+
+
+
+
+                        }  
+                    });  
+                }
+                    
+            },
+            error: function (returnValue) {
+                alert("upload img fail");;
+                location.href = "/"
+                savecontent();
+            }
+
+        })

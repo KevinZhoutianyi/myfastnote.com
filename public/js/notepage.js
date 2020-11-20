@@ -4,7 +4,7 @@
 function loadData() {
     
     // to do : get the real data
-    console.log("load lastsavedfile and get qiniuyun token")
+    console.log("load lastsavedfile")
     $.ajax({ cache:false,
         url:"main/getdata",
         type: "post",
@@ -19,28 +19,14 @@ function loadData() {
             mdSwitch();
         },
         error: function (returnValue) {
-            alert(returnValue.responseText);;
+            alert("load data fail");;
             location.href = "/"
                                     savecontent();
             mdSwitch();
         }
     })
-
-    $.ajax({ cache:false,
-        url:"/getqiniuyuntoken",
-        type: "post",
-        data:{token:localStorage.token,},
-        success: function (returnValue) {
-            if(returnValue=="fail"){
-                alert("fail to get token")
-            }else{
-                localStorage.qiniutoken = returnValue
-            }
-        },
-        error: function (returnValue) {
-                console.log(returnValue);
-        }
-    })
+ 
+    
     
     
 }
@@ -63,7 +49,7 @@ function loadfile(id) {
             mdSwitch();
         },
         error: function (returnValue) {
-            alert(returnValue.responseText);;
+            alert("load content fail");;
             location.href = "/"
                                     savecontent();
             mdSwitch();
@@ -254,7 +240,9 @@ function mouseover() {
 }
 
 $(document).ready(function(){
+    
     console.log("ready")
+    
     $("#extramenu").mouseleave(function(){
         $("#mouseoverarea").css("width",'4em');
         $("#extramenu").addClass("slideout");
@@ -313,9 +301,9 @@ function fullscreen(){
 /*全屏切换*/
 
 
-/*截图*/
+/*图*/
 function uploadmyimg() {
-    //截图 后上传
+    //图 后上传
     $("#uploadcropimg").click();
 }
 function inputChange(e){
@@ -331,85 +319,38 @@ function inputChange(e){
                     { type: blob.type }
             );
             console.log(blob.type)
-            formData.append('token',localStorage.qiniutoken);
             formData.append('file', compressedfile);
-            $.ajax({ cache:false,
-            url:"main/getleftsize",
-            type: "post",
-            data:{token:localStorage.token},
-        
-            success: function (returnValue) {
-                console.log(returnValue+"Byte Space left")//剩余空间大小
-                if(parseInt(returnValue)<parseInt(compressedfile["size"])){
-                    alert("no enough space :(")
-                }
-                else{
-                    $.ajax({ 
-                        url: 'http://upload-z2.qiniup.com' ,  
-                        type: 'POST',  
-                        data:formData,
-                        dataType: "formData",
-                        cache: false,
-                        contentType: false,
-                        processData:false,
-                        mimeType:"multipart/form-data",
-                        success: function (returndata) {  
-                            //xD明明code是200居然执行error //jsontype的问题
-                        },  
-                        error: function (returndata) {
-                            
-                            console.log("upload img success") 
-                            hash = JSON.parse(returndata['responseText'])['hash'];
-                            
-                            m = document.getElementById("md-area").value;
-                            m += "\r\n![](http://img.myfastnote.com/"+ hash+"~resize1)";
-                            document.getElementById("md-area").value = m;
-                            localStorage.leftscrolltop = $("#left").scrollTop();
-                            localStorage.rightscrolltop = $("#right").scrollTop();
-                            m = document.getElementById("md-area")
-                            m.style.height='auto';
-                            m.style.height = m.scrollHeight + 50 + 'px';
-                            mdSwitch();
-                            $("#left").scrollTop(localStorage.leftscrolltop);
-                            $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
-
-
-
-                //更新服务器上用户的存储信息
-                            $.ajax({ cache:false,
-                                url:"main/uploadimg",
-                                type: "post",
-                                data:{token:localStorage.token, size : compressedfile["size"],hash:hash,fileid:localStorage.nowopenfileid},
-                            
-                                success: function (returnValue) {
-                                    console.log("success")
-                                },
-                                error: function (returnValue) {
-                                    alert(returnValue.responseText);
-                                    location.href = "/"
-                                    savecontent();
-                                }
-                            })
-
-
-
-
-
-
-                        }  
-                    });  
-                }
-                    
-            },
-            error: function (returnValue) {
-                alert(returnValue.responseText);;
-                location.href = "/"
-                                    savecontent();
-                
-            }
-
-        })
+            formData.append('fileid', localStorage.nowopenfileid);
+            formData.append('token', localStorage.token);
+            $.ajax({
+                url: '/main/uploadimg' ,  
+                type: 'POST',  
+                data:formData,
+                dataType: "formData",
+                cache: false,
+                contentType: false,
+                processData:false,
+                mimeType:"multipart/form-data",
             
+                success: function (returnValue) {
+                    
+                },
+                error: function (returndata) {
+                    console.log("upload img success") 
+                    hash = JSON.parse(returndata['responseText'])['hash'];
+                    m = document.getElementById("md-area").value;
+                    m += "\r\n![](http://img.myfastnote.com/"+ hash+"~resize1)";
+                    document.getElementById("md-area").value = m;
+                    localStorage.leftscrolltop = $("#left").scrollTop();
+                    localStorage.rightscrolltop = $("#right").scrollTop();
+                    m = document.getElementById("md-area")
+                    m.style.height='auto';
+                    m.style.height = m.scrollHeight + 50 + 'px';
+                    mdSwitch();
+                    $("#left").scrollTop(localStorage.leftscrolltop);
+                    $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
+                }
+            })
         }else{
             alert("jpg/png only")
         }
@@ -565,7 +506,7 @@ function opfile(data) {
         name = localStorage.contextmenufilename;
         if(id=='foldernamexD'){
             //提示是否要删除文件和文件夹下所有内容
-            var r=confirm("是否要删除文件夹下所有内容?");
+            var r=confirm("Sure to delete the folder and all files?");
             if (r==true){
                 //ajax删除文件夹 和它下面的所有文件
                 $.ajax({cache:false,

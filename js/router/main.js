@@ -14,7 +14,15 @@ const fs = require('fs');
 const JwtUtil = require('../jwt');
 let router = express.Router();
 var app = express();
-
+//要上传的空间名
+var bucket = 'onlydrinkwater'; 
+var imageUrl = 'img.myfastnote.com'; // 域名名称
+var accessKey = '3PoDKOO6j9uXap5iTeeb5TE6JsYN4_okFnX9nozI';
+var secretKey = 'mXf52W_o7P8Q01HeT-lf1MehQeUxg0KtH-RnIxzo';
+var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+var config = new qiniu.conf.Config();
+// 空间对应的机房
+config.zone = qiniu.zone.Zone_z2;
 
 
 let query = function( sql, values ) {
@@ -416,38 +424,77 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  });
 
  router.post("/uploadimg",urlencodedParser,  async (req, res) => {
-   userid = getid(req.body.token)
-   if(userid=="-1"){
-      res.status(400).send("token expired")
-      return;
-   }
-   console.log("userid:"+userid+" is uploading img");
- 
-      var fileid = req.body.fileid;
-      var size = req.body.size;
-      var hash = req.body.hash;
-      const result = await query("select size from user where userid="+userid)
-      const result2 = await query("update user set size = "+(parseInt(result[0].size)+parseInt(size))+" where userid = "+userid);
-      const result3 = await query("insert into img values("+fileid+","+userid+",'"+hash+"',"+size+") ")
-      res.status(200)
- });
+   
+   let form = new multiparty.Form();
+   
+   form.parse(req, async(err,fields,file)=>{
+      userid = getid(fields["token"][0])
 
+      console.log("userid:"+userid+" is uploading img");
+      if(userid=="-1"){
+         res.status(400).send("token expired")
+         return;
+      }
+      //1.判断大小够不够 不够返回400 没空间了
+      //2.够的话上传到qiniu后更新usersize和hash
+      const result = await query("select maxsize from user where userid="+userid)
+      const result1 = await query("select size from user where userid="+userid)
+      leftsize = parseInt(result[0].maxsize) - parseInt(result1[0].size);
+      filesize = parseInt(file["file"][0]["size"]);
+      filename = (file["file"][0]["originalFilename"])
+      fileid = parseInt(fields["fileid"][0]);
+      if(leftsize<filesize){
+         res.status(400).send("no enough space :(")
+         return;
+      }
+      else{
+         let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+         let options = {
+               scope: bucket,
+               expires: 3600
+         };
+         let putPolicy =  new qiniu.rs.PutPolicy(options);
+         let uploadToken= putPolicy.uploadToken(mac);
+         if(uploadToken){
+         }
+         else{
+            console.log('get qiniuyun token fail')
+            res.status(400).send('get qiniuyun token fail')
+            return
+         }
+         var localFile = (file["file"][0]["path"])
+         var formUploader = new qiniu.form_up.FormUploader(config);
+         var putExtra = new qiniu.form_up.PutExtra();
+         // 文件上传
+         formUploader.putFile(uploadToken, null, localFile, putExtra, function(respErr,
+         respBody, respInfo) {
+         if (respErr) {
+            throw respErr;
+         }
+         if (respInfo.statusCode == 200) {
+            console.log("userid:"+userid+" finish upload img ")
+            pool.getConnection(function(err,connection){
+               qu1 = "update user set size = "+(parseInt(result1[0].size)+parseInt(filesize))+" where userid = "+userid;
+               connection.query(qu1,function(err,result22){})
+               connection.release();
+            })
+            pool.getConnection(function(err,connection){
+               qu2 = "insert into img values("+fileid+","+userid+",'"+respBody.hash+"',"+filesize+") ";
+               connection.query(qu2,function(err,result33){
+               })
+               connection.release();
+            })
+            // const result3 = await query()
+            res.status(200).send(respBody)
+         } else {
+            console.log(respBody.error);
+            res.status(400).send(respBody.error)
+            return
+         }
+         });
+      }
+   })
 
- 
- router.post("/getleftsize",urlencodedParser,  async (req, res) => {
-   userid = getid(req.body.token)
-   if(userid=="-1"){
-      res.status(400).send("token expired")
-      return;
-   }
-   console.log("userid:"+userid+" is asking for left size");
- 
-   const result = await query("select maxsize from user where userid="+userid)
-   const result1 = await query("select size from user where userid="+userid)
-   ret = parseInt(result[0].maxsize) - parseInt(result1[0].size);
-   res.json(ret)
-
-});
  
  
  
