@@ -653,7 +653,7 @@ document.addEventListener("contextmenu", (e) => {
     $(".rename").css("display","none");
     if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"|x=="folderxD"|x=="filecontainer"){//右键在file上
         
-        // e.preventDefault();
+        e.preventDefault();
 
         if(x=="foldernamexD"){
             $(".trash").css("display","flex");
