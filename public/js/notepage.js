@@ -122,16 +122,7 @@ function loadcatalogue(command) {
         
             }
 
-            $("#folderxD #foldernamexD").each(function(i){
-                folderid = $(this).attr('name')
-                if((localStorage.getItem("folderid"+folderid)!=null)&&(localStorage.getItem("folderid"+folderid)==1)){
-                    $(this).parent().children("#filecontainer").hide();
-                }else{
-                    $(this).parent().children("#filecontainer").show();
-                }
-                
-            });
-
+            freshcatalogue();
 
        
         }
@@ -140,6 +131,21 @@ function loadcatalogue(command) {
 }
 /*加载目录*/
 
+/*根据local里的flag 刷新目录的折叠*/
+function freshcatalogue() {
+    $("#folderxD #foldernamexD").each(function(i){
+        folderid = $(this).attr('name')
+        if((localStorage.getItem("folderid"+folderid)!=null)&&(localStorage.getItem("folderid"+folderid)==1)){
+            $(this).parent().children("#filecontainer").hide();
+        }else{
+            $(this).parent().children("#filecontainer").show();
+        }
+        
+    });
+    
+}
+
+/*根据local里的flag 刷新目录的折叠*/
 /* ---------------------------------------加载----------------------------------------*/
 
 
@@ -223,9 +229,9 @@ function savecontent() {
                 $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
             },
             error: function (returnValue) {
-                console.log(returnValue.responseText);;
-                console.log("save fail")
-                alert("fail")
+                alert(returnValue.responseText)
+
+                location.href = "/"
             }
         })
 }
@@ -642,6 +648,30 @@ function rename() {
 /* 重命名 */
 
 
+
+/* 收起所有文件夹 */
+function foldall() {
+    console.log("foldall")
+    $("#folderxD #foldernamexD").each(function(i){
+        folderid =  $(this).attr('name')
+        localStorage.setItem("folderid"+folderid,1)
+    });
+    freshcatalogue();
+}
+/* 收起所有文件夹 */
+
+/* zhankai所有文件夹 */
+function unfoldall() {
+    console.log("unfoldall")
+    $("#folderxD #foldernamexD").each(function(i){
+        folderid =  $(this).attr('name')
+        localStorage.setItem("folderid"+folderid,0)
+    });
+    freshcatalogue();
+}
+/* zhankai所有文件夹 */
+
+
 /*右键的context menu*/
 document.addEventListener("contextmenu", (e) => {
     // console.log(e.path[0].id)
@@ -651,6 +681,8 @@ document.addEventListener("contextmenu", (e) => {
     $(".trash").css("display","none");
     $(".upload").css("display","none");
     $(".rename").css("display","none");
+    $(".foldall").css("display","none");
+    $(".unfoldall").css("display","none");
     if(x=="filexD"|x=="foldernamexD"|x=="menutextarea"|x=="folderxD"|x=="filecontainer"){//右键在file上
         
         e.preventDefault();
@@ -665,6 +697,8 @@ document.addEventListener("contextmenu", (e) => {
         else if(x=="menutextarea"||x=="folderxD"){
             $(".newfolder").css("display","flex");
             $(".upload").css("display","flex");
+            $(".foldall").css("display","flex");
+            $(".unfoldall").css("display","flex");
         }
         
         else if(x=="filexD"){
@@ -764,6 +798,20 @@ document.addEventListener("contextmenu", (e) => {
             rename();
         },
       },
+      {
+        name: "public/png/foldall.png",
+        class: "foldall",
+        onClick: function (e) {
+            foldall();
+        },
+      },
+      {
+        name: "public/png/unfoldall.png",
+        class: "unfoldall",
+        onClick: function (e) {
+            unfoldall();
+        },
+      },
       
     ],
   });
@@ -820,7 +868,7 @@ function search(val) {
             
         },
         error: function (returnValue) {
-            alert("load data fail");;
+            alert("Search fail: token may expired");;
             location.href = "/"
             savecontent();
         }

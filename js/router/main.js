@@ -12,6 +12,7 @@ var qiniu = require("qiniu");
 const multiparty = require('multiparty');
 const fs = require('fs');
 const JwtUtil = require('../jwt');
+const { strict } = require('assert');
 var router = express.Router();
 var app = express();
 //要上传的空间名
@@ -472,6 +473,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       const result = await query("select maxsize from user where userid="+userid)
       const result1 = await query("select size from user where userid="+userid)
       leftsize = parseInt(result[0].maxsize) - parseInt(result1[0].size);
+      console.log("userid:"+userid+" size left: "+leftsize)
       filesize = parseInt(file["file"][0]["size"]);
       filename = (file["file"][0]["originalFilename"])
       fileid = parseInt(fields["fileid"][0]);

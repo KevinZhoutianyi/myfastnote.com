@@ -30,6 +30,7 @@ function trylogin(){
                 $("#container").hide();
             setTimeout(() => {
                 location.href = "/main"
+                localStorage.token = result;
             }, 500);
                 
             },

@@ -262,8 +262,8 @@ p>img{
   font-weight:800 !important;
 }
 .findkey{
-  -moz-box-shadow: 5px 5px 5px rgb(10,10,10); /* 老的 Firefox */
-  box-shadow: 5px 5px 5px rgb(10,10,10);
+  -moz-box-shadow: 4px 4px 5px 1px rgb(10,10,10);
+  box-shadow: 4px 4px 5px 1px rgb(10,10,10);
 }
 #filexD{
   border-radius: 8px;
@@ -271,14 +271,14 @@ p>img{
     flex-direction: row;
     color: white !important;
     font-weight: 200 !important;
-    padding-top: 0px !important;
-    padding-bottom: 1px !important;
-    padding-right: 3px !important;
-    padding-left: 6px !important;
-    margin-top: 28px !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-right: 8px !important;
+    padding-left: 12px !important;
+    margin-top: 25px !important;
     margin-bottom: 0px !important;
-    margin-left: 25px !important;
-    margin-right: 25px !important;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
     font-size: 1.2em !important;
     cursor: pointer;
     text-align: start;
@@ -758,6 +758,20 @@ pre code {
   margin-right: 1px;
  height:17px !important;
  width:17px !important;
+}
+.foldall{
+  display:none;
+}
+.foldallimg{
+ height:19px !important;
+ width:19px !important;
+}
+.unfoldall{
+  display:none;
+}
+.unfoldallimg{
+ height:19px !important;
+ width:19px !important;
 }
 .cntr-innr {
   display: flex;

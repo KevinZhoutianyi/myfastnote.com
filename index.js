@@ -92,6 +92,9 @@ function getid(token) {
   }
   return(ret)
 }
+
+//如果该用户的token可用 就刷新他的token，给他新的24小时
+//也就是说用户只要在24小时内 checktoken过就不会过期
 app.post('/checktoken',urlencodedParser, async (req, res) => {
   console.log("check tocken for: "+req.body.token)
   userid = getid(req.body.token)
@@ -99,8 +102,11 @@ app.post('/checktoken',urlencodedParser, async (req, res) => {
     res.status(400).send("cantverifytoken")
     return;
   }
-  console.log("userid:"+userid+" is ask for data");
-  res.status(200).send("tokenverified")
+  console.log("userid:"+userid+"check token success, give him a new one");
+  var content = {id:userid}
+  let jwt = new JwtUtil(content);
+  let token = jwt.generateToken();
+  res.status(200).send(token)
 })
 
 
