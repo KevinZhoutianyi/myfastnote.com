@@ -378,7 +378,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
 
    pool.getConnection(function(err,connection){
      //  console.log("savecatalogue : connection to sql success")
-      var qu = "select fileid from note where match(content) against('"+key+"' in boolean mode);";
+      var qu = "select fileid from note where match(content) against('"+key+"' in boolean mode) and userid = "+userid+";";
       connection.query(qu,function(err,result){
          if(err){
             console.log('[UPDATE ERROR] - ',err.message);

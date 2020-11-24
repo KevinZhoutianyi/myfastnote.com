@@ -850,7 +850,7 @@ function search(val) {
                 list.push(returnValue[i]["fileid"])
             }
             
-            console.log(list)
+            // console.log(list)
             $("#filecontainer #filexD").each(function(i){
                 $(this).removeClass('findkey');
             });
