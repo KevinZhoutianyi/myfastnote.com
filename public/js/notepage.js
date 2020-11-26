@@ -13,6 +13,7 @@ function loadData() {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
             document.getElementById("md-area").value = returnValue.content;
             localStorage.nowopenfileid = returnValue.id;
+            localStorage.nowopendbid = returnValue.lastopendbid;
             m = document.getElementById("md-area");
             m.style.height='auto';
             m.style.height = m.scrollHeight + 50 + 'px';
@@ -36,7 +37,7 @@ function loadfile(id) {
     $.ajax({ cache:false,
         url:"main/getfile",
         type: "post",
-        data:{token:localStorage.token, fileid : id},
+        data:{token:localStorage.token, fileid : id,dbid:localStorage.nowopendbid},
     
         success: function (returnValue) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
@@ -77,7 +78,7 @@ function loadcatalogue(command) {
     $.ajax({ cache:false,
         url:"main/getcatalogue",
         type: "post",
-        data:{token:localStorage.token},
+        data:{token:localStorage.token,dbid:localStorage.nowopendbid},
         success: function (returnValue) {
             var content = JSON.stringify(returnValue);
             var showhtml = "<br><br>";
@@ -224,7 +225,7 @@ function savecontent() {
         $.ajax({ cache:false,
             url:"main/savedata",
             type: "post",
-            data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid},
+            data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid,dbid:localStorage.nowopendbid},
             success: function (returnValue) {
                 $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
             },
@@ -334,6 +335,7 @@ function inputChange(e){
             formData.append('file', compressedfile);
             formData.append('fileid', localStorage.nowopenfileid);
             formData.append('token', localStorage.token);
+            formData.append('dbid', localStorage.nowopendbid);
             $.ajax({
                 url: '/main/uploadimg' ,  
                 type: 'POST',  
@@ -473,7 +475,7 @@ function savecatalogue(filename,fileid) {
         $.ajax({ cache:false,
             url:"main/savecatalogue",
             type: "post",
-            data:{token:localStorage.token, fileid : fileid,filename:filename},
+            data:{token:localStorage.token, fileid : fileid,filename:filename,dbid:localStorage.nowopendbid},
         
             success: function (returnValue) {
                 console.log("save catalogue success")
@@ -494,7 +496,7 @@ function newfolder(){
         $.ajax({ cache:false,
             url:"main/newfolder",
             type: "post",
-            data:{token:localStorage.token},
+            data:{token:localStorage.token,dbid:localStorage.nowopendbid},
         
             success: function (returnValue) {
                 loadcatalogue();
@@ -524,7 +526,7 @@ function opfile(data) {
                 $.ajax({cache:false,
                     url:"main/deletefile",
                     type: "post",
-                    data:{token:localStorage.token,fileid : name},
+                    data:{token:localStorage.token,fileid : name,dbid:localStorage.nowopendbid},
                 
                     success: function (returnValue) {
                         loadcatalogue();
@@ -546,7 +548,7 @@ function opfile(data) {
                 $.ajax({ cache:false,
                     url:"main/deletefile",
                     type: "post",
-                    data:{token:localStorage.token,fileid : name},
+                    data:{token:localStorage.token,fileid : name,dbid:localStorage.nowopendbid},
                 
                     success: function (returnValue) {
                         loadcatalogue();
@@ -570,7 +572,7 @@ function opfile(data) {
             $.ajax({ cache:false,
                 url:"main/newfile",
                 type: "post",
-                data:{token:localStorage.token, folderid:name},
+                data:{token:localStorage.token, folderid:name,dbid:localStorage.nowopendbid},
             
                 success: function (returnValue) {
                     loadcatalogue();
@@ -591,6 +593,22 @@ function opfile(data) {
 /*新建文件和删除文件文件夹*/
 
 
+/* 重命名全选 */
+function selectText(obj) {
+    if (document.selection) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(obj[0]);
+        range.select();
+    } else if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNodeContents(obj[0]);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    }
+}
+/* 重命名全选 */
+
+
 /*从本地上传md文件*/
 function upload() {
     $("#uploadbutton").trigger("click");
@@ -601,6 +619,8 @@ function doUpload() {
     var file = $("#uploadbutton")[0].files;
     formData.append('size', file.length);
     formData.append('token', localStorage.token);
+
+    formData.append('dbid', localStorage.nowopendbid);
     if(localStorage.contextmenufileid=="foldernamexD"){
         formData.append('folderid', localStorage.contextmenufilename);
 
@@ -644,6 +664,7 @@ function rename() {
     $(obj).attr("contentEditable",true)
     localStorage.edited = 1;
     $(obj).focus();
+        selectText(obj);
 }
 /* 重命名 */
 
@@ -842,7 +863,7 @@ function search(val) {
         cache:false,
         url:"main/search",
         type: "post",
-        data:{token:localStorage.token,key:val},
+        data:{token:localStorage.token,key:val,dbid:localStorage.nowopendbid},
         success: function (returnValue) {
             let list = []
             for (var i=0;i<returnValue.length;i++)
