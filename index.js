@@ -25,6 +25,7 @@ app.use(bodyParser.json());//数据JSON类型
 
 
 app.use('/main', require('./js/router/main'));
+app.use('/blog', require('./js/router/blog_back'));
 
 
 
@@ -108,6 +109,13 @@ app.post('/checktoken',urlencodedParser, async (req, res) => {
   let token = jwt.generateToken();
   res.status(200).send(token)
 })
+
+
+
+
+
+
+
 
 
 
