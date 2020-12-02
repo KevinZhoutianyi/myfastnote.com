@@ -28,7 +28,7 @@ config.zone = qiniu.zone.Zone_z2;
 
 let query = function( sql, values ) {
     // 返回一个 Promise
-    // console.log(sql)
+   //  myprint(sql)
     return new Promise(( resolve, reject ) => {
       pool.getConnection(function(err, connection) {
         if (err) {
@@ -39,6 +39,8 @@ let query = function( sql, values ) {
             if ( err ) {
               reject( err )
             } else {
+
+               // myprint(rows)
               resolve( rows )
             }
             // 结束会话
@@ -47,6 +49,7 @@ let query = function( sql, values ) {
         }
       })
     })
+    .catch(error => console.log('caught', error))
   }
  
  
@@ -69,6 +72,11 @@ function getid(token) {
    return(ret)
 }
 
+function myprint(output){
+   console.log(new Date(Date.now()))
+   console.log(output)
+}
+
 
 router.post('/getdata',urlencodedParser, async (req, res) => {
     
@@ -77,7 +85,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        res.status(400).send("token expired")
        return;
     }
-    console.log("userid:"+userid+" is ask for data");
+    myprint("userid:"+userid+" is ask for data");
  
     const result = await query("select lastopenfileid,lastopendbid from user where userid = '"+userid+"'");
     
@@ -103,10 +111,11 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        res.status(400).send("token expired")
        return;
     }
-    console.log("userid:"+userid+" is ask for file");
+
+    myprint("userid:"+userid+" is ask for file");
  
     pool.getConnection(function(err,connection){
-      //  console.log("getfile : connection to sql success")
+      //  myprint("getfile : connection to sql success")
        
           
              qu = "select content from note where userid = '"+userid+"' and fileid ='" +fileid +"' and dbid =" +dbid;
@@ -116,11 +125,11 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
                    res.send(x);
                 }
                 else{
-                  //  console.log("getfile : connection to mysql fail")
+                  //  myprint("getfile : connection to mysql fail")
                 }    
                 })
              connection.release();
-            //  console.log("getfile : mysql release")
+            //  myprint("getfile : mysql release")
           
              
          
@@ -139,7 +148,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       res.status(400).send("token expired")
       return;
    }
-   console.log("userid:"+userid+" is ask for catalogue");
+   myprint("userid:"+userid+" is ask for catalogue");
  
  
    const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+userid+" and dbid =" + dbid);
@@ -147,7 +156,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       res.send(result2)
    }  
    else{
-      console.log(result2)
+      myprint(result2)
    }
     
  })
@@ -161,27 +170,27 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        res.status(400).send("token expired")
        return;
     }
-    console.log("userid:"+userid+" is saving file");
+    myprint("userid:"+userid+" is saving file");
  
     pool.getConnection(function(err,connection){
-      //  console.log("savedata : connection to sql success")
+      //  myprint("savedata : connection to sql success")
        var qu = "update note set content ='" + content + "'where fileid ="+id +" and userid="+userid+" and dbid = "+dbid+";";
        connection.query(qu,function(err,result){
           if(err){
-             console.log('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR] - ',err.message);
              return;
           }  
           var qu2 = "update user set lastopenfileid ='" + id + "'where userid ="+userid+" and lastopendbid = "+ dbid +";";
           connection.query(qu2,function(err2,result2){
              if(err2){
-                console.log('[UPDATE ERROR] - ',err.message);
+                myprint('[UPDATE ERROR] - ',err.message);
                 return;
              } 
              connection.release();
-            //  console.log("savedata : mysql release")
+            //  myprint("savedata : mysql release")
              res.send("success");
              })
-         //  console.log("savedata : mysql release")
+         //  myprint("savedata : mysql release")
           })
        })
       
@@ -199,21 +208,21 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        res.status(400).send("token expired")
        return;
     }
-    console.log("userid:"+userid+" is deleting folder id:" + fileid);
+    myprint("userid:"+userid+" is deleting folder id:" + fileid);
  
     pool.getConnection(function(err,connection){
-      //  console.log("deletefolder : connection to sql success")
+      //  myprint("deletefolder : connection to sql success")
        var qu = "delete from catalogue where fileid = " + fileid + " and userid="+userid+" and dbid = "+dbid+";";
        connection.query(qu,function(err,result){
           if(err){
-             console.log('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR] - ',err.message);
              return;
           } 
-          // console.log(result[0])
+          // myprint(result[0])
           var qu2 = "delete from catalogue where fatherid = " +fileid+ " and userid="+userid+" and dbid = "+dbid+";";
           connection.query(qu2,function(err2,result2){
              if(err2){
-                console.log('[UPDATE ERROR] - ',err2.message);
+                myprint('[UPDATE ERROR] - ',err2.message);
                 return;
              } 
              
@@ -221,7 +230,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
           var qu3 = "delete from note where fatherid = " +fileid+ " and userid="+userid+" and dbid = "+dbid+";";
           connection.query(qu3,function(err3,result3){
              if(err3){
-                console.log('[UPDATE ERROR] - ',err3.message);
+                myprint('[UPDATE ERROR] - ',err3.message);
                 return;
              } 
           });
@@ -229,7 +238,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
           var qu4 = "delete from note where fileid = " +fileid+ " and userid="+userid+" and dbid = "+dbid+";";
           connection.query(qu4,function(err4,result4){
              if(err4){
-                console.log('[UPDATE ERROR] - ',err4.message);
+                myprint('[UPDATE ERROR] - ',err4.message);
                 return;
              } 
              res.send("success");
@@ -260,21 +269,21 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       res.status(400).send("token expired")
       return;
    }
-   console.log("userid:"+userid+" is newing folder");
+   myprint("userid:"+userid+" is newing folder");
 
     pool.getConnection(function(err,connection){
-      //  console.log("newfolder : connection to sql success")
+      //  myprint("newfolder : connection to sql success")
        var qu = "select max(fileid) from catalogue where userid="+userid+" and dbid = "+dbid;
        connection.query(qu,function(err,result){
           if(err){
-             console.log('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR] - ',err.message);
              return;
           } 
-          // console.log(result[0])
+          // myprint(result[0])
           var qu2 = "insert into catalogue values("+userid+","+(result[0]["max(fileid)"]+1)+",'newfolder',0,0,null,"+dbid+");";
           connection.query(qu2,function(err2,result2){
              if(err2){
-                console.log('[UPDATE ERROR] - ',err2.message);
+                myprint('[UPDATE ERROR] - ',err2.message);
                 return;
              } 
              
@@ -298,32 +307,32 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       res.status(400).send("token expired")
       return;
    }
-   console.log("userid:"+userid+" is newing file");
+   myprint("userid:"+userid+" is newing file");
 
     var folderid = req.body.folderid;
     var dbid = req.body.dbid;
     
  
     pool.getConnection(function(err,connection){
-      //  console.log("newfolder : connection to sql success");
+      //  myprint("newfolder : connection to sql success");
        var qu = "select max(fileid) from catalogue where userid="+userid+" and dbid = "+ dbid;
        connection.query(qu,function(err,result){
           if(err){
-             console.log('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR] - ',err.message);
              return;
           } 
-          // console.log(result[0])
+          // myprint(result[0])
           var qu2 = "insert into catalogue values("+userid+","+(result[0]["max(fileid)"]+1)+",'newfile',1,1,"+folderid+","+dbid+");";
           connection.query(qu2,function(err2,result2){
              if(err2){
-                console.log('[UPDATE ERROR] - ',err2.message);
+                myprint('[UPDATE ERROR] - ',err2.message);
                 return;
              } 
              });
           var qu3 = "insert into note values("+(result[0]["max(fileid)"]+1)+",'# ',"+userid+","+folderid+","+dbid+");";
           connection.query(qu3,function(err3,result3){
              if(err3){
-                console.log('[UPDATE ERROR] - ',err3.message);
+                myprint('[UPDATE ERROR] - ',err3.message);
                 return;
              } 
              
@@ -352,17 +361,17 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       res.status(400).send("token expired")
       return;
    }
-   console.log("userid:"+userid+" is saving catalogue for file " + fileid);
+   myprint("userid:"+userid+" is saving catalogue for file " + fileid);
  
     pool.getConnection(function(err,connection){
-      //  console.log("savecatalogue : connection to sql success")
+      //  myprint("savecatalogue : connection to sql success")
        var qu = "update catalogue set filename ='" + filename + "'where fileid ="+fileid+" and userid ="+userid+" and dbid = " + dbid;
        connection.query(qu,function(err,result){
           if(err){
-             console.log('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR] - ',err.message);
              return;
           } 
-         //  console.log("savecatalogue : mysql release")
+         //  myprint("savecatalogue : mysql release")
           res.send("success");
  
           connection.release();
@@ -383,19 +392,19 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
      res.status(400).send("token expired")
      return;
   }
-  console.log("userid:"+userid+" is searching key");
+  myprint("userid:"+userid+" is searching key");
 
    pool.getConnection(function(err,connection){
-     //  console.log("savecatalogue : connection to sql success")
+     //  myprint("savecatalogue : connection to sql success")
       var qu = "select fileid from note where match(content) against('"+key+"' in boolean mode) and userid = "+userid+" and dbid = "+dbid+";";
       connection.query(qu,function(err,result){
          if(err){
-            console.log('[UPDATE ERROR] - ',err.message);
+            myprint('[UPDATE ERROR] - ',err.message);
             connection.release();
             res.status(400)
             return;
          } 
-        //  console.log("savecatalogue : mysql release")
+        //  myprint("savecatalogue : mysql release")
          res.status(200).send(result);
          connection.release();
          })
@@ -422,13 +431,13 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       dbid = fields["dbid"]
       if(userid=="-1"){
          res.status(400).send("token expired")
-         console.log("token expired!!!!!")
+         myprint("token expired!!!!!")
          return;
       }
-      console.log("userid:"+userid+" is uploading file(md)");
+      myprint("userid:"+userid+" is uploading file(md)");
       const result = await query("select max(fileid) from catalogue where userid="+userid+" and dbid = "+dbid)
       var maxindex = (result[0]["max(fileid)"])
-      console.log("maxindex in catalogue ：  "+maxindex)
+      myprint("maxindex in catalogue ：  "+maxindex)
       if(fields["folderid"]==-1){//不是目录，先创建一个目录
          result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+1)+",'newfolder',0,0,null,"+dbid+")")
          for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
@@ -460,8 +469,9 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
                 data = data.replace(/\"/g,"\'\'");
                 data =data.replace(/\'/g,"\"");
             result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+userid+","+(fatherid)+","+dbid+")")
-            res.send("success")
+            
          }
+         res.send("success")
       }
   });
  });
@@ -474,7 +484,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       userid = getid(fields["token"][0])
       dbid = fields["dbid"]
 
-      console.log("userid:"+userid+" is uploading img");
+      myprint("userid:"+userid+" is uploading img");
       if(userid=="-1"){
          res.status(400).send("token expired")
          return;
@@ -484,7 +494,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       const result = await query("select maxsize from user where userid="+userid)
       const result1 = await query("select size from user where userid="+userid )
       leftsize = parseInt(result[0].maxsize) - parseInt(result1[0].size);
-      console.log("userid:"+userid+" size left: "+leftsize)
+      myprint("userid:"+userid+" size left: "+leftsize)
       filesize = parseInt(file["file"][0]["size"]);
       filename = (file["file"][0]["originalFilename"])
       fileid = parseInt(fields["fileid"][0]);
@@ -503,7 +513,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
          if(uploadToken){
          }
          else{
-            console.log('get qiniuyun token fail')
+            myprint('get qiniuyun token fail')
             res.status(400).send('get qiniuyun token fail')
             return
          }
@@ -517,7 +527,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
             throw respErr;
          }
          if (respInfo.statusCode == 200) {
-            console.log("userid:"+userid+" finish upload img ")
+            myprint("userid:"+userid+" finish upload img ")
             pool.getConnection(function(err,connection){
                qu1 = "update user set size = "+(parseInt(result1[0].size)+parseInt(filesize))+" where userid = "+userid;
                connection.query(qu1,function(err,result22){})
@@ -532,7 +542,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
             // const result3 = await query()
             res.status(200).send(respBody)
          } else {
-            console.log(respBody.error);
+            myprint(respBody.error);
             res.status(400).send(respBody.error)
             return
          }

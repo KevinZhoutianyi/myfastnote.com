@@ -40,7 +40,8 @@ var vm = new Vue({
             .then(function (response) {
                 mdValue = response.data;
                 mdValue = mdValue.replace(/\\/g,"\\\\");
-                var html = marked(mdValue);
+                
+                var html = marked(mdValue.replace(/\\n/g, '\n'))
                 document.getElementById("rightcontent").innerHTML = html;
                 
                 MathJax.typesetClear()
@@ -60,13 +61,8 @@ var vm = new Vue({
 var vm2 = new Vue({
     el: '#right',
     data: {
-        content:"123\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r123\n\r"
+        content:"All notes are originally token in Chinese and are translated by translator in this page"
     },
    
 });
 
-
-function mdSwitch() {
-    var mdValue = document.getElementById("md-area").value;
-    
-}

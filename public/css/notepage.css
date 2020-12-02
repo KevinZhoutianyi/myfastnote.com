@@ -222,6 +222,7 @@ p>img{
     font-size: 20px;
     outline: none;
     resize: none;
+    
     overflow: hidden;
     background-color:var(--lefthalfcolor);
     color:white;
@@ -533,6 +534,9 @@ ul,
 ol,
 dl,
 table {
+
+  margin: 1.5em 0;
+  line-height: 1.7;
 }
 
 li > ol,

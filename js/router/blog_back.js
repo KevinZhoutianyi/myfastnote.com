@@ -28,7 +28,7 @@ config.zone = qiniu.zone.Zone_z2;
 
 let query = function( sql, values ) {
     // 返回一个 Promise
-    // console.log(sql)
+    // myprint(sql)
     return new Promise(( resolve, reject ) => {
       pool.getConnection(function(err, connection) {
         if (err) {
@@ -69,10 +69,13 @@ function getid(token) {
    return(ret)
 }
 
-
+function myprint(output){
+  console.log(new Date(Date.now()))
+  console.log(output)
+}
 router.post('/catalogue',urlencodedParser, async (req, res) => {
   
-  const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+0+" and dbid =" + 0);
+  const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+2+" and dbid =" + 0);
   ret = []
   result2.forEach(function(e){  
    if(e.level == 0){
@@ -93,7 +96,7 @@ router.post('/catalogue',urlencodedParser, async (req, res) => {
 
 router.post('/content',urlencodedParser, async (req, res) => {
   
-  const result2 = await query("select content from note where userid = 0 and fileid = "+req.body.id);
+  const result2 = await query("select content from note where userid = 2 and fileid = "+req.body.id);
  
   res.send(result2[0].content)
 

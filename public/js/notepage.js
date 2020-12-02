@@ -5,6 +5,8 @@ function loadData() {
     
     // to do : get the real data
     console.log("load lastsavedfile")
+
+    loadcatalogue('first');
     $.ajax({ cache:false,
         url:"main/getdata",
         type: "post",
@@ -61,7 +63,7 @@ function loadfile(id) {
 
 /*加载目录*/
 function loadcatalogue(command) {
-    
+        console.log("load catalogue")
         $("#folderxD #foldernamexD").each(function(i){
             folderid =  $(this).attr('name')
             if($(this).parent().children("#filecontainer").css('display') == 'flex'){
@@ -160,8 +162,7 @@ function freshcatalogue() {
 var cycle = 10
 function mdSwitch() {
     var mdValue = document.getElementById("md-area").value;
-    mdValue = mdValue.replace(/\\/g,"\\\\");
-    var html = marked(mdValue);
+    var html = marked(mdValue.replace(/\\n/g, '\n'))
     for (let index = 0; index < 10; index++) {
         html += "<br>";
     }
@@ -653,7 +654,11 @@ function doUpload() {
 
 
 
-
+/* homepage */
+function homepage() {
+    location.href = "/blog"
+}
+/* homepage */
 
 
 
@@ -853,7 +858,12 @@ document.addEventListener("contextmenu", (e) => {
   document.addEventListener("keypress", hideMenu);
 /*右键的context menu*/
 
-
+/* 换号 */
+function quit(){
+    localStorage.token = ''
+    location.href = "/"
+}
+/* 换号 */
 
 
 /* 搜索*/
