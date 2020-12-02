@@ -442,10 +442,13 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
          result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+1)+",'newfolder',0,0,null,"+dbid+")")
          for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
             orifilename = file["file"][index-2]["originalFilename"];
-            filename = orifilename.substring(0,orifilename.indexOf("."))
-            endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
-            if(endname != ".md") 
+            filename = orifilename.substring(0,orifilename.length - 3)
+            endname = orifilename.substring(orifilename.length - 3)
+            if(endname != ".md") {
                return;
+               res.send("fail")
+
+            }
             result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+","+dbid+")")
             var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
             data = data.replace(/\\/g,"\\\\");
@@ -456,12 +459,16 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
          }
          res.send("success")
       }else{
-         for (let index = 1; index < (parseInt(fields["size"])+1); index++) {//每个文件存入该目录  
+         for (let index = 1; index < (parseInt(fields["size"])+1); index++) {//每个文件存入该目录  \
+            myprint(index+"th file")
             orifilename = file["file"][index-1]["originalFilename"];
-            filename = orifilename.substring(0,orifilename.indexOf("."))
-            endname = orifilename.substring(orifilename.indexOf("."),orifilename.length)
-            if(endname != ".md") 
+            filename = orifilename.substring(0,orifilename.length - 3)
+            endname = orifilename.substring(orifilename.length - 3)
+            if(endname != ".md") {
                return;
+               res.send("fail")
+
+            }
             fatherid = fields["folderid"]
             result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+","+dbid+")")
             var data = fs.readFileSync(file["file"][index-1]["path"], 'utf-8');

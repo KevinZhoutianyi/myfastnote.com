@@ -25,12 +25,15 @@
             <div id='left' class="left">
                 <div id="leftcontent" class="leftcontent">
                     <div v-for="folder in folders" class='folder'>
-                        <div class='foldername'>
+                        <div class='foldername' v-on:click="clickfolder">
                             {{folder.name}}
                         </div>
-                        <div id='filexD' v-on:click="clickfile(file.id)" v-for="file in folder.files" class="file"  >
-                            {{file.name}}
+                        <div id='filecontainer'>
+                            <div id='filexD' v-on:click="clickfile(file.id)" v-for="file in folder.files" class="file"  >
+                                {{file.name}}
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -38,9 +41,10 @@
                 <div id="rightcontent" class="rightcontent">{{content}}
                 </div>
             </div>
+            <img src="public/png/gomain.png" id="gomain" style="position: fixed; top:30px; right:30px; height:30px; width:30px; z-index:12;" v-on:click="gomain()">
         </div>
 
-        <script type="text/javascript" src="public/js/blog.js"></script>
+        <script type="text/javascript" src="public/js/blog.js"   ></script>
             
     </body>
     </html>

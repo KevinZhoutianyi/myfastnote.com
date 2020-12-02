@@ -127,6 +127,7 @@ p>img{
      margin-top: 50px;margin-bottom: 50px;
 }
 .foldername{
+    cursor:pointer;
     color:white; font-size: 30px; margin-bottom:20px;
     font-weight:500;
 }
@@ -149,7 +150,12 @@ p>img{
   }
 
 
-
+#filecontainer{
+  display:flex;
+  flex-direction:column;
+  justify-content:start;
+  align-items:start;
+}
 
 
 

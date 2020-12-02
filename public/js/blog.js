@@ -17,7 +17,7 @@ var vm = new Vue({
     data: {
         folders: [
             
-        ]
+        ],
     },
     mounted () {
         let that = this
@@ -33,6 +33,14 @@ var vm = new Vue({
           });
     },
     methods : {
+        clickfolder(e){
+            let obj = e.target
+            folderid = $(obj).attr('name')
+            if($(obj).parent().children("#filecontainer").css('display') == 'flex')
+                $(obj).parent().children("#filecontainer").hide();
+            else
+                $(obj).parent().children("#filecontainer").show();
+        },
         clickfile(fileid) {
             axios.post('/blog/content', {
                 id : fileid
@@ -65,4 +73,14 @@ var vm2 = new Vue({
     },
    
 });
+
+var vm3 = new Vue({
+    el: '#gomain',
+    methods : {
+        gomain() {
+            location.href='/'
+        }
+    }
+});
+
 

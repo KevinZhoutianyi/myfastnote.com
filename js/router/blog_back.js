@@ -77,11 +77,17 @@ router.post('/catalogue',urlencodedParser, async (req, res) => {
   
   const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+2+" and dbid =" + 0);
   ret = []
+  
   result2.forEach(function(e){  
-   if(e.level == 0){
-     ret.push({name:e.filename,id:e.fileid,files:[]})
-   }
-  });
+    if((e.level == 0) && (e.filename == "Demo")){
+      ret.push({name:e.filename,id:e.fileid,files:[]})
+    }
+   });
+  result2.forEach(function(e){  
+    if((e.level == 0) && (e.filename != "Demo")){
+      ret.push({name:e.filename,id:e.fileid,files:[]})
+    }
+   });
   result2.forEach(function(i){  
     ret.forEach(function(j){  
       if(j.id == i.fatherid){
