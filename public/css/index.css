@@ -65,7 +65,7 @@ table{border-collapse:collapse;border-spacing:0;}
     border-radius: 5px;
     outline:0px;
     width:350px;
-    margin-bottom:15px;
+    margin-bottom:7px;
 }
 #name1{
     margin-top:20px;
@@ -87,9 +87,9 @@ table{border-collapse:collapse;border-spacing:0;}
     outline:0px;
 }
 #btn{
+    border:1px solid black;
     text-align:center;
     width:150px;
-    padding-top:5px;
     padding-bottom:5px;
     border: none;
     outline: none;
@@ -98,8 +98,7 @@ table{border-collapse:collapse;border-spacing:0;}
     cursor: pointer;
     position: relative;
     z-index: 4;
-    border-radius: 20px;
-    animation: glowing 30s linear infinite;
+    border-radius: 50px;
 }
 #btn:before {
     content: '';
@@ -109,7 +108,7 @@ table{border-collapse:collapse;border-spacing:0;}
     left:-2px;
     background-size: 400%;
     z-index: -1;
-    filter: blur(15px);
+    filter: blur(10px);
     width: calc(100% + 4px);
     height: calc(100% + 4px);
     animation: glowing 30s linear infinite;

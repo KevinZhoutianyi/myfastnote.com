@@ -47,7 +47,7 @@
         
         </div>
         
-        <div style="width: 35%; height: 100%; z-index: 12; position:fixed; left :0px;" onclick="arrow()"></div>
+        <div id = "backarea" style="width: 35%; height: 100%; z-index: 12; position:fixed; left :0px;" onclick="arrow()"></div>
       
         <div id="menucontainer" style="height:100%;width:30%;display:flex;flex-direction:column; justify-content:start;">
             
@@ -66,18 +66,18 @@
             </div>
         </div>
         
-        <div style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;"onclick="arrow()"></div>
+        <div id = "backarea" style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;"onclick="arrow()"></div>
 
     </div>
 
     <div id="questionpop"  style="display: none;">
-        <div style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;" onclick="question()"></div>
+        <div id = "backarea" style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;" onclick="question()"></div>
         <div id="helpmenu">
             <div id="helptext">
                 <br><br><br><br><h3><code>ctrl + s </code>  to save</h3><br><h3>try right click in menu</h3><br><h3>try resize1\2\3 in imgurl</h3>
             </div>
         </div>
-        <div style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;"onclick="question()"></div>
+        <div id = "backarea" style="width: 35%; height: 100%;z-index: 12;position:fixed; right :0px;"onclick="question()"></div>
     </div>
 
 
@@ -131,6 +131,6 @@
     <form    enctype="multipart/form-data" id="imgformdata" style="visibility:hidden"></form>
         <input type="file" style="visibility:hidden;position: absolute; right:50%; top:50%;" onchange="inputChange(this)" id="uploadcropimg" name="uploadcropimg" accept="image/png,image/gif,image/jpg,image/jpeg" />
     </form>
-
+    <img src="public/png/phonecatalogue.png"  id="phonecatalogue" >
 </body>
 </html>

@@ -1,6 +1,30 @@
 /* ---------------------------------------加载----------------------------------------*/
+var isPhone = 0;
+$(document).ready(function(){
+    if(window.innerWidth<1000){
+        isPhone = 1;
+        $("#left").hide();
+        $("#downarrow").hide();
+        $("#right").css("width","100%");
+        $("#right").css("padding","3%");
+        $("#show-area").css("width","100%");
+        $("#seperateline").hide();
+        $("#extramenu").hide();
+        $("#menutextarea").css("font-size","15px");
+        $("#menucontainer").css("width","90%");
+        $("#helpmenu").css("font-size","15px");
+        $("#helpmenu").css("width","90%");
+        $("#backarea").css("width","5%");
+        $("#phonecatalogue").show();
+
+    }else{
+
+        $("#phonecatalogue").hide();
+    }
+});
 
 /* 加载上次编辑文档，加载存七牛的token */
+
 function loadData() {
     
     // to do : get the real data
@@ -282,7 +306,7 @@ function lock(){
 
 /*全屏切换*/
 function fullscreen(){
-
+    
     if(localStorage.isfull == 1){
         localStorage.isfull = 0;
         $("#smallscreen").hide();
