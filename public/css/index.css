@@ -23,6 +23,7 @@ table{border-collapse:collapse;border-spacing:0;}
 
 
 #bg{
+    font-size:25px;
     position:fixed;
     display:flex;
     flex-direction:column;
@@ -58,16 +59,21 @@ table{border-collapse:collapse;border-spacing:0;}
     justify-content:space-between;
     align-items:center;
 }
-#btn{
-    margin-top:10px;
-    width:100px;
-    height:auto;
-}
+
 #name2{
     text-align:center;
+    border-radius: 5px;
+    outline:0px;
+    width:350px;
+    margin-bottom:15px;
 }
 #name1{
+    margin-top:20px;
     text-align:center;
+    border-radius: 5px;
+    outline:0px;
+    width:350px;
+
 }
 
 #container{
@@ -78,4 +84,52 @@ table{border-collapse:collapse;border-spacing:0;}
     flex-direction:column;
     justify-content:center;
     align-items:center;
+    outline:0px;
+}
+#btn{
+    text-align:center;
+    width:150px;
+    padding-top:5px;
+    padding-bottom:5px;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    z-index: 4;
+    border-radius: 20px;
+    animation: glowing 30s linear infinite;
+}
+#btn:before {
+    content: '';
+    background: linear-gradient(45deg, #929292, #5e5d5d, #777777, #5c5c5c, #555555);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(15px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 30s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+#btn:active:after {
+    background: transparent;
+}
+
+#btn:hover:before {
+    opacity: 1;
+}
+
+
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
 }
