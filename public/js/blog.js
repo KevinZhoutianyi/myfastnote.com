@@ -31,6 +31,24 @@ var vm = new Vue({
           .catch(function (error) { // 请求失败处理
             console.log(error);
           });
+        axios.post('/blog/content', {
+            id : 11
+        })
+        .then(function (response) {
+            mdValue = response.data;
+            mdValue = mdValue.replace(/\\/g,"\\\\");
+            
+            var html = marked(mdValue.replace(/\\n/g, '\n'))
+            document.getElementById("rightcontent").innerHTML = html;
+            
+            MathJax.typesetClear()
+            MathJax.typeset(["#rightcontent"]);
+            mdValue = ""
+            html =""
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     },
     methods : {
         clickfolder(e){

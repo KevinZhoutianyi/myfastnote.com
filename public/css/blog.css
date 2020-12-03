@@ -72,7 +72,6 @@ p>img{
 }
 .leftcontent{
     padding: 15%;
-
     direction: ltr;
 }
 
@@ -131,12 +130,18 @@ p>img{
     color:white; font-size: 30px; margin-bottom:20px;
     font-weight:500;
 }
+.foldername:hover{
+  font-weight:800 !important;
+}
 .file{
-    color:white; font-size: 20px; margin-top: 30px;margin-bottom: 30px;
-    cursor:pointer;
+  color: white;
+  font-size: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
 }
 .file:hover{
-    font-weight:800 !important;
+    font-weight:600 !important;
 }
 .file::after{
     display:block;
@@ -148,7 +153,14 @@ p>img{
     margin-bottom:-1px;
     overflow:hidden;
   }
-
+  #rowseperateline{
+    height:2px;
+    width:100%;
+    margin-bottom:10px;
+    background: linear-gradient(left,rgb(204, 204, 204)  0%,rgb(204, 204, 204) 15%,var(--menucolor) 100%);
+    background: -webkit-linear-gradient(left,rgb(204, 204, 204)  0%,rgb(195, 195, 195) 15%,var(--menucolor) 100%);
+    
+}
 
 #filecontainer{
   display:flex;

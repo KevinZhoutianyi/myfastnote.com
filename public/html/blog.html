@@ -29,6 +29,7 @@
                             {{folder.name}}
                         </div>
                         <div id='filecontainer'>
+                            <div id='rowseperateline'></div>
                             <div id='filexD' v-on:click="clickfile(file.id)" v-for="file in folder.files" class="file"  >
                                 {{file.name}}
                             </div>
