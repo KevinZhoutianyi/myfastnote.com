@@ -241,13 +241,13 @@ p>img{
 
 #folderxD{
   color:white !important;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: start;
-  align-items: center;
-  margin: 30px;
+  align-items: center; */
   width:85%;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 #foldernamexD{
   color:white !important;
@@ -258,6 +258,7 @@ p>img{
   font-size:25px !important;
   cursor: pointer;
   text-align:start;
+  padding-left: 15px;
 }
 #foldernamexD:hover{
   font-weight:800 !important;
@@ -302,18 +303,56 @@ p>img{
   position: absolute;
   /* left: 0px; */
   /* top: 20px; */
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   z-index: 8;
-  top: 15px;
+  top: 10px;
   left: 50%;
   transform: translate(-50%,-50%);
+  
+}
+.arrowani{
+  animation:mymove 1s;
+  -webkit-animation:mymove 1s;
+  animation-timing-function:ease-in-out;
+-webkit-animation-timing-function:ease-in-out;  /* Safari and Chrome */
+
+}
+@keyframes mymove
+{
+  0%{
+    top:10px;  /*开始为原始大小*/
+    }
+    55%{
+      top:20px;
+    }
+    75%{
+      top:20px;
+    }
+    100%{
+      top:10px;  /*开始为原始大小*/
+    }
+
 }
 
+@-webkit-keyframes mymove /*Safari and Chrome*/
+{
+  0%{
+    top:10px;  /*开始为原始大小*/
+    }
+    55%{
+      top:20px;
+    }
+    75%{
+      top:20px;
+    }
+    100%{
+      top:10px;  /*开始为原始大小*/
+    }
+}
 
 #seperateline{
   position: fixed;
-    right: 50%;
     top: 12%;
     width: 2px;
     height: 80%;
@@ -373,27 +412,24 @@ p>img{
 }
 
 
-#avator{
-  height: 6em;
-  width: 6em;
-  z-index: 14;
-  position: absolute;
-  top:40px;
-  right: 30px;
-  border-radius: 2em;
 
-}
 #avatorbg{
   height: 6em;
   width: 6em;
   z-index: 13;
   position: absolute;
   top:7%;
-  right: 5%;
+  right: 7%;
   border-radius: 2em;
 
 }
-
+#backarea{
+  width: 35%;
+   height: 100%;
+   z-index: 12;
+   position:fixed; 
+   right :0px;
+}
 #phonecatalogue{
   z-index:9;
   position:fixed;
@@ -486,6 +522,20 @@ h6:hover a.anchor {
   text-decoration: none;
 }
 
+td,th{
+  border: 1px solid white;
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:5px;
+  padding-bottom:5px;
+  text-align:center;
+  vertical-align:center;
+  word-break: keep-all;
+}
+th{
+  background-color:var(--lefthalfcolor)
+}
+
 h1 tt,
 h1 code,
 h2 tt,
@@ -552,7 +602,9 @@ li > ol,
 li > ul {
   margin: 0 0;
 }
-
+strong{
+  font-weight:1000
+}
 hr {
   padding: 0;
   margin: 16px 0;

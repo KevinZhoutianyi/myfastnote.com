@@ -559,7 +559,15 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
 
  
 })
- 
+router.post('/checkip',urlencodedParser, function (req, res) {
+   var location = req.body.location;
+   
+   myprint('====userlocation:'+location+" open note====")
+   res.status(200)
+     
+
+})
+
  
  
  

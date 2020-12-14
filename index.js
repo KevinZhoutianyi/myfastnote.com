@@ -26,6 +26,7 @@ app.use(bodyParser.json());//数据JSON类型
 
 app.use('/main', require('./js/router/main'));
 app.use('/blog', require('./js/router/blog_back'));
+app.use('/tempnote', require('./js/router/tempnote_back'));
 
 
 
@@ -64,6 +65,7 @@ app.get('/', function (req, res) {
    console.log( req.ip + "visit your server  \n");
    res.sendFile( __dirname + "/public/html/" + "index.html" );
 })
+
 
 
 app.post('/login',urlencodedParser, async (req, res) => {

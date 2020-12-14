@@ -101,4 +101,37 @@ var vm3 = new Vue({
     }
 });
 
-
+/*查看用户ip*/
+function checkiplocation(){
+    var iPAddress = "", iPAttach = "";//IP地址，IP归属地
+    GetIPAll();
+    //获取IP地址，IP归属地
+    function GetIPAll() {
+        iPAddress = returnCitySN["cip"];//IP地址:
+        $.ajax({ cache:false,
+            url:"http://www.geoplugin.net/json.gp",
+            type: "get",
+            data:{ip:iPAddress},
+            success: function (returnValue) {
+                returnValue = JSON.parse(returnValue)
+                $.ajax({ cache:false,
+                    url:"main/checkip",
+                    type: "post",
+                    data:{location:returnValue.geoplugin_countryName+','+returnValue.geoplugin_city},
+                
+                    success: function (returnValue) {
+                        
+                    },
+                    error: function (returnValue) {
+                        
+                    }
+                })    
+                
+            },
+            error: function (returnValue) {
+                                      
+            }
+    }) 
+    }
+}
+/*查看用户ip*/

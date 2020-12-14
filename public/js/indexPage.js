@@ -17,7 +17,12 @@ function trylogin(){
 }
 
 
-
+function blog() {
+    location.href='/blog'
+}
+function tempnote() {
+    location.href='/tempnote'
+}
 
  
  $(document).ready(function(){

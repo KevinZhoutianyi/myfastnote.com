@@ -73,51 +73,44 @@ function myprint(output){
   console.log(new Date(Date.now()))
   console.log(output)
 }
-router.post('/catalogue',urlencodedParser, async (req, res) => {
-  
-  const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+2+" and dbid =" + 0);
-  ret = []
-  
-  result2.forEach(function(e){  
-    if((e.level == 0) && (e.filename == "Demo")){
-      ret.push({name:e.filename,id:e.fileid,files:[]})
-    }
-   });
-  result2.forEach(function(e){  
-    if((e.level == 0) && (e.filename != "Demo")){
-      ret.push({name:e.filename,id:e.fileid,files:[]})
-    }
-   });
-  result2.forEach(function(i){  
-    ret.forEach(function(j){  
-      if(j.id == i.fatherid){
-        j.files.push({id:i.fileid,name:i.filename})
-      }
-    });
-  });
-  res.send(ret)
 
-})
-router.post('/checkip',urlencodedParser, function (req, res) {
-  var location = req.body.location;
-  
-  myprint('====userlocation:'+location+" open blog====")
-  res.status(200)
+router.get('/',urlencodedParser, function (req, res) {
+  res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "tempnote.html") );
+});
+  router.post('/savedata',urlencodedParser, function (req, res) {
+    var content = req.body.content;
     
-
-})
-
-router.post('/content',urlencodedParser, async (req, res) => {
+    myprint("tempnote is saving file");
+ 
+    pool.getConnection(function(err,connection){
+      //  myprint("savedata : connection to sql success")
+       var qu = "update tempnote set content = '" + content+"';";
+       connection.query(qu,function(err,result){
+          if(err){
+             myprint('[UPDATE ERROR] - ',err.message);
+             return;
+          }  
   
-  const result2 = await query("select content from note where userid = 2 and fileid = "+req.body.id);
+             res.status(200).send("success");
+            
+         //  myprint("savedata : mysql release")
+          })
+       })
+      
  
-  res.send(result2[0].content)
+ })
 
-})
-
+ router.post('/getdata',urlencodedParser, async (req, res) => {
+    
  
-router.get('/',urlencodedParser, async (req, res) => {
-  res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "blog.html") );
-})
+  myprint("tempnote is ask for data");
+
+     const result2 = await query("select content from tempnote");
+     if(result2.length>=1){
+        var x = {content:result2[0].content}
+        res.status(200).send(x);
+     }
+  
+});
 
  module.exports = router

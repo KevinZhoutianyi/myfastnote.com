@@ -1,6 +1,7 @@
 /* ---------------------------------------加载----------------------------------------*/
 var isPhone = 0;
 $(document).ready(function(){
+    
     if(localStorage.first==null){
         arrow();
         localStorage.first = 1;
@@ -34,30 +35,28 @@ $(document).ready(function(){
 function loadData() {
     
     // to do : get the real data
-    console.log("load lastsavedfile")
-
-    $.ajax({ cache:false,
-        url:"main/getdata",
+    console.log("load file")
+    var ref
+    $.ajax({ 
+        cache:false,
+        url:"tempnote/getdata",
         type: "post",
-        data:{token:localStorage.token},
         success: function (returnValue) {
             // console.log("dataloaded:"+ JSON.stringify(returnValue) )
             document.getElementById("md-area").value = returnValue.content;
-            localStorage.nowopenfileid = returnValue.id;
-            localStorage.nowopendbid = returnValue.lastopendbid;
-            
-            loadcatalogue('first');
             m = document.getElementById("md-area");
             m.style.height='auto';
             m.style.height = m.scrollHeight + 50 + 'px';
             mdSwitch();
+            
         },
         error: function (returnValue) {
             alert("load data fail");;
             location.href = "/"
-                                    savecontent();
+            savecontent();
         }
     })
+    
  
     
     
@@ -84,7 +83,7 @@ function loadfile(id) {
         error: function (returnValue) {
             alert("load content fail");;
             location.href = "/"
-                                    savecontent();
+             savecontent();
                                     
         }
     })      
@@ -92,78 +91,7 @@ function loadfile(id) {
 }
 /*用username得到userid存在本地，用读取fileid对应的content*/ 
 
-/*加载目录*/
-function loadcatalogue(command) {
-        console.log("load catalogue")
-        $("#folderxD #foldernamexD").each(function(i){
-            folderid =  $(this).attr('name')
-            if($(this).parent().children("#filecontainer").css('display') == 'flex'){
-                localStorage.setItem("folderid"+folderid,0)
-            }else{
-                localStorage.setItem("folderid"+folderid,1)
-            }
-            
-        });
 
-    
-    // to do : get the real data
-   
-    $.ajax({ cache:false,
-        url:"main/getcatalogue",
-        type: "post",
-        data:{token:localStorage.token,dbid:localStorage.nowopendbid},
-        success: function (returnValue) {
-            var content = JSON.stringify(returnValue);
-            var showhtml = "<br><br>";
-            var foldersfileidarray =[];
-            for (let index = 0; index < returnValue.length; index++) {
-                if(returnValue[index].level == 0){
-                    var temp = {};
-                    temp.fileid = returnValue[index].fileid;
-                    temp.filename = returnValue[index].filename;
-                    foldersfileidarray.push(temp);
-                }
-                
-            }
-            
-            // console.log("folder's file id and name" +JSON.stringify(foldersfileidarray)  )
-            for (let i = 0; i < foldersfileidarray.length; i++) {
-                showhtml += "<div id='folderxD' name='" + foldersfileidarray[i]  +"'>";
-                showhtml += "<h2  id='foldernamexD' name = "+ foldersfileidarray[i].fileid+"  onclick='folderclick(this)' contenteditable='false'  tabindex='1' onblur='myblur(this);'   spellcheck='false'>" + foldersfileidarray[i].filename + "</h2>";
-                showhtml+= "<div id='filecontainer'>"
-                showhtml+="<div id='rowseperateline'></div>"
-                for (let j = 0; j < returnValue.length; j++) {
-                    if(returnValue[j].fatherid == foldersfileidarray[i].fileid)
-                    {   
-                        showhtml += "<h4  title='"+returnValue[j].filename+"' id = 'filexD' name = "+ returnValue[j].fileid+"  onclick = 'clickfile(this);'   tabindex='1' onblur='myblur(this);'contenteditable='false' style='display: block;' spellcheck='false' >" + returnValue[j].filename+ "</h4>";
-                    }
-                    
-                }
-                showhtml += "</div>";
-                showhtml += "</div>";
-            }
-            
-            
-            
-            document.getElementById("menutextarea").innerHTML = showhtml;
-
-            if(command == 'first'){//第一次load的时候 把所有folder fold起来
-
-                $("#folderxD #foldernamexD").each(function(i){
-                    folderid =  $(this).attr('name')
-                    localStorage.setItem("folderid"+folderid,1)
-                });
-        
-            }
-
-            freshcatalogue();
-
-       
-        }
-    })
-    
-}
-/*加载目录*/
 
 /*根据local里的flag 刷新目录的折叠*/
 function freshcatalogue() {
@@ -178,6 +106,21 @@ function freshcatalogue() {
     });
     
 }
+/*ctrl s = 保存*/
+window.addEventListener("keydown", function(e) {
+    
+    //可以判断是不是mac，如果是mac,ctrl变为花键
+    //event.preventDefault() 方法阻止元素发生默认的行为。
+    if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        localStorage.leftscrolltop = $("#left").scrollTop();
+        localStorage.rightscrolltop = $("#right").scrollTop();
+        // Process event...
+        savecontent();
+    }
+    
+ 
+}, false);
 /*查看用户ip*/
 function checkiplocation(){
     var iPAddress = "", iPAttach = "";//IP地址，IP归属地
@@ -259,26 +202,7 @@ function syncDivsScrollPos() {
 }
 /*左半边的scroll同步右边*/
 
-/*ctrl s = 保存*/
-window.addEventListener("keydown", function(e) {
-    if(e.keyCode == 13 && localStorage.edited==1){
-        e.preventDefault();
 
-        var obj  = document.getElementsByName(localStorage.contextmenufilename)
-        myblur(obj);
-    }
-    //可以判断是不是mac，如果是mac,ctrl变为花键
-    //event.preventDefault() 方法阻止元素发生默认的行为。
-    if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-        e.preventDefault();
-        localStorage.leftscrolltop = $("#left").scrollTop();
-        localStorage.rightscrolltop = $("#right").scrollTop();
-        // Process event...
-        savecontent();
-    }
-    
- 
-}, false);
 function savecontent() {
     m = document.getElementById("md-area");
         m.style.height='auto';
@@ -291,15 +215,14 @@ function savecontent() {
         m = m.replace(/\"/g,"\\\"");
         m = m.replace(/\'/g,"\\\'");
         $.ajax({ cache:false,
-            url:"main/savedata",
+            url:"tempnote/savedata",
             type: "post",
-            data:{token:localStorage.token,content : m,id :localStorage.nowopenfileid,dbid:localStorage.nowopendbid},
+            data:{content : m},
             success: function (returnValue) {
                 $('<div>').appendTo('body').addClass('alert alert-success').html('Saved').show().delay(500).fadeOut();
             },
             error: function (returnValue) {
                 alert(returnValue.responseText)
-
                 location.href = "/"
             }
         })
@@ -317,7 +240,8 @@ $(document).ready(function(){
     
     console.log("ready")
     $("#inpt_search").on('focus', function () {
-	$(this).parent('label').addClass('active');
+    $(this).parent('label').addClass('active');
+    
 });
 
 $("#inpt_search").on('blur', function () {
