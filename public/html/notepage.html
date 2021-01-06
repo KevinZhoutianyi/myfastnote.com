@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" >
+<div id='makeitcenter' style='position:fixed;
+top:45%;
+z-index:1;'>
+    <div class="sk-folding-cube">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+    </div>
+</div>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="public/css/notepage.css">
@@ -9,7 +19,7 @@
     <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script src="https://ip.ws.126.net/ipquery"></script>
     <script>localStorage.islock= 1;localStorage.isfull= 0;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
-    <script src="public/js/marked.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="public/highlight/styles/qtcreator_dark.css">
     <script src="public/highlight/highlight.pack.js"></script>
     
@@ -27,6 +37,7 @@
     <title>FastNote</title>
 </head>
 <body onLoad="document.getElementById('md-area').focus();  loadData();  syncDivsScrollPos(); mouseover(); checkiplocation();">
+
      <script type="text/javascript" src="public/js/notepage.js"></script>
     <div id="pop"  style="display: none;"  onmousedown="myblur()">
         <div id="avatorbg">
@@ -133,4 +144,8 @@
         <input type="file" style="visibility:hidden;position: absolute; right:50%; top:50%;" onchange="inputChange(this)" id="uploadcropimg" name="uploadcropimg" accept="image/png,image/gif,image/jpg,image/jpeg" />
     </form>
 </body>
+<script>
+document.getElementById('makeitcenter').style.visibility='hidden';
+    
+</script>
 </html>

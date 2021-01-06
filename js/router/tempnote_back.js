@@ -77,25 +77,12 @@ function myprint(output){
 router.get('/',urlencodedParser, function (req, res) {
   res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "tempnote.html") );
 });
-  router.post('/savedata',urlencodedParser, function (req, res) {
+  router.post('/savedata',urlencodedParser, async (req, res) => {
     var content = req.body.content;
     
-    myprint("tempnote is saving file");
- 
-    pool.getConnection(function(err,connection){
-      //  myprint("savedata : connection to sql success")
-       var qu = "update tempnote set content = '" + content+"';";
-       connection.query(qu,function(err,result){
-          if(err){
-             myprint('[UPDATE ERROR] - ',err.message);
-             return;
-          }  
-  
-             res.status(200).send("success");
-            
-         //  myprint("savedata : mysql release")
-          })
-       })
+    const result2 = await query("update tempnote set content = '" + content+"';");
+    
+    res.status(200).send("xD")
       
  
  })
