@@ -95,8 +95,10 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        const result2 = await query("select content from note where fileid = '"+result[0].lastopenfileid+"' and userid="+userid+" and dbid = "+result[0].lastopendbid);
        if(result2.length>=1){
           var x = {content:result2[0].content,id:result[0].lastopenfileid,userid:userid,lastopendbid:result[0].lastopendbid}
-          res.send(x);
+          res.status(200).send(x);
        }
+    }else{
+       res.status(400).send(result)
     }
  });
  

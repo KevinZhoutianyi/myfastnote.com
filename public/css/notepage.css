@@ -988,3 +988,88 @@ pre code {
     }
   }
 
+ 
+  
+  .mylabel {
+    z-index:10;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    display: block;
+    width: 70px;
+    height: 70px;
+    position: fixed;
+    bottom:20px;
+    right:20px;
+    z-index:30;
+    /* -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
+    cursor: pointer;
+  }
+  
+  .card {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    
+    z-index: 20;
+  }
+  
+  .card div {
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color:black;
+
+    text-align: center;
+    line-height: 200px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 50px;
+    transform-style: preserve-3d;
+  }
+  
+  .card .cbback {
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+-webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+  .card .cbfront {
+    -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+    -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+  }
+  
+  label:hover .card {
+    /* -webkit-transform: rotateY(20deg);
+    transform: rotateY(20deg); */
+    /* box-shadow: 0 20px 20px rgba(50, 50, 50, 0.2); */
+  }
+  
+  :checked + .card .cbback {
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+-webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+  :checked + .card .cbfront {
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+    -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+  }
+  
+  
+  label:hover :checked + .card {
+    /* transform: rotateY(160deg);
+    -webkit-transform: rotateY(160deg); */
+    /* box-shadow: 0 20px 20px rgba(255, 255, 255, 0.2); */
+  }
+  

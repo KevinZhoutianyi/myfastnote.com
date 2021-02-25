@@ -1,5 +1,5 @@
 /* ---------------------------------------加载----------------------------------------*/
-var isPhone = 0;
+var isPhone = 0;var finishiloading = 0;
 $(document).ready(function(){
     if(localStorage.first==null){
         arrow();
@@ -8,10 +8,13 @@ $(document).ready(function(){
     }
     if(window.innerWidth<1000){
         isPhone = 1;
-        $("#left").hide();
-        $("#right").css("width","100%");
-        $("#right").css("padding","3%");
-        $("#show-area").css("width","100%");
+        
+        $(".card").show();
+        $("#questionxD").hide();
+
+        showright();
+        
+
         $("#seperateline").hide();
         $("#extramenu").hide();
         $("#menutextarea").css("font-size","15px");
@@ -21,6 +24,7 @@ $(document).ready(function(){
         $("#pop #backarea").each(function(i){
             $(this).css("width","10%");
         })
+
         $("#quesitonpop #backarea").each(function(i){
             $(this).css("width","10%");
         })
@@ -29,6 +33,25 @@ $(document).ready(function(){
     }
 });
 
+
+function showright(){
+    $("#left").hide();
+    $("#right").show();
+    $("#right").css("width","100%");
+    $("#right").css("padding","3%");
+    $("#show-area").css("width","100%");
+
+}
+function showleft(){
+    $("#right").hide();
+    $("#left").show();
+        $("#left").css("width","100%");
+        $("#left").css("padding","3%");
+        $("#md-area").css("width","100%");
+        m = document.getElementById("md-area");
+        m.style.height='auto';
+        m.style.height = m.scrollHeight + 50 + 'px';
+}
 /* 加载上次编辑文档，加载存七牛的token */
 
 function loadData() {
@@ -45,17 +68,17 @@ function loadData() {
             document.getElementById("md-area").value = returnValue.content;
             localStorage.nowopenfileid = returnValue.id;
             localStorage.nowopendbid = returnValue.lastopendbid;
-            
             loadcatalogue('first');
             m = document.getElementById("md-area");
             m.style.height='auto';
             m.style.height = m.scrollHeight + 50 + 'px';
             mdSwitch();
+            finishiloading = 1;
         },
         error: function (returnValue) {
             alert("load data fail");;
             location.href = "/"
-                                    savecontent();
+                                    // savecontent();
         }
     })
  
@@ -224,6 +247,23 @@ function checkiplocation(){
 
 
 /* ---------------------------------------主界面----------------------------------------*/
+/*CheckBox*/
+
+function CheckBox(index){
+    if ($(index).prop("checked") == true) {
+       showleft()
+     }
+    //取消
+     else
+     {
+    
+        savecontent();
+        showright()
+     }
+    
+    }
+/*CheckBox*/
+
 
 /*转md*/
 var cycle = 10
@@ -280,6 +320,8 @@ window.addEventListener("keydown", function(e) {
  
 }, false);
 function savecontent() {
+    if(finishiloading==0)//没第一次load完是没法保存的
+         return;
     m = document.getElementById("md-area");
         m.style.height='auto';
         m.style.height = m.scrollHeight + 50 + 'px';
