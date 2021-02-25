@@ -8,8 +8,7 @@ $(document).ready(function(){
     }
     if(window.innerWidth<1000){
         isPhone = 1;
-        
-        $(".card").show();
+        $(".mylabel").css("display","flex");
         $("#questionxD").hide();
 
         showright();
