@@ -46,7 +46,7 @@ body{
     right:0px;
     top:0px;
     z-index:10;
-    cursor: pointer;
+    /* cursor: pointer; */
     background:rgb(107, 106, 106);
     color:rgb(255, 255, 255);
     -webkit-mask: url("/public/png/nature-sprite.png");
@@ -101,7 +101,7 @@ body{
 #btn{
     border:1px solid black;
     text-align:center;
-    width:150px;
+    width:100px;
     padding-bottom:5px;
     border: none;
     outline: none;
@@ -264,5 +264,26 @@ body{
     border-color: transparent
   }
 }
-
-
+.topleftpart{
+  font-size:18px;
+  padding:10px;
+  position:fixed;
+  left:0px;
+  top:0px;
+  font-family: monospace;
+  /* font-size: 15px; */
+  height:auto;
+  width:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:start;
+  align-items:flex-start;
+}
+.leftbtn{
+    padding:5px;
+    border: none;
+    outline: none;
+    color: rgb(201, 199, 199);
+    background: transparent;
+    cursor: pointer;
+}

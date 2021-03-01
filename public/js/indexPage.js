@@ -23,6 +23,9 @@ function blog() {
 function tempnote() {
     location.href='/tempnote'
 }
+function signup() {
+    alert("Closed beta");
+}
 
  
  $(document).ready(function(){
@@ -45,3 +48,15 @@ function tempnote() {
             }
         });
 });
+
+
+window.addEventListener("keydown", function(e) {
+    
+    if(e.keyCode == 13 ){
+        e.preventDefault();
+        trylogin()
+       
+    }
+     
+ 
+}, false);
