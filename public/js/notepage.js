@@ -1,36 +1,85 @@
 /* ---------------------------------------加载----------------------------------------*/
+var zoomScale = 1
 var isPhone = 0;var finishiloading = 0;
+function getWindowSize(){
+    // alert(window.innerWidth)
+    if(window.innerWidth<800){
+        isPhone = 1;
+        $(".mylabel").css("display","flex");
+        $("#questionxD").hide();
+        showright();
+        $("#seperateline").hide();
+        $("#extramenu").hide();
+        $("#menucontainer").css("width","60%");
+        $("#helpmenu").css("width","60%");
+        $("#pop #backarea").each(function(i){
+            $(this).css("width","20%");
+        })
+        $("#quesitonpop #backarea").each(function(i){
+            $(this).css("width","20%");
+        })
+        zoomScale = 0.8
+        $('body').css({'zoom':zoomScale});
+    }else{
+        isPhone = 0;
+        $(".mylabel").css("display","none");
+        $("#questionxD").show();
+        showboth();
+        $("#seperateline").show();
+        $("#extramenu").show();
+        $("#menucontainer").css("width","30%");
+        $("#helpmenu").css("width","30%");
+        $("#pop #backarea").each(function(i){
+            $(this).css("width","35%");
+        })
+        $("#quesitonpop #backarea").each(function(i){
+            $(this).css("width","35%");
+        })
+        let windowWidth=$(window).width();
+        let windowHeigh=$(window).height();
+        let documentWidth = 1800;
+        zoomScale=windowWidth/documentWidth;
+        // console.log(zoomScale)
+        // console.log(documentWidth)
+        // console.log(windowWidth)
+        $('body').css({'zoom':zoomScale});
+    }
+}
+$(window).bind('resize',function(){getWindowSize()});
 $(document).ready(function(){
+    getWindowSize();
     if(localStorage.first==null){
         arrow();
         localStorage.first = 1;
         $("#downarrow").addClass("arrowani")
     }
-    if(window.innerWidth<1000){
-        isPhone = 1;
-        $(".mylabel").css("display","flex");
-        $("#questionxD").hide();
-
-        showright();
-        
-
-        $("#seperateline").hide();
-        $("#extramenu").hide();
-        $("#menutextarea").css("font-size","15px");
-        $("#menucontainer").css("width","80%");
-        $("#helpmenu").css("font-size","15px");
-        $("#helpmenu").css("width","80%");
-        $("#pop #backarea").each(function(i){
-            $(this).css("width","10%");
-        })
-
-        $("#quesitonpop #backarea").each(function(i){
-            $(this).css("width","10%");
-        })
-    }else{
-
-    }
+   
 });
+
+function showboth(){
+    $("#right").show();
+    $("#left").show();
+    $("#left").css("width","50%");
+    $("#left").css("padding","0px");
+    $("#left").css("padding-top","40px");
+    $("#left").css("padding-left","70px");
+    $("#left").css("padding-right","90px");
+
+    $("#right").css("width","50%");
+    $("#right").css("padding","0px");
+    $("#right").css("padding-top","50px");
+    $("#right").css("padding-left","90px");
+    $("#right").css("padding-right","70px");
+
+
+    $("#show-area").css("width","100%");
+    $("#md-area").css("width","100%");
+
+
+    m = document.getElementById("md-area");
+    m.style.height='auto';
+    m.style.height = m.scrollHeight + 50 + 'px';
+}
 
 
 function showright(){
@@ -952,8 +1001,8 @@ document.addEventListener("contextmenu", (e) => {
 
   function showMenu(e) {
     const menus = menuSinglton.getInstance();
-    menus.style.top = `${e.clientY+10}px`;
-    menus.style.left = `${e.clientX+10}px`;
+    menus.style.top = `${e.clientY/zoomScale+5}px`;
+    menus.style.left = `${e.clientX/zoomScale+5}px`;
     
   menus.style.display = "flex";
     
