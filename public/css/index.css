@@ -17,7 +17,7 @@ sup{vertical-align:text-top;}
 sub{vertical-align:text-bottom;}
 legend{color:#000;}
 fieldset,img{border:0;}
-button,input,select,textarea{font-size:100%;}
+button,input,select,textarea{}
 table{border-collapse:collapse;border-spacing:0;}
 html,body{
     padding: 0px;
@@ -33,7 +33,9 @@ body{
   align-items: center;
 }
 
-
+input{
+  font-size:1em !important;
+}
 #bg{
     font-size:25px;
     position:fixed;
@@ -64,28 +66,43 @@ body{
 }
 
 #myform{
-  margin-top:-30px;
+  /* margin-top:-30px; */
+
     height:auto;
     width:auto;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
     align-items:center;
+    width:100%;
+    font-size:1em;
 }
 
 #name2{
+  margin-top:10px;
     text-align:center;
-    border-radius: 5px;
+    color: #e0e0e0;
+    /* border-radius: 5px; */
     outline:0px;
-    width:350px;
-    margin-bottom:7px;
+    width:28%;
+    background-color:transparent;
+    border-bottom: 1px solid #e0e0e0;;  
+border-top:0px;  
+border-left:0px;  
+border-right:0px;  
 }
 #name1{
-    margin-top:20px;
+  /* margin-top:20px; */
     text-align:center;
-    border-radius: 5px;
+    color: #e0e0e0;;
+    /* border-radius: 5px; */
     outline:0px;
-    width:350px;
+    width:28%;
+    background-color:transparent;
+    border-bottom: 1px solid #e0e0e0;;  
+border-top:0px;  
+border-left:0px;  
+border-right:0px;  
 
 }
 
@@ -100,9 +117,11 @@ body{
     outline:0px;
 }
 #btn{
-    border:1px solid black;
+  margin-top:16px;
+    font-size:0.8em;
+    /* border:1px solid #2f2f37; */
     text-align:center;
-    width:100px;
+    width:80px;
     padding-bottom:5px;
     border: none;
     outline: none;
@@ -114,20 +133,19 @@ body{
     border-radius: 50px;
 }
 #btn:before {
-    content: '';
-    background: linear-gradient(45deg, #929292, #5e5d5d, #777777, #5c5c5c, #555555);
-    position: absolute;
-    top: -2px;
-    left:-2px;
-    background-size: 400%;
-    z-index: -1;
-    filter: blur(10px);
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
-    animation: glowing 30s linear infinite;
-    opacity: 0;
-    transition: opacity .3s ease-in-out;
-    border-radius: 10px;
+  content: '';
+  background: linear-gradient(45deg, #e0e0e0, #e0e0e0, #e0e0e0, #e0e0e0, #e0e0e0);
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(10px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 30s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
 }
 
 #btn:active:after {
@@ -171,7 +189,7 @@ body{
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(90, 90, 90);
+    background-color:#2f2f37;
     -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
             animation: sk-foldCubeAngle 2.4s infinite linear both;
     -webkit-transform-origin: 100% 100%;
@@ -287,4 +305,82 @@ body{
     color: rgb(0, 0, 0);
     background: transparent;
     cursor: pointer;
+}
+
+.background{
+  background-image: linear-gradient(#7c7e8a,#585a64,#8c8080, #898686);
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  width:73%;
+  height:70%;
+  border-radius:5px;
+  display:flex;
+  flex-direction:row;
+  justify-content:start;
+}
+
+.left{
+  width:55%;
+  background-color:#26262e;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.right{
+  width:45%;
+  background-color:#2f2f37;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.rightinner{
+  color: #e0e0e0;
+  width: 80%;
+  /* border:1px black solid; */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.leftinner{
+  color: #e0e0e0;
+  width: 60%;
+  height:40%;
+  /* border:1px black solid; */
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+}
+.item{
+  display:flex;
+  flex-direction:row;
+  justify-content:start;
+  align-items:center;
+  width:100%;
+  
+
+}
+
+.item:hover .leftitem{
+  font-weight: 800;
+}
+.leftitem{
+  width:80%;
+}
+.icon{
+  width:20px;
+  height:20px;
 }

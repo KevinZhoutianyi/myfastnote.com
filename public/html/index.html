@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" >
-<div id='makeitcenter' style='position:fixed;
+<!-- <div id='makeitcenter' style='position:fixed;
 top:48%; left:48%;z-index:1;'>
     Loading...
-</div>
+</div> -->
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="public/css/notepage.css">
@@ -12,13 +12,13 @@ top:48%; left:48%;z-index:1;'>
         <script type="text/javascript" src="public/js/indexPage.js"></script>
  
     </head>
-    <body>
+    <body >
         
-        <div id="bg">
+        <!-- <div id="bg"> -->
             
             <!-- <img src="public/png/blog.png" alt="" srcset="" style="z-index:10; position:fixed; right:30px; top:29px; width:42px; height:42px;" onclick="blog()">
         <img src="public/png/tempnote.png" alt="" srcset="" style="z-index:10; position:fixed; right:100px; top:30px; width:40px; height:40px;" onclick="tempnote()"> -->
-            <div id="container" hidden  >
+            <!-- <div id="container" hidden  >
                 <div class="topleftpart"> 
                     <button type="btn" class="leftbtn" onclick="signup()">SignUp</button>
                     <button type="btn" class="leftbtn" onclick="blog()">Blog</button>
@@ -41,11 +41,59 @@ top:48%; left:48%;z-index:1;'>
             
         
         </div>
-        
+         -->
+         <div class="background">
+            <div class="container">
+                <div class="left">
+                    <div class="leftinner">
+                        <div class='item' onclick="blog()">
+                            <div class='leftitem'> Personal Blog</div>
+                            <img class='icon' src="public/png/blog.png"></img>
+
+                        </div>
+
+                        <div class='item'  onclick="tempnote()">
+                            <div class='leftitem'> Temp Note</div>
+                            <img class='icon' src="public/png/tempnote.png"></img>
+
+                        </div>
+                        <div class='item'  onclick="signup()">
+                            <div class='leftitem'> Sign Up</div>
+                            <img class='icon' style="width:19px !important; height:19px !important;" src="public/png/signup.png"></img>
+
+                        </div>
+
+                        <div class='item'  onclick="signup()">
+                            <div class='leftitem'> Forget Password</div>
+                            <img class='icon'  src="public/png/forgetpassword2.png"></img>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="right">
+                    <div class="rightinner">
+                        <!-- <div class="">SignIn</div> -->
+                        <form enctype="multipart/form-data" id="myform">
+                            <input type="text" name="username" id = "name1" value="kevin" spellcheck='false'>
+                            <input type="password" name="password" id = "name2" value="zhoutianyi" spellcheck='false'>
+                        </form> 
+                        <button type="btn" id="btn" onclick="trylogin()">Sign In</button>
+                    </div>
+                    
+
+                </div>
+            </div>
+         </div>
+         <!-- <div class="wrapper">
+            <div class="typing-demo">
+                The world is not black or white, but a delicious shade of grey.
+            </div>
+        </div> -->
     </body>
-    <script>
+    <!-- <script>
         document.getElementById('makeitcenter').style.visibility='hidden';
             
-    </script>
+    </script> -->
     </html>
    
