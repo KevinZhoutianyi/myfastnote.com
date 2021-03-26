@@ -1,6 +1,7 @@
 /* ---------------------------------------加载----------------------------------------*/
 var zoomScale = 1
 var isPhone = 0;var finishiloading = 0;
+var questionNum = 0;
 function getWindowSize(){
     // alert(window.innerWidth)
     if(window.innerWidth<800){
@@ -15,7 +16,7 @@ function getWindowSize(){
         $("#pop #backarea").each(function(i){
             $(this).css("width","20%");
         })
-        $("#quesitonpop #backarea").each(function(i){
+        $("#questionpop #backarea").each(function(i){
             $(this).css("width","20%");
         })
         zoomScale = 0.8
@@ -32,7 +33,7 @@ function getWindowSize(){
         $("#pop #backarea").each(function(i){
             $(this).css("width","35%");
         })
-        $("#quesitonpop #backarea").each(function(i){
+        $("#questionpop #backarea").each(function(i){
             $(this).css("width","35%");
         })
         let windowWidth=$(window).width();
@@ -48,6 +49,7 @@ function getWindowSize(){
 $(window).bind('resize',function(){getWindowSize()});
 $(document).ready(function(){
     getWindowSize();
+    refreshQuestion();
     if(localStorage.first==null){
         arrow();
         localStorage.first = 1;
@@ -552,6 +554,33 @@ function question(){
     }            
     }
 /* 右上角帮助 */
+
+
+
+/* 帮助菜单切换 */
+function leftclick(){
+    questionNum = questionNum -1;
+    refreshQuestion()  
+}
+function rightclick(){
+    questionNum = questionNum +1;
+    refreshQuestion()  
+}
+function refreshQuestion(){
+    // alert(questionNum)
+    // console.log($("#helpmenumid").children("#mathjaxhelp"))
+    if(questionNum%2 == 0){
+        
+        $("#helpmenumid").children("#mathjaxhelp").show()
+        $("#helpmenumid").children("#menuhelp").hide()
+    }
+    else if(questionNum%2 == 1){
+        $("#helpmenumid").children("#mathjaxhelp").hide()
+        $("#helpmenumid").children("#menuhelp").show()
+
+    }
+}
+/* 帮助菜单切换 */
 
 /* show menu*/
 function arrow(){
