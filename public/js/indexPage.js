@@ -1,5 +1,5 @@
 
-function trylogin(){
+function trylogin(){//如果没token 用login去后端要token。notepage是需要token才能得到数据
     $.ajax({
         //几个参数需要注意一下
             type: "POST",//方法类型
