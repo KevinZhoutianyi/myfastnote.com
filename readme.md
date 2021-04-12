@@ -77,3 +77,7 @@ mouseleavemenu之后再移动回去
 数据库里存的永远是可以直接用的md格式的文件
 但问题是 textarea里的\n在marked翻译的时候没法被识别出来 （也就是在showarea里不能正常换行）
 所以在 前端 用marked转md的时候，需要把文章内\n部分都替换成<br>
+
+# 是否能篡改他人数据
+前端只能得到自己token 传token回去改对应数据
+所以前端就改dbid或者fileid，也只能改自己token下的

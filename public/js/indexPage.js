@@ -29,21 +29,23 @@ function signup() {
 
  
  $(document).ready(function(){
+     
+    $(".background").hide();
     $.ajax({
         //几个参数需要注意一下
             type: "POST",
             url: "/checktoken" ,
             data:{token:localStorage.token},
             success: function (result) {
-                $("#container").hide();
+                $(".background").hide();
             setTimeout(() => {
                 location.href = "/main"
                 localStorage.token = result;
-            }, 500);
+            }, 50);
                 
             },
             error : function(result) {
-                $("#container").show();
+                $(".background").show();
                 console.log("token expire")
             }
         });
