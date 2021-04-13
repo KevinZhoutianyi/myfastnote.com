@@ -28,6 +28,7 @@ app.use('/main', require('./js/router/main'));
 app.use('/blog', require('./js/router/blog_back'));
 app.use('/tempnote', require('./js/router/tempnote_back'));
 app.use('/admin', require('./js/router/admin'));
+app.use('/personal', require('./js/router/personal'));
 
 
 

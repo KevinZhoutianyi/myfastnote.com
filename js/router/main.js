@@ -28,7 +28,7 @@ config.zone = qiniu.zone.Zone_z2;
 
 let query = function( sql, values ) {
     // 返回一个 Promise
-   //  myprint(sql)
+    myprint(sql)
     return new Promise(( resolve, reject ) => {
       pool.getConnection(function(err, connection) {
         if (err) {
@@ -87,18 +87,22 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
     }
     myprint("userid:"+userid+" is ask for data");
  
-    const result = await query("select lastopenfileid,lastopendbid from user where userid = '"+userid+"'");
+    const result = await query("select lastopenfileid,nowopendbid from user where userid = '"+userid+"'");
     
     if(result.length==1){
    
-       // console.log(result) 这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
-       const result2 = await query("select content from note where fileid = '"+result[0].lastopenfileid+"' and userid="+userid+" and dbid = "+result[0].lastopendbid);
+      //  console.log(result) //这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
+       const result2 = await query("select content from note where fileid = '"+result[0].lastopenfileid+"' and userid="+userid+" and dbid = "+result[0].nowopendbid);
+      //  console.log(result2)
        if(result2.length>=1){
-          var x = {content:result2[0].content,id:result[0].lastopenfileid,userid:userid,lastopendbid:result[0].lastopendbid}
+          var x = {content:result2[0].content,id:result[0].lastopenfileid,nowopendbid:result[0].nowopendbid}
+          res.status(200).send(x);
+       }else{
+          var x = {id:-1,nowopendbid:result[0].nowopendbid}//说明lastopenfile被删掉了没找到，就返回-1
           res.status(200).send(x);
        }
     }else{
-       res.status(400).send(result)
+       res.status(400).send("fail")
     }
  });
  
@@ -154,11 +158,11 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
    const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+userid+" and dbid =" + dbid);
-   if(result2.length>=1){
-      res.send(result2)
+   if(result2.length>=0){
+      res.status(200).send(result2)
    }  
    else{
-      myprint(result2)
+      res.status(400).send("fail")
    }
     
  })
@@ -182,7 +186,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
              myprint('[UPDATE ERROR] - ',err.message);
              return;
           }  
-          var qu2 = "update user set lastopenfileid ='" + id + "'where userid ="+userid+" and lastopendbid = "+ dbid +";";
+          var qu2 = "update user set lastopenfileid ='" + id + "'where userid ="+userid+" and nowopendbid = "+ dbid +";";
           connection.query(qu2,function(err2,result2){
              if(err2){
                 myprint('[UPDATE ERROR] - ',err.message);
@@ -278,14 +282,14 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        var qu = "select max(fileid) from catalogue where userid="+userid+" and dbid = "+dbid;
        connection.query(qu,function(err,result){
           if(err){
-             myprint('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR 1] - ',err.message);
              return;
           } 
           // myprint(result[0])
-          var qu2 = "insert into catalogue values("+userid+","+(result[0]["max(fileid)"]+1)+",'newfolder',0,0,null,"+dbid+");";
+          var qu2 = "insert into catalogue(userid,fileid,filename,isnote,level,fatherid,dbid)  values("+userid+","+(result[0]["max(fileid)"]+1)+",'newfolder',0,0,null,"+dbid+");";
           connection.query(qu2,function(err2,result2){
              if(err2){
-                myprint('[UPDATE ERROR] - ',err2.message);
+               myprint('[UPDATE ERROR 2] - ',err2.message);
                 return;
              } 
              
@@ -324,14 +328,14 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
              return;
           } 
           // myprint(result[0])
-          var qu2 = "insert into catalogue values("+userid+","+(result[0]["max(fileid)"]+1)+",'newfile',1,1,"+folderid+","+dbid+");";
+          var qu2 = "insert into catalogue(userid,fileid,filename,isnote,level,fatherid,dbid) values("+userid+","+(result[0]["max(fileid)"]+1)+",'newfile',1,1,"+folderid+","+dbid+");";
           connection.query(qu2,function(err2,result2){
              if(err2){
                 myprint('[UPDATE ERROR] - ',err2.message);
                 return;
              } 
              });
-          var qu3 = "insert into note values("+(result[0]["max(fileid)"]+1)+",'# ',"+userid+","+folderid+","+dbid+");";
+          var qu3 = "insert into note(fileid,content,userid,fatherid,dbid) values("+(result[0]["max(fileid)"]+1)+",'# ',"+userid+","+folderid+","+dbid+");";
           connection.query(qu3,function(err3,result3){
              if(err3){
                 myprint('[UPDATE ERROR] - ',err3.message);
@@ -441,7 +445,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       var maxindex = (result[0]["max(fileid)"])
       myprint("maxindex in catalogue ：  "+maxindex)
       if(fields["folderid"]==-1){//不是目录，先创建一个目录
-         result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+1)+",'newfolder',0,0,null,"+dbid+")")
+         result2 = await query( "INSERT INTO catalogue(userid,fileid,filename,isnote,level,fatherid,dbid) VALUES("+userid +","+(maxindex+1)+",'newfolder',0,0,null,"+dbid+")")
          for (let index = 2; index < (parseInt(fields["size"])+2); index++) {//每个文件存入该目录  
             orifilename = file["file"][index-2]["originalFilename"];
             filename = orifilename.substring(0,orifilename.length - 3)
@@ -472,12 +476,12 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
 
             }
             fatherid = fields["folderid"]
-            result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+","+dbid+")")
+            result2 = await query( "INSERT INTO catalogue(userid,fileid,filename,isnote,level,fatherid,dbid) VALUES("+userid +","+(maxindex+index)+",'"+filename+"',1,1,"+(fatherid)+","+dbid+")")
             var data = fs.readFileSync(file["file"][index-1]["path"], 'utf-8');
             data = data.replace(/\\/g,"\\\\");
                 data = data.replace(/\"/g,"\'\'");
                 data =data.replace(/\'/g,"\"");
-            result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+userid+","+(fatherid)+","+dbid+")")
+            result3 = await query( "INSERT INTO note(fileid,content,userid,fatherid,dbid) VALUES("+(maxindex+index)+",'"+data+"',"+userid+","+(fatherid)+","+dbid+")")
             
          }
          res.send("success")
@@ -543,7 +547,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
                connection.release();
             })
             pool.getConnection(function(err,connection){
-               qu2 = "insert into img values("+fileid+","+userid+",'"+respBody.hash+"',"+filesize+","+dbid+") ";
+               qu2 = "insert into img(fileid,userid,hash,size,dbid) values("+fileid+","+userid+",'"+respBody.hash+"',"+filesize+","+dbid+") ";
                connection.query(qu2,function(err,result33){
                })
                connection.release();

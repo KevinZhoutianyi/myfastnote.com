@@ -114,20 +114,34 @@ function loadData() {
         type: "post",
         data:{token:localStorage.token},
         success: function (returnValue) {
-            // console.log("dataloaded:"+ JSON.stringify(returnValue) )
-            document.getElementById("md-area").value = returnValue.content;
-            localStorage.nowopenfileid = returnValue.id;
-            localStorage.nowopendbid = returnValue.lastopendbid;
-            loadcatalogue('first');
-            m = document.getElementById("md-area");
-            m.style.height='auto';
-            m.style.height = m.scrollHeight + 50 + 'px';
-            mdSwitch();
-            finishiloading = 1;
+            if(returnValue.id==-1){
+                document.getElementById("md-area").value="## Has been deleted :("
+                localStorage.nowopenfileid = returnValue.id;
+                localStorage.nowopendbid = returnValue.nowopendbid;
+                loadcatalogue('first');
+                m = document.getElementById("md-area");
+                m.style.height='auto';
+                m.style.height = m.scrollHeight + 50 + 'px';
+                mdSwitch();
+                 finishiloading = 1;
+            }
+            else{
+                // console.log("dataloaded:"+ JSON.stringify(returnValue) )
+                document.getElementById("md-area").value = returnValue.content;
+                localStorage.nowopenfileid = returnValue.id;
+                localStorage.nowopendbid = returnValue.nowopendbid;
+                loadcatalogue('first');
+                m = document.getElementById("md-area");
+                m.style.height='auto';
+                m.style.height = m.scrollHeight + 50 + 'px';
+                mdSwitch();
+                finishiloading = 1;
+            }
         },
         error: function (returnValue) {
+            console.log(returnValue)
             alert("load data fail");;
-            location.href = "/"
+            // location.href = "/"
                                     // savecontent();
         }
     })
@@ -187,6 +201,7 @@ function loadcatalogue(command) {
         data:{token:localStorage.token,dbid:localStorage.nowopendbid},
         success: function (returnValue) {
             var content = JSON.stringify(returnValue);
+            console.log(content)
             var showhtml = "<br><br>";
             var foldersfileidarray =[];
             for (let index = 0; index < returnValue.length; index++) {
@@ -232,6 +247,10 @@ function loadcatalogue(command) {
             freshcatalogue();
 
        
+        },
+        error: function (returnValue) {
+            alert("load catalogue fail")
+                                    
         }
     })
     
@@ -842,7 +861,7 @@ function doUpload() {
 
 /* homepage */
 function homepage() {
-    location.href = "/blog"
+    location.href = "/personal"
 }
 /* homepage */
 
