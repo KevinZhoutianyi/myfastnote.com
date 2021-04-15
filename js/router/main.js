@@ -181,14 +181,14 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
     pool.getConnection(function(err,connection){
       //  myprint("savedata : connection to sql success")
        var qu = "update note set content ='" + content + "' where fileid ="+id +" and userid="+userid+" and dbid = "+dbid+";";
-      console.log(qu)
+      // console.log(qu)
        connection.query(qu,function(err,result){
           if(err){
              myprint('[UPDATE ERROR] - ',err);
              return;
           }  
           var qu2 = "update db set lastopenfileid =" + id + " where userid ="+userid+" and dbid = "+ dbid +";";
-          console.log(qu)
+         //  console.log(qu)
           connection.query(qu2,function(err2,result2){
              if(err2){
                 myprint('[UPDATE ERROR] - ',err.message);
