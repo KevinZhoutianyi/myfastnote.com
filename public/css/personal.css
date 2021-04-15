@@ -153,6 +153,7 @@
 
 }
  .databaseUnit{    
+   cursor:pointer;
    box-shadow: 2px 3px 5px rgb(10 10 10);
    text-align: center;
    width:80%;
@@ -164,6 +165,11 @@
    flex-direction: column;
    justify-content: center;
    align-items:center;
+   -webkit-transition: all 0.4s;
+   -moz-transition: all 0.4s;
+   -ms-transition: all 0.4s;
+   -o-transition: all 0.4s;
+   transition: all 0.4s;
    
  }
 
@@ -175,7 +181,7 @@
   height:auto;
   overflow: hidden;
 }
-#databaseContainer{
+.databaseContainer{
   /* border:1px black solid; */
   width:90%;
   display: flex;
@@ -223,3 +229,118 @@
     bottom: 10px;
     z-index: 10;
 }
+
+
+/* context */
+.custom-context-menu{
+  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    position: fixed;
+    z-index: 19;
+    background-color: rgba(80, 79, 79, 0);
+    border-radius: 10px;
+    padding-left: 2px;
+    padding-top: 7px;
+    /* padding-bottom: 12px; */
+    width: 100px;
+    
+}
+#icon{
+  margin-right: 5px;
+  margin-top: 5px;
+  height: 40px;
+  width: 40px;
+  border-radius: 7px;
+  /* display:flex; */
+  flex-direction:column;
+  justify-content:center;
+  align-items: center;
+}
+/* icon & newfile表示外面的container */
+/* newfileimg表示里面的图片 */
+.newfile{
+   display:none;
+}
+.newfileimg{
+  margin-bottom: 0.3px;
+  margin-left: 3px;
+  height:15px !important;
+  width:15px !important;
+}
+.newfolder{   
+   display:none;
+
+}
+.newfolderimg{
+  
+  height: 16px !important;
+  width: 17px !important;
+  margin-bottom: 1px;
+}
+
+.upload{  
+   display:none;
+}
+.uploadimg{
+  margin-bottom: 1px;
+  height: 16px !important;
+  width: 18px !important;
+}
+
+
+
+.trash{
+    display:none;
+}
+.trashimg{
+  margin-bottom: 1px;
+  height: 16px !important;
+  width: 18px !important;
+}
+
+.rename{
+  display:none;
+}
+.renameimg{
+  margin-bottom: 0.3px;
+  margin-right: 1px;
+ height:17px !important;
+ width:17px !important;
+}
+.foldall{
+  display:none;
+}
+.foldallimg{
+ height:19px !important;
+ width:19px !important;
+}
+.unfoldall{
+  display:none;
+}
+.unfoldallimg{
+ height:19px !important;
+ width:19px !important;
+}
+.cntr-innr {
+  display: flex;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+}
+
+/* context */
+
+.loading{
+  display:none;
+  color:white;
+   position: fixed;
+   top:5px;
+   right:5px;
+   /* transform: translate(-50%,-50%); */
+   z-index: 99999;
+
+ }

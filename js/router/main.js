@@ -74,7 +74,7 @@ function getid(token) {
 
 function myprint(output){
    console.log(new Date(Date.now()))
-   console.log(output)
+   console.log("[notepage.js]: "+output)
 }
 
 
@@ -87,15 +87,15 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
     }
     myprint("userid:"+userid+" is ask for data");
  
-    const result = await query("select lastopenfileid,nowopendbid from user where userid = '"+userid+"'");
+    const result = await query("select nowopendbid from user where userid = '"+userid+"'");
     
     if(result.length==1){
-   
+      const result4 = await query("select lastopenfileid from db where userid = "+userid+" and dbid = " + result[0].nowopendbid);
       //  console.log(result) //这里即使result是null也会有数据返回 解决方法是 用户注册完 在note里生成一个startnote.md 作为用户的lastopenfileid
-       const result2 = await query("select content from note where fileid = '"+result[0].lastopenfileid+"' and userid="+userid+" and dbid = "+result[0].nowopendbid);
+       const result2 = await query("select content from note where fileid = '"+result4[0].lastopenfileid+"' and userid="+userid+" and dbid = "+result[0].nowopendbid);
       //  console.log(result2)
        if(result2.length>=1){
-          var x = {content:result2[0].content,id:result[0].lastopenfileid,nowopendbid:result[0].nowopendbid}
+          var x = {content:result2[0].content,id:result4[0].lastopenfileid,nowopendbid:result[0].nowopendbid}
           res.status(200).send(x);
        }else{
           var x = {id:-1,nowopendbid:result[0].nowopendbid}//说明lastopenfile被删掉了没找到，就返回-1
@@ -180,13 +180,15 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
     pool.getConnection(function(err,connection){
       //  myprint("savedata : connection to sql success")
-       var qu = "update note set content ='" + content + "'where fileid ="+id +" and userid="+userid+" and dbid = "+dbid+";";
+       var qu = "update note set content ='" + content + "' where fileid ="+id +" and userid="+userid+" and dbid = "+dbid+";";
+      console.log(qu)
        connection.query(qu,function(err,result){
           if(err){
-             myprint('[UPDATE ERROR] - ',err.message);
+             myprint('[UPDATE ERROR] - ',err);
              return;
           }  
-          var qu2 = "update user set lastopenfileid ='" + id + "'where userid ="+userid+" and nowopendbid = "+ dbid +";";
+          var qu2 = "update db set lastopenfileid =" + id + " where userid ="+userid+" and dbid = "+ dbid +";";
+          console.log(qu)
           connection.query(qu2,function(err2,result2){
              if(err2){
                 myprint('[UPDATE ERROR] - ',err.message);

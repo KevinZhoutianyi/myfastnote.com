@@ -15,6 +15,7 @@
  
     </head>
     <body >
+      <div class="loading"><i class="fa fa-spinner fa-pulse" ></i></div>
         <i class="fa fa-sign-out fa-2x quit" onclick="location.href='/main'"></i>
         <div class="tabs">
             <input class="tab" id="tab--1" type="radio" name="tabs" checked="checked">
@@ -30,12 +31,12 @@
             
             <div class="display" id="display--1">
 
-              <div class="container">
+              <div class="container" id="pathContainer">
                 <span class="title">Database Management</span>
-                <div id="databaseContainer" >
-                  <div class="grid"  v-for="database in databases">
-                    <div class="databaseUnit" v-bind:class="{chosen:database.checked}" v-on:click="clickUnit(database.dbid)">
-                      <div class="textUnit">
+                <div class="databaseContainer" id="pathContainer">
+                  <div class="grid"  v-for="database in databases" id="pathContainer">
+                    <div class="databaseUnit" id="pathUnit"   v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname"  v-bind:class="{chosen:database.checked}" v-on:click="clickUnit(database.dbid)">
+                      <div class="textUnit" id="pathUnit" v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname">
                         {{database.dbname}}
                       </div>
                     </div>

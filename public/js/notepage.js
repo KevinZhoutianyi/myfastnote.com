@@ -44,6 +44,9 @@ function getWindowSize(){
         // console.log(documentWidth)
         // console.log(windowWidth)
         $('body').css({'zoom':zoomScale});
+        
+        localStorage.isfull = 1//非手机界面大小的时候 resize之后 设置成 notfullscreen
+        fullscreen()
     }
 }
 $(window).bind('resize',function(){getWindowSize()});
@@ -115,7 +118,7 @@ function loadData() {
         data:{token:localStorage.token},
         success: function (returnValue) {
             if(returnValue.id==-1){
-                document.getElementById("md-area").value="## Has been deleted :("
+                document.getElementById("md-area").value="## File 404 :("
                 localStorage.nowopenfileid = returnValue.id;
                 localStorage.nowopendbid = returnValue.nowopendbid;
                 loadcatalogue('first');
@@ -372,7 +375,6 @@ function syncDivsScrollPos() {
 window.addEventListener("keydown", function(e) {
     if(e.keyCode == 13 && localStorage.edited==1){
         e.preventDefault();
-
         var obj  = document.getElementsByName(localStorage.contextmenufilename)
         myblur(obj);
     }
@@ -380,17 +382,23 @@ window.addEventListener("keydown", function(e) {
     //event.preventDefault() 方法阻止元素发生默认的行为。
     if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
-        localStorage.leftscrolltop = $("#left").scrollTop();
-        localStorage.rightscrolltop = $("#right").scrollTop();
-        // Process event...
-        savecontent();
+        if(localStorage.nowopenfileid != -1){
+            // localStorage.leftscrolltop = $("#left").scrollTop();
+            // localStorage.rightscrolltop = $("#right").scrollTop();
+            var obj  = document.getElementsByName(localStorage.contextmenufilename)
+            // Process event...
+            savecontent();
+        }
     }
     
  
 }, false);
 function savecontent() {
+    console.log("save content")
     if(finishiloading==0)//没第一次load完是没法保存的
          return;
+        
+    console.log("saving")
     m = document.getElementById("md-area");
         m.style.height='auto';
         m.style.height = m.scrollHeight + 50 + 'px';
@@ -500,58 +508,65 @@ function uploadmyimg() {
 }
 function inputChange(e){
     flag = 1;
-    var formData = new FormData();
-    var file = $("#uploadcropimg")[0].files;
-    function callback(blob){//回调获取压缩后的Blog
-        if(blob){
-            console.log("compressed ok")
-            let compressedfile = new window.File(
-                    [blob],
-                    file[0]["name"],
-                    { type: blob.type }
-            );
-            console.log(blob.type)
-            formData.append('file', compressedfile);
-            formData.append('fileid', localStorage.nowopenfileid);
-            formData.append('token', localStorage.token);
-            formData.append('dbid', localStorage.nowopendbid);
-            $.ajax({
-                url: '/main/uploadimg' ,  
-                type: 'POST',  
-                data:formData,
-                dataType: "formData",
-                cache: false,
-                contentType: false,
-                processData:false,
-                mimeType:"multipart/form-data",
-            
-                success: function (returnValue) {
-                    
-                },
-                error: function (returndata) {
-                    console.log("upload img success") 
-                    hash = JSON.parse(returndata['responseText'])['hash'];
-                    m = document.getElementById("md-area").value;
-                    m += "\r\n![](http://img.myfastnote.com/"+ hash+"~resize1)";
-                    document.getElementById("md-area").value = m;
-                    localStorage.leftscrolltop = $("#left").scrollTop();
-                    localStorage.rightscrolltop = $("#right").scrollTop();
-                    m = document.getElementById("md-area")
-                    m.style.height='auto';
-                    m.style.height = m.scrollHeight + 50 + 'px';
-                    mdSwitch();
-                    $("#left").scrollTop(localStorage.leftscrolltop);
-                    $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
-                }
-            })
-        }else{
-            alert("jpg/png only")
+    if($(".loading").css("display")=="none"){
+        $(".loading").css("display","flex")
+        var formData = new FormData();
+        var file = $("#uploadcropimg")[0].files;
+        function callback(blob){//回调获取压缩后的Blog
+            if(blob){
+                console.log("compressed ok")
+                let compressedfile = new window.File(
+                        [blob],
+                        file[0]["name"],
+                        { type: blob.type }
+                );
+                console.log(blob.type)
+                formData.append('file', compressedfile);
+                formData.append('fileid', localStorage.nowopenfileid);
+                formData.append('token', localStorage.token);
+                formData.append('dbid', localStorage.nowopendbid);
+                $.ajax({
+                    url: '/main/uploadimg' ,  
+                    type: 'POST',  
+                    data:formData,
+                    dataType: "formData",
+                    cache: false,
+                    contentType: false,
+                    processData:false,
+                    mimeType:"multipart/form-data",
+                
+                    success: function (returnValue) {
+                        
+                    },
+                    error: function (returndata) {
+                        console.log("upload img success") 
+                        hash = JSON.parse(returndata['responseText'])['hash'];
+                        m = document.getElementById("md-area").value;
+                        m += "\r\n![](http://img.myfastnote.com/"+ hash+"~resize1)";
+                        document.getElementById("md-area").value = m;
+                        localStorage.leftscrolltop = $("#left").scrollTop();
+                        localStorage.rightscrolltop = $("#right").scrollTop();
+                        m = document.getElementById("md-area")
+                        m.style.height='auto';
+                        m.style.height = m.scrollHeight + 50 + 'px';
+                        mdSwitch();
+                        
+                        $(".loading").css("display","none")
+                        $("#left").scrollTop(localStorage.leftscrolltop);
+                        $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
+                    }
+                })
+            }else{
+                alert("jpg/png only")
+            }
         }
+        
+        this.compress(file[0], callback);
+        
+        
+    
     }
-    
-    this.compress(file[0], callback);
-    
-
+   
 }
 
 /*截图*/
@@ -819,7 +834,7 @@ function selectText(obj) {
 function upload() {
     $("#uploadbutton").trigger("click");
 }
-function doUpload() {  
+function doUpload() {
     // var formData = new FormData($( "#uploadForm" )[0]); 
     var formData = new FormData();
     var file = $("#uploadbutton")[0].files;
@@ -992,75 +1007,75 @@ document.addEventListener("contextmenu", (e) => {
       },
     };
   };
-   const menuSinglton = ContextMenu({
-    menus: [
-      {
+const menuSinglton = ContextMenu({
+menus: [
+    {
         name: "public/png/trashwhite.png",
         class: "trash",
         onClick: function (e) {
             opfile("delete");
         },
-      },
-      {
+    },
+    {
         name: "public/png/newfile.png",
         class: "newfile",
         onClick: function (e) {
             opfile("new");
         },
-      },
-      {
+    },
+    {
         name: "public/png/newfolder.png",
         class: "newfolder",
         onClick: function (e) {
             newfolder();
         },
-      },
-      {
+    },
+    {
         name: "public/png/upload.png",
         class: "upload",
         onClick: function (e) {
             upload();
         },
-      },
-      {
+    },
+    {
         name: "public/png/rename.png",
         class: "rename",
         onClick: function (e) {
             rename();
         },
-      },
-      {
+    },
+    {
         name: "public/png/foldall.png",
         class: "foldall",
         onClick: function (e) {
             foldall();
         },
-      },
-      {
+    },
+    {
         name: "public/png/unfoldall.png",
         class: "unfoldall",
         onClick: function (e) {
             unfoldall();
         },
-      },
-      
-    ],
-  });
-
-  function showMenu(e) {
+    },
+    
+],
+});
+const menus = menuSinglton.getInstance();
+function showMenu(e) {
     const menus = menuSinglton.getInstance();
     menus.style.top = `${e.clientY/zoomScale+5}px`;
     menus.style.left = `${e.clientX/zoomScale+5}px`;
-    
-  menus.style.display = "flex";
-    
-  }
-  function hideMenu(e) {
+    menus.style.display = "flex";
+}
+
+function hideMenu(e) {
     const menus = menuSinglton.getInstance();
     menus.style.display = "none";
-  }
-  document.addEventListener("click", hideMenu);
-  document.addEventListener("keypress", hideMenu);
+}
+
+document.addEventListener("click", hideMenu);
+document.addEventListener("keypress", hideMenu);
 /*右键的context menu*/
 
 /* 换号 */
