@@ -7,8 +7,20 @@ function login(){
             url: "/admin/login" ,//url
             data: $('#myform').serialize(),
             success: function (result) {
-                $('body').html($(result));
-                isLogin = 1;
+                // console.log(result)
+                localStorage.adminToken = result;
+                $.ajax({
+                    //几个参数需要注意一下
+                        type: "POST",//方法类型
+                        url: "/admin/showpage" ,//url
+                        success: function (result) {
+                            $('body').html($(result));
+                            isLogin = 1;
+                        },
+                        error : function(result) {
+                            alert("fail");
+                        }
+                    });
             },
             error : function(result) {
                 alert("fail");
@@ -22,7 +34,7 @@ function query(){
         //几个参数需要注意一下
             type: "POST",//方法类型
             url: "/admin/query" ,//url
-            data: {query:$('.query').val()},
+            data: {query:$('.query').val(),token:localStorage.adminToken},
             success: function (result) {
                 
                 $('#resultPart').text(JSON.stringify(result))

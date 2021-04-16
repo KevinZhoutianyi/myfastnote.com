@@ -311,13 +311,15 @@ p>img{
   transform: translate(-50%,-50%);
   
 }
+
 .arrowani{
-  animation:mymove 1s;
-  -webkit-animation:mymove 1s;
+  animation:firstani 2s;
+  -webkit-animation:firstani 2s;
   animation-timing-function:ease-in-out;
 -webkit-animation-timing-function:ease-in-out;  /* Safari and Chrome */
 
 }
+
 @keyframes mymove
 {
   0%{
@@ -349,6 +351,43 @@ p>img{
     100%{
       top:10px;  /*开始为原始大小*/
     }
+}
+@keyframes firstani
+{
+  0% {
+    top:5px;
+    width: 32px;
+    height: 32px;
+  }
+  50% {
+    top:10px;
+    width: 60px;
+    height:   60px;
+  }
+  100% {
+    top:5px;
+    width: 32px;
+    height:   32px;
+  }
+}
+
+@-webkit-keyframes firstani /*Safari and Chrome*/
+{
+  0% {
+    top:5px;
+    width: 32px;
+    height: 32px;
+  }
+  50% {
+    top:10px;
+    width: 60px;
+    height:   60px;
+  }
+  100% {
+    top:5px;
+    width: 32px;
+    height:   32px;
+  }
 }
 
 #seperateline{

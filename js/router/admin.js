@@ -49,22 +49,58 @@ let query = function( sql, values ) {
   })
   .catch(error => console.log('caught', error))
 }
-
+function getid(token) {
+   
+  var jwt = new JwtUtil(token);
+  var ret;
+  try{
+     ret = jwt.verifyToken().id;
+  }catch(e){
+      ret = "-99";
+  }
+  return(ret)
+}
 
 router.post('/login',urlencodedParser, async (req, res) => {
   console.log(req.body.username+","+req.body.password+" try to query login\n")
   if(req.body.username=="admin"&&req.body.password=="Kevin_1212"){
-    res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "admin.html") );
+    var content = {id:-1}
+    let jwt = new JwtUtil(content);
+    let token = jwt.generateToken();
+    console.log("admin login success"+",his token is "+token)
+    res.status(200).send(token)
+    
+  }
+  else{
+    res.status(400)
   }
 })
-
+router.post('/showpage',urlencodedParser, async (req, res) => {
+  res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "admin.html") );
+})
 router.post('/query',urlencodedParser, async (req, res) => {
+
+  userid = getid(req.body.token)
+    if(userid!="-1"){
+       res.status(400).send("token expired")
+       return;
+    }
   console.log("admin query mysql:"+req.body.query)
-  
   const result = await query(req.body.query);
-  
-  
   res.status(200).send(result)
+})
+router.post('/log',urlencodedParser, async (req, res) => {
+
+  userid = getid(req.body.token)
+    if(userid!="-1"){
+       res.status(400).send("token expired")
+       return;
+    }
+  console.log("admin query mysql:"+req.body.query)
+  const result = await query(req.body.query);
+  res.status(200).send(result)
+  
+  
 })
 
 router.get('/',urlencodedParser, async (req, res) => {

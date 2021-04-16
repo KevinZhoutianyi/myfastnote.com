@@ -156,7 +156,7 @@ router.post('/imgcount',urlencodedParser, async (req, res) => {
 
 router.post('/deldb',urlencodedParser, async (req, res) => {
   userid = getid(req.body.token)
-  if(userid=="-1"){
+  if(userid=="-1"||userid=="2"){
     res.status(400).send("token expired")
     return;
   }

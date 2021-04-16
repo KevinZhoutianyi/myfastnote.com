@@ -4,6 +4,7 @@
 不同用户fileid可以重复，A有文件10，B也有fileid10
 目录:fatherid = null, level = 0; isnote = 0
 文件：level = 1; isnote = 1;
+管理员userid=-1，用户登录如果userid-1就是expire，admin登录如果不是-1就是expire
 
 
 # 上传七牛云
@@ -81,3 +82,5 @@ mouseleavemenu之后再移动回去
 # 是否能篡改他人数据
 前端只能得到自己token 传token回去改对应数据
 所以前端就改dbid或者fileid，也只能改自己token下的
+
+#
