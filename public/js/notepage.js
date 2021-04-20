@@ -816,6 +816,7 @@ function opfile(data) {
 
 /* 重命名全选 */
 function selectText(obj) {
+    console.log(obj)
     if (document.selection) {
         var range = document.body.createTextRange();
         range.moveToElementText(obj[0]);

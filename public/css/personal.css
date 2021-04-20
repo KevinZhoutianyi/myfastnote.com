@@ -178,9 +178,11 @@
  }
 .textUnit{
   width: 70%;
+  font-size:1.2em;
   height:auto;
   overflow: hidden;
 }
+[contenteditable]:focus{outline:none;}
 .databaseContainer{
   /* border:1px black solid; */
   width:90%;
@@ -343,4 +345,12 @@
    /* transform: translate(-50%,-50%); */
    z-index: 99999;
 
+ }
+
+ .dbinfo{
+   margin-top:4%;
+   font-size:5px !important;
+ }
+ #pathUnit{
+   /* margin-top:5%; */
  }

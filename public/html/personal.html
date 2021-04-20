@@ -36,10 +36,13 @@
                 <div class="databaseContainer" id="pathContainer">
                   <div class="grid"  v-for="database in databases" id="pathContainer">
                     <div class="databaseUnit" id="pathUnit"   v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname"  v-bind:class="{chosen:database.checked}" v-on:click="clickUnit(database.dbid)">
-                      <div class="textUnit" id="pathUnit" v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname">
+                      <div style="margin-top:5%;" class="textUnit" id="pathUnit" v-bind:rename='database.dbname' v-bind:name='database.dbid' v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname" contenteditable='false'  tabindex='1' onblur='myblur(this);'   spellcheck='false'>
                         {{database.dbname}}
                       </div>
+                      <div  id="pathUnit"  class="dbinfo textUnit"  v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname" >{{Math.floor(database.size/1000000)}} M</div>
                     </div>
+                    
+                      
                   </div>
                 </div>
               </div>

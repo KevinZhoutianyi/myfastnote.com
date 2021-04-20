@@ -149,7 +149,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  router.post('/getcatalogue',urlencodedParser,  async (req, res) => {
    userid = getid(req.body.token)
-   dbid = req.body.dbid
+   dbid = req.body.dbid;
    if(userid=="-1"){
       res.status(400).send("token expired")
       return;
@@ -159,13 +159,13 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
    const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+userid+" and dbid =" + dbid);
    if(result2.length>=0){
-      res.status(200).send(result2)
+      res.status(200).send(result2);
    }  
    else{
-      res.status(400).send("fail")
+      res.status(400).send("fail");
    }
     
- })
+ });
  
  router.post('/savedata',urlencodedParser, function (req, res) {
     var content = req.body.content;
@@ -197,13 +197,13 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
              connection.release();
             //  myprint("savedata : mysql release")
              res.send("success");
-             })
+             });
          //  myprint("savedata : mysql release")
-          })
-       })
+          });
+       });
       
  
- })
+ });
  
  
  
@@ -211,9 +211,9 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  router.post('/deletefile',urlencodedParser, function (req, res) {
    var fileid = req.body.fileid;
    var dbid = req.body.dbid;
-    userid = getid(req.body.token)
+    userid = getid(req.body.token);
     if(userid=="-1"){
-       res.status(400).send("token expired")
+       res.status(400).send("token expired");
        return;
     }
     myprint("userid:"+userid+" is deleting folder id:" + fileid);
@@ -492,6 +492,12 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  });
 
  router.post("/uploadimg",urlencodedParser,  async (req, res) => {
+
+   /* 上传图片
+      1. 图片传到后端，再用token传到图床
+      2. 增加user使用的size，增加该db使用的size，img里增加该图信息
+
+   */
    
    let form = new multiparty.Form();
    
@@ -551,6 +557,12 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
             pool.getConnection(function(err,connection){
                qu2 = "insert into img(fileid,userid,hash,size,dbid) values("+fileid+","+userid+",'"+respBody.hash+"',"+filesize+","+dbid+") ";
                connection.query(qu2,function(err,result33){
+               })
+               connection.release();
+            })
+            pool.getConnection(function(err,connection){
+               qu3 = "UPDATE db  SET size= size+ "+ parseInt(filesize) +" where userid = "+userid+" and dbid = "+ dbid;
+               connection.query(qu3,function(err,result44){
                })
                connection.release();
             })

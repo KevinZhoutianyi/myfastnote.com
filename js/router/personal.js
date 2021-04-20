@@ -94,7 +94,7 @@ router.post('/refresh',urlencodedParser, async (req, res) => {
   }
     myprint("userid:"+userid+" refreshing database")
     
-    const result = await query("select dbid,dbname from db where userid = '"+userid+"'");
+    const result = await query("select dbid,dbname,size from db where userid = '"+userid+"'");
     
     if(result.length>=0){
   
@@ -134,7 +134,7 @@ router.post('/newdb',urlencodedParser, async (req, res) => {
   myprint("userid:"+userid+" newing database")
   const result1 = await query("select max(dbid) from db where userid="+userid);
   myprint("max db id for user"+userid+":"+result1[0]["max(dbid)"])
-  const result2 = await query("insert into db values("+userid+","+(result1[0]["max(dbid)"]+1)+",'database:"+(result1[0]["max(dbid)"]+1)+"',0)");
+  const result2 = await query("insert into db values("+userid+","+(result1[0]["max(dbid)"]+1)+",'database:"+(result1[0]["max(dbid)"]+1)+"',0,0)");
   res.status(200).send("OK");
     
 
@@ -154,9 +154,36 @@ router.post('/imgcount',urlencodedParser, async (req, res) => {
 
 });
 
+router.post('/rename',urlencodedParser, function (req, res) {//rename
+  var filename = req.body.dbname;
+  var dbid = req.body.dbid;
+  userid = getid(req.body.token)
+ if(userid=="-1"){
+    res.status(400).send("token expired")
+    return;
+ }
+ myprint("userid:"+userid+" is renaming db " + dbid);
+
+  pool.getConnection(function(err,connection){
+    //  myprint("savecatalogue : connection to sql success")
+     var qu = "update db set dbname ='" + filename + "'where dbid ="+dbid+" and userid ="+userid;
+     connection.query(qu,function(err,result){
+        if(err){
+           myprint('[UPDATE ERROR] - ',err.message);
+           return;
+        } 
+       //  myprint("savecatalogue : mysql release")
+        res.send("success");
+
+        connection.release();
+        })
+     })
+
+})
+
 router.post('/deldb',urlencodedParser, async (req, res) => {
   userid = getid(req.body.token)
-  if(userid=="-1"||userid=="2"){
+  if(userid=="-1"){
     res.status(400).send("token expired")
     return;
   }
@@ -199,13 +226,9 @@ const deleteDatabase = async (dbid,userid) => {
   
   const result1 = await query("delete from catalogue where dbid = " +dbid+ " and userid = " +userid);
   const result2 = await query("delete from note where dbid = " +dbid+ " and userid = " +userid);
-  const result3 = await query("select hash,size from img where dbid = " +dbid+ " and userid = " +userid);
+  const result3 = await query("select size from db where dbid = " +dbid+ " and userid = " +userid);
   // console.log(result2)
-  var acc = 0;
-  result3.forEach(x => {
-    deleteImg(x.hash)
-    acc += parseInt(x.size)
-  });
+  var acc = result3[0]['size']
   const result4 = await query("select size from user where userid = " +userid);
   var res = parseInt(result4[0]["size"]) - acc;
   const result5 = await query("update user set size = " + res +" where userid = " +userid);

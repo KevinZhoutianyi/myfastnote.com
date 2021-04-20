@@ -87,8 +87,31 @@ var vm = new Vue({
             });
             
         },
+ 
 
   
+    },
+    myblur(obj) {
+    
+        if($(obj).html()==undefined)
+        return;
+        if(localStorage.edited == 1){
+            localStorage.edited = 0;
+    
+            if($(obj).html().length<=2){
+                alert("too short")
+                loadcatalogue();
+            }else{
+                var s = "";
+                s = $(obj).html();
+                s = s.replace(/<div>/g, "");
+                s = s.replace(/<\/div>/g, "");
+                savecatalogue(s,$(obj).attr('name'));
+            }
+            // console.log($(obj).html())
+            
+            $(obj).attr("contentEditable",false)
+            }
     }
     
     
@@ -99,7 +122,7 @@ var vm = new Vue({
 document.addEventListener("click", hideMenu);
 document.addEventListener("keypress", hideMenu);
 document.addEventListener("contextmenu", (e) => {
-    console.log(e.path[0])
+    // console.log(e.path[0])
     let x = e.path[0].id
     $(".newfile").css("display","none");
     $(".newfolder").css("display","none");
@@ -213,7 +236,9 @@ function hideMenu(e) {
 document.addEventListener("click", hideMenu);
 document.addEventListener("keypress", hideMenu);
 /*右键的context menu*/
-
+// $(document).ready(function(){
+//     vm.refresh()
+// });
 
 function newdb() {
     $.ajax({cache:false,
@@ -272,3 +297,78 @@ function deldb() {
 
     
 }
+
+       /* 重命名全选 */
+    function selectText(obj){
+        console.log(obj)
+        if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(obj[0]);
+            range.select();
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNodeContents(obj[0]);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+        }
+    }
+    /* 重命名全选 */
+    /* 重命名 */
+    function rename() {
+        // console.log("renamefor " +(localStorage.contextmenudbname))
+        var obj  = document.getElementsByName(localStorage.contextmenudbid)
+        // console.log(obj)
+        $(obj).attr("contentEditable",true)
+        localStorage.edited = 1;
+        $(obj).focus();
+            selectText(obj);
+    }
+    /* 重命名 */
+    function myblur(obj) {
+    
+        if($(obj).html()==undefined)
+        return;
+        if(localStorage.edited == 1){
+            localStorage.edited = 0;
+    
+            if($(obj).html().length<=2){
+                alert("too short")
+                vm.refresh();
+            }else{
+                var s = "";
+                s = $(obj).html();
+                // console.log(s)
+                s = s.replace(/\s*/g,"");
+                s = s.replace(/<div>/g, "");
+                s = s.replace(/<\/div>/g, "");
+                savedbname(s,$(obj).attr('dbid'));
+                // console.log(s)
+                // console.log($(obj).attr('dbid'))
+                
+            }
+            // console.log($(obj).html())
+            
+            $(obj).attr("contentEditable",false)
+            }
+    }
+/*保存目录*/
+function savedbname(dbname,dbid) {
+    console.log("dbname: "+dbname +" dbid: "+dbid)
+        $.ajax({ 
+            cache:false,
+            url:"personal/rename",
+            type: "post",
+            data:{token:localStorage.token, dbid : dbid,dbname:dbname},
+        
+            success: function (returnValue) {
+                console.log("rename success")
+                vm.refresh();
+            },
+            error: function (returnValue) {
+                alert(returnValue.responseText);;
+                location.href = "/"
+            }
+        })
+}
+/*保存目录*/
+
