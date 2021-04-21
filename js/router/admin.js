@@ -22,6 +22,7 @@ var accessKey = '3PoDKOO6j9uXap5iTeeb5TE6JsYN4_okFnX9nozI';
 var secretKey = 'mXf52W_o7P8Q01HeT-lf1MehQeUxg0KtH-RnIxzo';
 var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 var config = new qiniu.conf.Config();
+// now you can read the txt path
 // 空间对应的机房
 config.zone = qiniu.zone.Zone_z2;
 let query = function( sql, values ) {
@@ -60,10 +61,16 @@ function getid(token) {
   }
   return(ret)
 }
+function myprint(output){
+  console.log(new Date(Date.now()))
+   console.log("[admin.js]: " + output)
+  //  console.log(output)
+}
+
 
 router.post('/login',urlencodedParser, async (req, res) => {
   console.log(req.body.username+","+req.body.password+" try to query login\n")
-  if(req.body.username=="admin"&&req.body.password=="Kevin_1212"){
+  if(req.body.username=="admin"&&req.body.password==""){
     var content = {id:-1}
     let jwt = new JwtUtil(content);
     let token = jwt.generateToken();
@@ -85,20 +92,24 @@ router.post('/query',urlencodedParser, async (req, res) => {
        res.status(400).send("token expired")
        return;
     }
-  console.log("admin query mysql:"+req.body.query)
+  myprint("admin query mysql:"+req.body.query)
   const result = await query(req.body.query);
   res.status(200).send(result)
 })
-router.post('/log',urlencodedParser, async (req, res) => {
 
+
+router.post('/logfile',urlencodedParser, async (req, res) => {
+  myprint("logfile")
   userid = getid(req.body.token)
     if(userid!="-1"){
        res.status(400).send("token expired")
        return;
     }
-  console.log("admin query mysql:"+req.body.query)
-  const result = await query(req.body.query);
-  res.status(200).send(result)
+  var txtpath = path.join(__dirname, '/../../tmp/', 'forever.log');
+  myprint(txtpath)
+  var contentText = fs.readFileSync(txtpath,'utf-8');
+  // myprint(contentText)
+  res.status(200).send(contentText)
   
   
 })
@@ -107,6 +118,7 @@ router.get('/',urlencodedParser, async (req, res) => {
     res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "adminLogin.html") );
     
 })
+
 
 
  module.exports = router

@@ -1,36 +1,110 @@
+
 <!DOCTYPE html>
 <html lang="en" >
 
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="public/css/personal.css">
+        <script src="public/jslib/axios.min.js"></script>
         <link rel="stylesheet" href="public/css/admin.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script type="text/javascript" src="public/js/admin.js"></script>
+        <title>ADMIN</title>
  
     </head>
     <body >
-        <div id="container">
-            <div id='mysqlContainer'>
-                <div id="inputPart">
-                    <input type="text" name="query" class="query" id = "name2" value="" spellcheck='false'>
-                    <button type="goquery" id="goquery" onclick="query()">Go!</button>
-                </div>
-                <div id='resultPart'>
-                </div>
-                
+      <div class="loading"><i class="fa fa-spinner fa-pulse" ></i></div>
+        <i class="fa fa-sign-out fa-2x quit" onclick="location.href='/main'"></i>
+        <div class="tabs">
+            <input class="tab" id="tab--1" type="radio" name="tabs" checked="checked">
+            <input class="tab" id="tab--2" type="radio" name="tabs">
+            <input class="tab" id="tab--3" type="radio" name="tabs">
+            <input class="tab" id="tab--4" type="radio" name="tabs">
+            <label class="button" id="button--1" for="tab--1"><i class="fa fa-search fa-2x"></i></label>
+            <label class="button" id="button--2" for="tab--2"><i class="fa fa-table fa-2x"></i></label>
+            <label class="button" id="button--3" for="tab--3"><i class="fa fa-heart fa-2x
+                "></i></label>
+            <label class="button" id="button--4" for="tab--4"><i class="fa fa-user fa-2x"></i></label>
+
+            
+            <div class="display" id="display--1" >
+              <span class="title">Mysql Query</span>
+              <div id="container">
+                  <div id='mysqlContainer'>
+                      <div id="inputPart">
+                          <input type="text" name="query" class="query" id = "name2" value="" spellcheck='false'>
+                          <button type="goquery" id="goquery" onclick="query()">Go!</button>
+                      </div>
+                      <div id='resultPart'>
+                      </div>
+                  </div>   
+              </div>
+            
+              
             </div>
-    
-    
-            <div id='logContainer'>
-                <div id='log'>
-    
-    
+
+            <div class="display"  id="display--2"> 
+              <span class="title">Table</span> 
+              <div id="container">
+                <div class="btns">
+                  <div class='btn' onclick="demo.getuser()">user</div>
+                  <div class='btn' onclick="demo.getcatalogue()">catalogue</div>
+                  <div class='btn' onclick="demo.getdb()">db</div>
+                  <div class='btn' onclick="demo.getimg()">img</div>
                 </div>
-    
+                <script type="text/x-template" id="grid-template">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th v-for="key in columns"
+                          @click="sortBy(key)"
+                          :class="{active: sortKey == key}">
+                          {{key | capitalize}}
+                          <span class="arrow"
+                            :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+                          </span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="
+                        entry in data
+                        | filterBy filterKey
+                        | orderBy sortKey sortOrders[sortKey]">
+                        <td v-for="key in columns">
+                          {{entry[key]}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </script>
+
+                <!-- demo root element -->
+                <div id="demo">
+                  <form id="search">
+                    Search <input name="query" v-model="searchQuery">
+                  </form>
+                  <demo-grid
+                    :data="gridData"
+                    :columns="gridColumns"
+                    :filter-key="searchQuery">
+                  </demo-grid>
+                </div>
+              </div>
             </div>
-        </div>
-       
+
+            
+            <div class="display" id="display--3">
+              {{logdata}}
+              
+            </div>
+            <div class="display" id="display--4"><span class="title">But it works!</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur aperiam, esse ex ipsa? Quibusdam itaque dolor modi laudantium quod deleniti est provident incidunt? Voluptas animi aut, non id, ipsam voluptates.</p>
+            </div>
     </body>
+    <script type="text/javascript" src="public/js/admin.js"></script>
 
     </html>
    
+
