@@ -18,7 +18,7 @@ function trylogin(){//如果没token 用login去后端要token。notepage是需�
 
 
 function blog() {
-    location.href='/blog'
+    location.href='/blog/2/0'
 }
 function tempnote() {
     location.href='/tempnote'

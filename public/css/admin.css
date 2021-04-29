@@ -473,6 +473,19 @@ th.active .arrow {
   overflow: auto !important;
 }
 
+
+.display::-webkit-scrollbar {
+  width: 8px;               /* width of the entire scrollbar */
+}
+.display::-webkit-scrollbar-track {
+  background: transparent;      /* color of the tracking area */
+}
+.display::-webkit-scrollbar-thumb {
+  background-color: black;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 2px solidvar(--righthalfcolor);  /* creates padding around scroll thumb */
+}
+
 .btns{
   display:flex;
   flex-direction:row;
@@ -487,4 +500,19 @@ th.active .arrow {
   padding:5px;
   background-color:var(--lefthalfcolor);
   border-radius:5%;
+}
+
+.modal{
+  width: 500%;
+  height: 500%;
+  z-index: 9999;
+  display: flex;
+  position: fixed;
+  background-color: var(--indexBGcolor);
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+}
+
+.loading{
 }

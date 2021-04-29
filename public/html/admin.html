@@ -7,15 +7,18 @@
         <link rel="stylesheet" href="public/css/personal.css">
         <script src="public/jslib/axios.min.js"></script>
         <link rel="stylesheet" href="public/css/admin.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+        <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
         <title>ADMIN</title>
  
     </head>
     <body >
+      <div class="modal">
+        <i class="fa fa-spinner fa-pulse loading" ></i>
+      </div>
       <div class="loading"><i class="fa fa-spinner fa-pulse" ></i></div>
-        <i class="fa fa-sign-out fa-2x quit" onclick="location.href='/main'"></i>
+        <i class="fa fa-sign-out fa-2x quit" onclick="  localStorage.adminToken='';  location.href='/admin'; "></i>
         <div class="tabs">
             <input class="tab" id="tab--1" type="radio" name="tabs" checked="checked">
             <input class="tab" id="tab--2" type="radio" name="tabs">

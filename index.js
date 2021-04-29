@@ -20,6 +20,9 @@ app.set('trust proxy', true);// 设置以后，req.ips是ip数组；如果未经
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());//数据JSON类型
 
+  app.set('view engine', 'ejs');//设置之后就能render .ejs了
+  app.set("views",__dirname + "/public/html/"); //这个设置在router里报错 说No default engine was specified and no extension was provided.
+
 
 
 

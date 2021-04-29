@@ -1,5 +1,17 @@
+function getWindowSize(params) {
+    let windowWidth=$(window).width();
+    let windowHeigh=$(window).height();
+    let documentWidth = 1800;
+    zoomScale=windowWidth/documentWidth;
+    // console.log(zoomScale)
+    // console.log(documentWidth)
+    // console.log(windowWidth)
+    $('body').css({'zoom':zoomScale});
+    
+}
 
 
+$(window).bind('resize',function(){getWindowSize()});
 var vm = new Vue({
     el: '.databaseContainer',
     data: {
@@ -55,6 +67,16 @@ var vm = new Vue({
                 that.nowopendbid = response.data.nowopendbid;
                 // console.log(that.nowopendbid)
                 for(var i = 0; i < that.databases.length; i++) {
+
+                    if(that.databases[i].status==0){
+                        that.databases[i].status='Private';
+                    }else if(that.databases[i].status==1){
+                        that.databases[i].status='Reviewing';
+                    }
+                    else if(that.databases[i].status==2){
+                        that.databases[i].status='Public';
+                    }
+
                     if(that.databases[i].dbid == that.nowopendbid){
                         that.databases[i].checked = 'True';
                     }else{
@@ -124,13 +146,11 @@ document.addEventListener("keypress", hideMenu);
 document.addEventListener("contextmenu", (e) => {
     // console.log(e.path[0])
     let x = e.path[0].id
-    $(".newfile").css("display","none");
     $(".newfolder").css("display","none");
     $(".trash").css("display","none");
-    $(".upload").css("display","none");
     $(".rename").css("display","none");
-    $(".foldall").css("display","none");
-    $(".unfoldall").css("display","none");
+    $(".soloppl").css("display","none");
+    $(".multippl").css("display","none");
     if(x=="pathUnit"||x=="pathContainer"){//右键在file上
         
         e.preventDefault();
@@ -138,6 +158,8 @@ document.addEventListener("contextmenu", (e) => {
         if(x=="pathUnit"){
             $(".trash").css("display","flex");
             $(".rename").css("display","flex");
+            $(".soloppl").css("display","flex");
+            $(".multippl").css("display","flex");
         }
         
         else if(x=="pathContainer"){
@@ -216,6 +238,22 @@ menus: [
         },
     },
     
+    {
+        name: "public/png/soloppl.png",
+        class: "soloppl",
+        onClick: function (e) {
+            soloppl();
+        },
+    },
+    
+    {
+        name: "public/png/multippl.png",
+        class: "multippl",
+        onClick: function (e) {
+            multippl();
+        },
+    },
+    
 ],
 });
 
@@ -236,9 +274,6 @@ function hideMenu(e) {
 document.addEventListener("click", hideMenu);
 document.addEventListener("keypress", hideMenu);
 /*右键的context menu*/
-// $(document).ready(function(){
-//     vm.refresh()
-// });
 
 function newdb() {
     $.ajax({cache:false,
@@ -298,59 +333,55 @@ function deldb() {
     
 }
 
-       /* 重命名全选 */
-    function selectText(obj){
-        console.log(obj)
-        if (document.selection) {
-            var range = document.body.createTextRange();
-            range.moveToElementText(obj[0]);
-            range.select();
-        } else if (window.getSelection) {
-            var range = document.createRange();
-            range.selectNodeContents(obj[0]);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-        }
+/* 重命名全选 */
+function selectText(obj){
+    console.log(obj)
+    if (document.selection) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(obj[0]);
+        range.select();
+    } else if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNodeContents(obj[0]);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
     }
-    /* 重命名全选 */
-    /* 重命名 */
-    function rename() {
-        // console.log("renamefor " +(localStorage.contextmenudbname))
-        var obj  = document.getElementsByName(localStorage.contextmenudbid)
-        // console.log(obj)
-        $(obj).attr("contentEditable",true)
-        localStorage.edited = 1;
-        $(obj).focus();
-            selectText(obj);
-    }
-    /* 重命名 */
-    function myblur(obj) {
-    
-        if($(obj).html()==undefined)
-        return;
-        if(localStorage.edited == 1){
-            localStorage.edited = 0;
-    
-            if($(obj).html().length<=2){
-                alert("too short")
-                vm.refresh();
-            }else{
-                var s = "";
-                s = $(obj).html();
-                // console.log(s)
-                s = s.replace(/\s*/g,"");
-                s = s.replace(/<div>/g, "");
-                s = s.replace(/<\/div>/g, "");
-                savedbname(s,$(obj).attr('dbid'));
-                // console.log(s)
-                // console.log($(obj).attr('dbid'))
-                
-            }
-            // console.log($(obj).html())
+}
+/* 重命名全选 */
+/* 重命名 */
+function rename() {
+    // console.log("renamefor " +(localStorage.contextmenudbname))
+    var obj  = document.getElementsByName(localStorage.contextmenudbid)
+    // console.log(obj)
+    $(obj).attr("contentEditable",true)
+    localStorage.edited = 1;
+    $(obj).focus();
+        selectText(obj);
+}
+/* 重命名 */
+function myblur(obj) {
+
+    if($(obj).html()==undefined)
+    return;
+    if(localStorage.edited == 1){
+        localStorage.edited = 0;
+
+        if($(obj).html().length<=2){
+            alert("too short")
+            vm.refresh();
+        }else{
+            var s = "";
+            s = $(obj).html();
+            s = s.replace(/\s*/g,"");
+            s = s.replace(/<div>/g, "");
+            s = s.replace(/<\/div>/g, "");
+            savedbname(s,$(obj).attr('dbid'));
             
-            $(obj).attr("contentEditable",false)
-            }
-    }
+        }
+        
+        $(obj).attr("contentEditable",false)
+        }
+}
 /*保存目录*/
 function savedbname(dbname,dbid) {
     console.log("dbname: "+dbname +" dbid: "+dbid)
@@ -371,4 +402,59 @@ function savedbname(dbname,dbid) {
         })
 }
 /*保存目录*/
+
+
+
+/*私有化*/
+function soloppl(params) {
+    console.log("solo ppl")
+        $.ajax({ 
+            cache:false,
+            url:"personal/private",
+            type: "post",
+            data:{token:localStorage.token, dbid : localStorage.contextmenudbid},
+        
+            success: function (returnValue) {
+                code = (returnValue.code)
+                if(code == 0){
+                    console.log("Already private")
+                }else if (code == 1 || code ==2){
+                    console.log("success")
+                }
+                vm.refresh();
+            },
+            error: function (returnValue) {
+                alert(returnValue.responseText);;
+                location.href = "/"
+            }
+        })
+
+
+    
+}
+/*私有化*/
+
+
+/*公开*/
+function multippl(params) {
+    console.log("multi ppl")
+        $.ajax({ 
+            cache:false,
+            url:"personal/public",
+            type: "post",
+            data:{token:localStorage.token, dbid : localStorage.contextmenudbid},
+        
+            success: function (returnValue) {
+                console.log(returnValue)
+                code = (returnValue)
+                vm.refresh();
+            },
+            error: function (returnValue) {
+                alert(returnValue.responseText);;
+                location.href = "/"
+            }
+        })
+
+}
+/*公开*/
 

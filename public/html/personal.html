@@ -36,11 +36,20 @@
                 <div class="databaseContainer" id="pathContainer">
                   <div class="grid"  v-for="database in databases" id="pathContainer">
                     <div class="databaseUnit" id="pathUnit"   v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname"  v-bind:class="{chosen:database.checked}" v-on:click="clickUnit(database.dbid)">
-                      <div style="margin-top:5%;" class="textUnit" id="pathUnit" v-bind:rename='database.dbname' v-bind:name='database.dbid' v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname" contenteditable='false'  tabindex='1' onblur='myblur(this);'   spellcheck='false'>
+                      <div  class="textUnit" id="pathUnit" v-bind:rename='database.dbname' v-bind:name='database.dbid' v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname" contenteditable='false'  tabindex='1' onblur='myblur(this);'   spellcheck='false'>
                         {{database.dbname}}
                       </div>
-                      <div  id="pathUnit"  class="dbinfo textUnit"  v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname" >{{Math.floor(database.size/1000000)}} M</div>
+                      <div class="infocontainer">
+                        <div  id="pathUnit"  class="dbinfo textUnit"  v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname" >Size: {{Math.floor(database.size/1000000)}}M</div>
+                          <div id="pathUnit"  class="dbinfo textUnit"  v-bind:dbid="database.dbid"   v-bind:dbname="database.dbname">Status: {{database.status}}</div>
+                        
+
+
+                      </div>
+                      <!-- <div ></div> -->
                     </div>
+                    
+                      
                     
                       
                   </div>
@@ -51,14 +60,27 @@
 
 
 
-            <div class="display" id="display--2"> <span class="title">No JavaScript Needed</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex soluta dolorum porro maiores id ipsum eos excepturi perferendis similique nihil quasi tempora facilis, natus necessitatibus quam in sed enim repellat temporibus beatae assumenda velit veritatis. Adipisci ex vero corrupti est recusandae nihil minima autem odio dolor velit quam voluptatibus delectus, tempore quo odit placeat ipsa sit, veniam id ducimus exercitationem! Facere eius tempore voluptatem harum accusantium officiis quos officia, explicabo assumenda beatae mollitia molestias ad aut minima error ut, id omnis perferendis, nesciunt animi. Facere, recusandae, architecto, soluta et porro magnam repudiandae, aperiam harum accusamus saepe ad commodi explicabo labore!</p>
+            <div class="display" id="display--2">
+              
+              <div class="container" >
+                <span class="title">Blog</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex soluta dolorum porro maiores id ipsum eos excepturi perferendis similique nihil quasi tempora facilis, natus necessitatibus quam in sed enim repellat temporibus beatae assumenda velit veritatis. Adipisci ex vero corrupti est recusandae nihil minima autem odio dolor velit quam voluptatibus delectus, tempore quo odit placeat ipsa sit, veniam id ducimus exercitationem! Facere eius tempore voluptatem harum accusantium officiis quos officia, explicabo assumenda beatae mollitia molestias ad aut minima error ut, id omnis perferendis, nesciunt animi. Facere, recusandae, architecto, soluta et porro magnam repudiandae, aperiam harum accusamus saepe ad commodi explicabo labore!</p>
+            
+              </div>
             </div>
-            <div class="display" id="display--3"><span class="title">Ugly markup though...</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas ipsam eveniet dolor iste blanditiis sunt, accusamus cupiditate ratione voluptates tenetur minus facilis saepe laudantium quod dicta, optio illum nulla dignissimos soluta velit. Tempora, inventore. Nesciunt, quasi, iste. Dolorum amet porro, repellendus cumque. Delectus ut, saepe nobis quas minus numquam, culpa dolor dolorum nisi ducimus quam harum impedit architecto quasi sunt pariatur cum dolorem aut, aliquam mollitia voluptates deleniti animi. Delectus dignissimos, libero pariatur aliquid, necessitatibus vel obcaecati natus labore rerum.</p>
+            <div class="display" id="display--3">
+              <div class="container" >
+                <span class="title">Theme</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex soluta dolorum porro maiores id ipsum eos excepturi perferendis similique nihil quasi tempora facilis, natus necessitatibus quam in sed enim repellat temporibus beatae assumenda velit veritatis. Adipisci ex vero corrupti est recusandae nihil minima autem odio dolor velit quam voluptatibus delectus, tempore quo odit placeat ipsa sit, veniam id ducimus exercitationem! Facere eius tempore voluptatem harum accusantium officiis quos officia, explicabo assumenda beatae mollitia molestias ad aut minima error ut, id omnis perferendis, nesciunt animi. Facere, recusandae, architecto, soluta et porro magnam repudiandae, aperiam harum accusamus saepe ad commodi explicabo labore!</p>
+            
+              </div>
             </div>
-            <div class="display" id="display--4"><span class="title">But it works!</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur aperiam, esse ex ipsa? Quibusdam itaque dolor modi laudantium quod deleniti est provident incidunt? Voluptas animi aut, non id, ipsam voluptates.</p>
+            <div class="display" id="display--4">
+              <div class="container" >
+                <span class="title">Setting</span>
+                <p>个人界面 设置等，个人消息考虑再加一个tab</p>
+            
+              </div>
             </div>
           </div>
           <script type="text/javascript" src="public/js/personal.js"></script>

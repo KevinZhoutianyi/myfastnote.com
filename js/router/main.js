@@ -157,7 +157,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
    myprint("userid:"+userid+" is ask for catalogue");
  
  
-   const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+userid+" and dbid =" + dbid);
+   const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+userid+" and dbid =" + dbid + " order by createtime");
    if(result2.length>=0){
       res.status(200).send(result2);
    }  

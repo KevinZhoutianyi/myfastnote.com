@@ -1,7 +1,7 @@
 /* ---------------------------------------加载----------------------------------------*/
 var zoomScale = 1
 var isPhone = 0;var finishiloading = 0;
-var questionNum = 0;
+var questionNum = 1;
 function getWindowSize(){
     // alert(window.innerWidth)
     if(window.innerWidth<800){
@@ -49,10 +49,20 @@ function getWindowSize(){
         fullscreen()
     }
 }
+
+function fitheight(){ 
+    m = document.getElementById("md-area");
+    m.style.height='auto';
+    m.style.height = m.scrollHeight + 100 + 'px';
+    mdSwitch();
+
+}
 $(window).bind('resize',function(){getWindowSize()});
 $(document).ready(function(){
     getWindowSize();
     refreshQuestion();
+    
+    
     if(localStorage.first==null){
         arrow();
         localStorage.first = 1;
@@ -83,7 +93,7 @@ function showboth(){
 
     m = document.getElementById("md-area");
     m.style.height='auto';
-    m.style.height = m.scrollHeight + 50 + 'px';
+    m.style.height = m.scrollHeight + 100 + 'px';
 }
 
 
@@ -103,7 +113,7 @@ function showleft(){
         $("#md-area").css("width","100%");
         m = document.getElementById("md-area");
         m.style.height='auto';
-        m.style.height = m.scrollHeight + 50 + 'px';
+        m.style.height = m.scrollHeight + 100 + 'px';
 }
 /* 加载上次编辑文档，加载存七牛的token */
 
@@ -124,7 +134,7 @@ function loadData() {
                 loadcatalogue('first');
                 m = document.getElementById("md-area");
                 m.style.height='auto';
-                m.style.height = m.scrollHeight + 50 + 'px';
+                m.style.height = m.scrollHeight + 100 + 'px';
                 mdSwitch();
                  finishiloading = 1;
             }
@@ -136,7 +146,7 @@ function loadData() {
                 loadcatalogue('first');
                 m = document.getElementById("md-area");
                 m.style.height='auto';
-                m.style.height = m.scrollHeight + 50 + 'px';
+                m.style.height = m.scrollHeight + 100 + 'px';
                 mdSwitch();
                 finishiloading = 1;
             }
@@ -168,7 +178,7 @@ function loadfile(id) {
             localStorage.nowopenfileid = returnValue.fileid;
             m = document.getElementById("md-area");
             m.style.height='auto';
-            m.style.height = m.scrollHeight + 50 + 'px';
+            m.style.height = m.scrollHeight + 100 + 'px';
             mdSwitch();
         },
         error: function (returnValue) {
@@ -400,11 +410,11 @@ function savecontent() {
         
     console.log("saving")
     m = document.getElementById("md-area");
-        m.style.height='auto';
-        m.style.height = m.scrollHeight + 50 + 'px';
+        // m.style.height='auto';保存的时候不移动到顶部 看有啥问题
+        // m.style.height = m.scrollHeight + 100 + 'px';
 
-        $("#left").scrollTop(localStorage.leftscrolltop);
-        $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
+        // $("#left").scrollTop(localStorage.leftscrolltop);
+        // $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
         m = document.getElementById("md-area").value;
         m = m.replace(/\\/g,"\\\\");
         m = m.replace(/\"/g,"\\\"");
@@ -483,7 +493,7 @@ function fullscreen(){
         // Process event...
         m = document.getElementById("md-area");
         m.style.height='auto';
-        m.style.height = m.scrollHeight + 50 + 'px';
+        m.style.height = m.scrollHeight + 100 + 'px';
         $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
         
         //防止 全屏 换文件 小屏 后 left高度不对
@@ -547,10 +557,10 @@ function inputChange(e){
                         localStorage.leftscrolltop = $("#left").scrollTop();
                         localStorage.rightscrolltop = $("#right").scrollTop();
                         m = document.getElementById("md-area")
-                        m.style.height='auto';
-                        m.style.height = m.scrollHeight + 50 + 'px';
-                        mdSwitch();
                         
+                        m.style.height='auto';
+                        m.style.height = m.scrollHeight + 100 + 'px';
+                        mdSwitch();
                         $(".loading").css("display","none")
                         $("#left").scrollTop(localStorage.leftscrolltop);
                         $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面

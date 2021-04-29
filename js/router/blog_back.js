@@ -15,6 +15,7 @@ const JwtUtil = require('../jwt');
 const { strict } = require('assert');
 var router = express.Router();
 var app = express();
+var ejs = require('ejs') 
 //要上传的空间名
 var bucket = 'onlydrinkwater'; 
 var imageUrl = 'img.myfastnote.com'; // 域名名称
@@ -54,8 +55,9 @@ let query = function( sql, values ) {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.set('trust proxy', true);// 设置以后，req.ips是ip数组；如果未经过代理，则为[]. 若不设置，则req.ips恒为[]
   app.use('/public', express.static('public'));
-  app.use(bodyParser.json());//数据JSON类型
   
+  app.use(bodyParser.json());//数据JSON类型
+
  
 function getid(token) {
    
@@ -75,7 +77,7 @@ function myprint(output){
 }
 router.post('/catalogue',urlencodedParser, async (req, res) => {
   
-  const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+2+" and dbid =" + 0);
+  const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+req.body.userid+" and dbid =" + req.body.dbid);
   ret = []
   
   result2.forEach(function(e){  
@@ -106,18 +108,20 @@ router.post('/checkip',urlencodedParser, function (req, res) {
     
 
 })
-
 router.post('/content',urlencodedParser, async (req, res) => {
   
-  const result2 = await query("select content from note where userid = 2 and fileid = "+req.body.id);
+  const result2 = await query("select content from note where userid =" +req.body.userid+ " and fileid = "+req.body.fileid+" and dbid = " +req.body.dbid);
  
   res.send(result2[0].content)
 
 })
 
  
-router.get('/',urlencodedParser, async (req, res) => {
-  res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "blog.html") );
+router.get('/:userid/:dbid',urlencodedParser, async (req, res) => {
+  
+  res.render( "blog",{userid:req.params.userid,dbid:req.params.dbid});
+  // res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "blog.html") );
 })
+
 
  module.exports = router

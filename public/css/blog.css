@@ -36,6 +36,7 @@ html,body{
     margin: 0px;
 }
 body{
+  color:white;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -47,6 +48,21 @@ img{
 p>img{
   min-width:51%;
 
+}
+
+td,th{
+  
+  border: 1px solid white;
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:5px;
+  padding-bottom:5px;
+  text-align:center;
+  vertical-align:center;
+  word-break: keep-all;
+}
+th{
+  background-color:var(--lefthalfcolor)
 }
 
 

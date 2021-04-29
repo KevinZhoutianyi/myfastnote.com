@@ -4,7 +4,8 @@
 不同用户fileid可以重复，A有文件10，B也有fileid10
 目录:fatherid = null, level = 0; isnote = 0
 文件：level = 1; isnote = 1;
-管理员userid=-1，用户登录如果userid-1就是expire，admin登录如果不是-1就是expire
+管理员userid=-1，用户登录如果userid-1就是expire，admin登录如果不是-1就是expire\
+db status 0 表示private 1表示待审核 2表示公开 审核失败的时候改为0，再用
 
 
 # 上传七牛云

@@ -144,8 +144,8 @@
   
 .grid{
   
-  width:20%;
-  height:13vw;
+  width: 20%;
+  height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -153,6 +153,7 @@
 
 }
  .databaseUnit{    
+  position:relative;
    cursor:pointer;
    box-shadow: 2px 3px 5px rgb(10 10 10);
    text-align: center;
@@ -171,13 +172,14 @@
    -o-transition: all 0.4s;
    transition: all 0.4s;
    
+   
  }
 
  .databaseUnit:hover{
   background:var(--lefthalfcolor)
  }
 .textUnit{
-  width: 70%;
+  /* width: 70%; */
   font-size:1.2em;
   height:auto;
   overflow: hidden;
@@ -326,6 +328,26 @@
  height:19px !important;
  width:19px !important;
 }
+
+
+.multippl{
+  display:none;
+}
+.multipplimg{
+ height:20px !important;
+ width:20px !important;
+}
+
+
+.soloppl{
+  display:none;
+  margin-left:1px;
+}
+.solopplimg{
+ height:15px !important;
+ width:15px !important;
+}
+
 .cntr-innr {
   display: flex;
     text-align: center;
@@ -348,9 +370,20 @@
  }
 
  .dbinfo{
-   margin-top:4%;
+   /* margin-top:4%; */
    font-size:5px !important;
+   -webkit-transform:scale(0.8);
+   transform:scale(0.8);
  }
  #pathUnit{
    /* margin-top:5%; */
+ }
+
+ .infocontainer{
+   position: absolute;
+   bottom: 2%;
+   display: flex;
+   flex-direction: column;
+   justify-content: start;
+   align-items: center;
  }

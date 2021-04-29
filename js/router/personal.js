@@ -94,7 +94,7 @@ router.post('/refresh',urlencodedParser, async (req, res) => {
   }
     myprint("userid:"+userid+" refreshing database")
     
-    const result = await query("select dbid,dbname,size from db where userid = '"+userid+"'");
+    const result = await query("select dbid,dbname,size,status from db where userid = '"+userid+"'");
     
     if(result.length>=0){
   
@@ -180,6 +180,67 @@ router.post('/rename',urlencodedParser, function (req, res) {//rename
      })
 
 })
+
+
+
+router.post('/private',urlencodedParser,  async (req, res) => {
+  var dbid = req.body.dbid;
+  userid = getid(req.body.token)
+ if(userid=="-1"){
+    res.status(400).send("token expired")
+    return;
+ }
+ myprint("userid:"+userid+" is privatize db " + dbid);
+ const result1 = await query("select status from db where userid="+userid+" and dbid ="+dbid);
+ status = result1[0]["status"];
+ myprint("now status for db"+dbid+":"+status)//得到当前打开的db
+ if(status==0){//当前私有
+  var data = {code:0}
+  res.status(200).send(data)
+ }else if(status==1){//当前正在审核 删除待审核表中 该条记录
+  const result2 = await query("delete from review where userid="+userid+" and dbid ="+dbid);
+  const result3 = await query("update db set status = 0 where userid="+userid+" and dbid ="+dbid);
+  var data = {code:1}
+  res.status(200).send(data)
+
+ }else if(status==2){//当前公开 改为私有 用/blog访问的时候 禁止
+  const result4 = await query("update db set status = 0 where userid="+userid+" and dbid ="+dbid);
+  var data = {code:2}
+  res.status(200).send(data)
+
+ }
+})
+
+
+
+
+router.post('/public',urlencodedParser,  async (req, res) => {
+  var dbid = req.body.dbid;
+  userid = getid(req.body.token)
+ if(userid=="-1"){
+    res.status(400).send("token expired")
+    return;
+ }
+ myprint("userid:"+userid+" is publicize db " + dbid);
+ const result1 = await query("select status from db where userid="+userid+" and dbid ="+dbid);
+ status = result1[0]["status"];
+ myprint("now status for db"+dbid+":"+status)//得到当前打开的db
+ if(status==0){//当前私有
+  const result2 = await query("insert into review(userid,dbid) values("+userid+","+dbid+")");
+  const result3 = await query("update db set status = 1 where userid="+userid+" and dbid ="+dbid);
+  var data = {code:0}
+  res.status(200).send(data)
+ }else if(status==1){//当前正在审核
+  var data = {code:1}
+  res.status(200).send(data)
+
+ }else if(status==2){//当前公开 改为私有 用/blog访问的时候 禁止
+  var data = {code:2}
+  res.status(200).send(data)
+
+ }
+})
+
 
 router.post('/deldb',urlencodedParser, async (req, res) => {
   userid = getid(req.body.token)

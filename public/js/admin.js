@@ -1,35 +1,4 @@
 var isLogin = 0;
-function login(){
-    console.log("login")
-    $.ajax({
-        //几个参数需要注意一下
-            type: "POST",//方法类型
-            url: "/admin/login" ,//url
-            data: $('#myform').serialize(),
-            success: function (result) {
-                // console.log(result)
-                localStorage.adminToken = result;
-                $.ajax({
-                    //几个参数需要注意一下
-                        type: "POST",//方法类型
-                        url: "/admin/showpage" ,//url
-                        success: function (result) {
-                            $('body').html($(result));
-                            isLogin = 1;
-                            demo.getcatalogue()
-                            // display3.logfile()
-                        },
-                        error : function(result) {
-                            alert("fail");
-                        }
-                    });
-            },
-            error : function(result) {
-                alert("fail");
-            }
-        });
-
-}
 function query(){
     console.log("query")
     $.ajax({
@@ -42,15 +11,12 @@ function query(){
                 $('#resultPart').text(JSON.stringify(result))
             },
             error : function(result) {
-                alert("fail");
+                console.log("fail");
             }
         });
 
 }
 
-$(document).ready(function(){
-    document.getElementById("name2").focus();
-});
 
 
 
@@ -201,6 +167,51 @@ Vue.component('demo-grid', {
           console.log(error);
         });
       }
+    }
+    
+  })
+
+  var login = new Vue({
+    el: '.vuedata',
+    data: {
+    },
+    created () {
+      
+      
+    },
+    methods:{
+      login(){
+        console.log("login")
+        $.ajax({
+            //几个参数需要注意一下
+                type: "POST",//方法类型
+                url: "/admin/login" ,//url
+                data: $('#myform').serialize(),
+                success: function (result) {
+                    // console.log(result)
+                    localStorage.adminToken = result;
+                    $.ajax({
+                        //几个参数需要注意一下
+                            type: "POST",//方法类型
+                            url: "/admin/showpage" ,//url
+                            success: function (result) {
+                                $('body').html($(result));
+                                isLogin = 1;
+                                demo.getcatalogue()
+                                // display3.logfile()
+                                $('.modal').hide()
+                            },
+                            error : function(result) {
+                                alert("fail");
+                            }
+                        });
+                },
+                error : function(result) {
+                    alert("fail");
+                }
+            });
+    
+    }
     }
     
   })

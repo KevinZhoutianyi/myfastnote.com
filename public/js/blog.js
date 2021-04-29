@@ -1,17 +1,3 @@
-// var vm = new Vue({
-//     el: '#databinding',
-//         data: {
-//             show:true,
-//             styleobj :{
-//                 fontSize:'30px',
-//                 color:'red'
-//             }
-//         },
-//         methods : {
-//         }
-//     });
-
-// import "./blog.css";/
 var vm = new Vue({
     el: '#left',
     data: {
@@ -20,19 +6,23 @@ var vm = new Vue({
         ],
     },
     mounted () {
-        let that = this
-        axios
-          .post('blog/catalogue')
-          .then(function (response) { 
-              
-            that.folders = response.data
-            console.log(response.data)
-          })
-          .catch(function (error) { // 请求失败处理
-            console.log(error);
-          });
+        let that = this;
+        info = ($(".info").html())
+        spinfo = (info.split(","))
+        axios.post('/blog/catalogue',{
+            userid:spinfo[0],
+            dbid:spinfo[1],
+        })
+        .then(function (response) { 
+        that.folders = response.data
+        console.log(response.data)
+        }).catch(function (error) { // 请求失败处理
+        console.log(error);
+        });
+
         axios.post('/blog/content', {
-            id : 11
+            userid:spinfo[0],
+            fileid : 0
         })
         .then(function (response) {
             mdValue = response.data;
@@ -60,8 +50,13 @@ var vm = new Vue({
                 $(obj).parent().children("#filecontainer").show();
         },
         clickfile(fileid) {
+            
+            info = ($(".info").html())
+            spinfo = (info.split(","))
             axios.post('/blog/content', {
-                id : fileid
+                userid:spinfo[0],
+                fileid : fileid,
+                dbid:spinfo[1],
             })
             .then(function (response) {
                 mdValue = response.data;
@@ -87,7 +82,7 @@ var vm = new Vue({
 var vm2 = new Vue({
     el: '#right',
     data: {
-        content:"All notes are originally token in Chinese and are translated by translator in this page"
+        content:"Click any file"
     },
    
 });

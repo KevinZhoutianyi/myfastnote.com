@@ -70,7 +70,7 @@ function myprint(output){
 
 router.post('/login',urlencodedParser, async (req, res) => {
   console.log(req.body.username+","+req.body.password+" try to query login\n")
-  if(req.body.username=="admin"&&req.body.password==""){
+  if(req.body.username=="admin"&&req.body.password=="Kevin_1212"){
     var content = {id:-1}
     let jwt = new JwtUtil(content);
     let token = jwt.generateToken();
@@ -82,9 +82,25 @@ router.post('/login',urlencodedParser, async (req, res) => {
     res.status(400)
   }
 })
+
+
+router.post('/checktoken',urlencodedParser, async (req, res) => {
+
+  userid = getid(req.body.token)
+    if(userid!="-1"){
+       res.status(400).send("token expired")
+       return;
+    }
+  myprint("check token success")
+  res.status(200).send("OK")
+})
+
+
 router.post('/showpage',urlencodedParser, async (req, res) => {
   res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "admin.html") );
 })
+
+
 router.post('/query',urlencodedParser, async (req, res) => {
 
   userid = getid(req.body.token)
