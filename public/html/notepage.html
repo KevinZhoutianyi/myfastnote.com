@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" >
+<link rel="shortcut icon"  href="public/png/urlicon.png" >
+<div id='makeitcenter' style='position:fixed;
+top:45%;
+z-index:1;'>
+    <div class="sk-folding-cube">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+    </div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="public/css/notepage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script src="https://ip.ws.126.net/ipquery"></script>
+    <script>localStorage.islock= 1;localStorage.isfull= 0;localStorage.isarrowdown=1; localStorage.showhelp =0;</script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="public/highlight/styles/qtcreator_dark.css">
+    <script src="public/highlight/highlight.pack.js"></script>
+    
+    <script type="text/javascript" src="public/js/notepageload.js"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+               "SVG": { linebreaks: { automatic: true } },
+               "MathMenu": {showRenderer: false}
+        });
+        </script>
+    <script   id="MathJax-script" src="https://cdn.bootcss.com/mathjax/3.1.1/es5/tex-mml-chtml.js"></script>
+    
+   
+    <link rel="stylesheet" href="public/css/avator.css">
+    <title>FastNote</title>
+
+</head>
+<body onLoad="document.getElementById('md-area').focus();  loadData();  syncDivsScrollPos(); mouseover(); ">
+    <!-- checkiplocation(); -->
+    <div class="loading"><i class="fa fa-spinner fa-pulse" ></i></div>
+     <script type="text/javascript" src="public/js/notepage.js"></script>
+    <div id="pop"  style="display: none;"  onmousedown="myblur()">
+        <div id="avatorbg">
+            <div class="col" ontouchstart="this.classList.toggle('hover');">
+				<div class="container">
+					<div class="front" style="background-image: url(public/png/avator.png);">
+						
+					</div>
+					<div class="back" >
+						<div class="inner" onclick="homepage()">
+						  <div id="LINE" style="font-size:12px;">Personal Page</div>
+                        </div>
+                        <img src="public/png/quit.png" style="position:fixed; right:11px; top:11px; width:15px; height:15px" onclick="quit()"></img>
+					</div>
+                    
+				</div>
+			</div>
+        
+        
+        </div>
+        
+        <div id = "backarea" style="left:0px;" onclick="arrow()"></div>
+      
+        <div id="menucontainer" style="height:100%;width:30%;display:flex;flex-direction:column; justify-content:start;">
+            
+        <div style="width: 100%; height: 10%;z-index: 12; "onclick="arrow()"></div>
+            <div id="menuxD">
+                <div id="menutextarea" name="notcare">
+                    <br><h1>loading</h1><br>
+                </div>
+            </div>
+            <div style="width: 100%; height: 14%;z-index: 12; display: flex; flex-direction:column; justify-content: center; align-items:center" >
+                    <div class="cntr-innr">
+                      <label class="search" for="inpt_search">
+                            <input id="inpt_search" type="text" onchange='search(this.value);' spellcheck='false' autocomplete="off"/>
+                        </label>
+                    </div>
+            </div>
+        </div>
+        
+        <div id = "backarea" style="right:0px;" onclick="arrow()"></div>
+
+    </div>
+
+    <div id="questionpop"  style="display: none;">
+        <div id = "backarea" style="left:0px;" onclick="question()"></div>
+        <div id="helpmenu">
+            <!-- <div id="helptext">
+                
+            </div> -->
+            <div id="helpmenuleft" onclick="leftclick()"></div>
+            <div id="helpmenumid">
+                <div id="mathjaxhelp">
+                    <table><thead><tr><th align="center">显示</th><th align="center">命令</th><th align="center">显示</th><th align="center">命令</th></tr></thead><tbody><tr><td align="center">α</td><td align="center">\alpha</td><td align="center">β</td><td align="center">\beta</td></tr><tr><td align="center">γ</td><td align="center">\gamma</td><td align="center">δ</td><td align="center">\delta</td></tr><tr><td align="center">ε</td><td align="center">\epsilon</td><td align="center">ζ</td><td align="center">\zeta</td></tr><tr><td align="center">η</td><td align="center">\eta</td><td align="center">θ</td><td align="center">\theta</td></tr><tr><td align="center">ι</td><td align="center">\iota</td><td align="center">κ</td><td align="center">\kappa</td></tr><tr><td align="center">λ</td><td align="center">\lambda</td><td align="center">μ</td><td align="center">\mu</td></tr><tr><td align="center">ν</td><td align="center">\nu</td><td align="center">ξ</td><td align="center">\xi</td></tr><tr><td align="center">π</td><td align="center">\pi</td><td align="center">ρ</td><td align="center">\rho</td></tr><tr><td align="center">σ</td><td align="center">\sigma</td><td align="center">τ</td><td align="center">\tau</td></tr><tr><td align="center">υ</td><td align="center">\upsilon</td><td align="center">φ</td><td align="center">\phi</td></tr><tr><td align="center">χ</td><td align="center">\chi</td><td align="center">ψ</td><td align="center">\psi</td></tr><tr><td align="center">ω</td><td align="center">\omega</td><td align="center"></td><td align="center"></td></tr></tbody></table>
+                </div>
+                <div id="menuhelp">
+                    <h3 style="margin-top: -30px;"><code>ctrl + s </code>  to save</h3><br><h3>try right click in menu and database management</h3><br><h3>try resize1\2\3 in imgurl</h3>
+                </div>
+
+            </div>
+            <div id="helpmenuright" onclick="rightclick()"></div>
+        </div>
+        <div id = "backarea" style="right:0px;" onclick="question()"></div>
+    </div>
+
+
+    <div id="topbar"></div>
+    <label class="mylabel" style="display:none;" id="toggle" >
+        <input type="checkbox"  style="display:none;" onclick="CheckBox(this)"  />
+        <div class="card"  >
+            <div class="cbfront" style="background-image: url(public/png/book.png);background-size: 80% 80%; background-repeat: no-repeat;"></div>
+            <div class="cbback" style="background-image: url(public/png/pen.png); background-size: 80% 80%; background-repeat: no-repeat;"></div>
+        </div>
+    </label>
+
+    <div id="bg">
+        <div id="left"  > 
+            <textarea name=""   spellcheck="false" id="md-area" cols="30" rows="10"  onkeyup=mdSwitch()  onpropertychange=" this.style.height = this.scrollHeight + 'px'; "  oninput="this.style.height = this.scrollHeight + 'px';"># loading ...</textarea>
+            <div style="height: 50%;"></div>
+            
+        </div>
+        <div id="right" >
+            <div id="show-area">
+                <div style="height: 20px;">
+                    
+                
+                </div>
+            </div>
+            <!-- <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
+            <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img> -->
+            <Img src="public/png/questionmark.png" onclick="question()" id="questionxD" ></Img>
+            <div  id='mouseoverarea' onmouseover="mouseover()"></div>
+            <div  id='extramenu'>
+                
+
+                <Img src="public/png/locker.png" onclick="lock()" id="locked" ></Img>
+                <Img src="public/png/locker2.png" onclick="lock()" id="notlocked" hidden ></Img>
+
+
+                <Img src="public/png/uploadimg.png" id="uploadimg" onclick="uploadmyimg()"></Img>
+
+                <Img src="public/png/fullscreen.png" id="fullscreen" onclick="fullscreen()"></Img>
+                <Img src="public/png/smallscreen.png" id="smallscreen" onclick="fullscreen()" hidden></Img>
+                
+            </div>
+           
+        </div>
+        <div id='seperateline'></div>
+    </div>
+
+
+
+    <Img src="public/png/downarrow.png" onclick="arrow() ;" id="downarrow" ></Img>
+    <div id="bottombar"></div>
+
+
+    <form    enctype="multipart/form-data" id="formdata" style="visibility:hidden">
+        <input name="upload" type="file"  multiple="multiplt" id="uploadbutton" onchange ="doUpload()" style="visibility:hidden;position: absolute; right:50%; top:50%;"/>
+    </form>
+    <form    enctype="multipart/form-data" id="imgformdata" style="visibility:hidden"></form>
+        <input type="file" style="visibility:hidden;position: absolute; right:50%; top:50%;" onchange="inputChange(this)" id="uploadcropimg" name="uploadcropimg" accept="image/png,image/gif,image/jpg,image/jpeg" />
+    </form>
+</body>
+<script>
+document.getElementById('makeitcenter').style.visibility='hidden';
+    
+</script>
+</html>

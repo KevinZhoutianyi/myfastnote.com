@@ -1,0 +1,38 @@
+{
+  "name": "myfastnote.com",
+  "version": "1.0.0",
+  "description": "一个用户 filename可以重复 一个用户 fileid不可以重复 不同用户fileid可以重复，A有文件10，B也有fileid10 目录:fatherid = null, level = 0; isnote = 0 文件：level = 1; isnote = 1; 管理员userid=-1，用户登录如果userid-1就是expire，admin登录如果不是-1就是expire\\ db status 0 表示private 1表示待审核 2表示公开 审核失败的时候改为0，再用",
+  "main": "index.js",
+  "dependencies": {
+    "editor.md": "^1.5.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-rewrite": "0.0.4",
+    "express-urlrewrite": "^1.4.0",
+    "highlight.js": "^10.3.1",
+    "html5-boilerplate": "^8.0.0",
+    "jshint": "^2.12.0",
+    "jsonwebtoken": "^8.5.1",
+    "marked": "^1.2.0",
+    "mathjax": "^3.1.2",
+    "multiparty": "^4.2.2",
+    "mysql": "^2.18.1",
+    "qiniu": "^7.3.2",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KevinZhoutianyi/myfastnote.com.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KevinZhoutianyi/myfastnote.com/issues"
+  },
+  "homepage": "https://github.com/KevinZhoutianyi/myfastnote.com#readme"
+}

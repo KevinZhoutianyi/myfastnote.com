@@ -1,0 +1,15 @@
+:root {
+    --lefthalfcolor:rgb(49, 49, 49);
+    --righthalfcolor:rgb(60,60,60);
+    --modolcolor: rgba(41, 41, 41, 0.356);
+    --menucolor:#272727;
+    --helpcolor:rgb(39, 39, 39);
+    --helpfontcolor:rgb(255,255,255);
+    --alertcolor:rgb(37, 37, 37);
+    --codecolor:rgb(50,50,50);
+    --searchbarcolor:rgb(202, 202, 202);
+    --iconcolor:white;
+    --indexBGcolor:#313135;
+    --indexleftcolor:#1d1d23;
+    --indexrightcolor:#0b0b0c;
+}
