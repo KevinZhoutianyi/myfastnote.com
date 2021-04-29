@@ -20,25 +20,26 @@ var vm = new Vue({
         console.log(error);
         });
 
-        axios.post('/blog/content', {
-            userid:spinfo[0],
-            fileid : 0
-        })
-        .then(function (response) {
-            mdValue = response.data;
-            mdValue = mdValue.replace(/\\/g,"\\\\");
+        // axios.post('/blog/content', {
+        //     userid:spinfo[0],
+        //     fileid : 0,
+        //     dbid:spinfo[1],
+        // })
+        // .then(function (response) {
+        //     mdValue = response.data;
+        //     mdValue = mdValue.replace(/\\/g,"\\\\");
             
-            var html = marked(mdValue.replace(/\\n/g, '\n'))
-            document.getElementById("rightcontent").innerHTML = html;
+        //     var html = marked(mdValue.replace(/\\n/g, '\n'))
+        //     document.getElementById("rightcontent").innerHTML = html;
             
-            MathJax.typesetClear()
-            MathJax.typeset(["#rightcontent"]);
-            mdValue = ""
-            html =""
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        //     MathJax.typesetClear()
+        //     MathJax.typeset(["#rightcontent"]);
+        //     mdValue = ""
+        //     html =""
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
     },
     methods : {
         clickfolder(e){
