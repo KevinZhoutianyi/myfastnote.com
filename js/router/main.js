@@ -167,13 +167,20 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
     
  });
  
- router.post('/savedata',urlencodedParser, function (req, res) {
+ router.post('/savedata',urlencodedParser,async (req, res) => {
     var content = req.body.content;
     var id = req.body.id;
     var dbid = req.body.dbid;
     userid = getid(req.body.token)
     if(userid=="-1"){
        res.status(400).send("token expired")
+       return;
+    }
+    
+    const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+    if(result[0]["status"]!=0){
+       //不是private不让保存
+       res.status(400).send("It's a public notebook, you need to set it to private")
        return;
     }
     myprint("userid:"+userid+" is saving file");
@@ -208,7 +215,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
  // deletefile
- router.post('/deletefile',urlencodedParser, function (req, res) {
+ router.post('/deletefile',urlencodedParser, async (req, res) => {
    var fileid = req.body.fileid;
    var dbid = req.body.dbid;
     userid = getid(req.body.token);
@@ -216,6 +223,13 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
        res.status(400).send("token expired");
        return;
     }
+    
+   const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+   if(result[0]["status"]!=0){
+      //不是private不让保存
+      res.status(400).send("It's a public notebook, you need to set it to private")
+      return;
+   }
     myprint("userid:"+userid+" is deleting folder id:" + fileid);
  
     pool.getConnection(function(err,connection){
@@ -270,13 +284,20 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
  // newfolder
- router.post('/newfolder',urlencodedParser, function (req, res) {
+ router.post('/newfolder',urlencodedParser, async (req, res) => {
    userid = getid(req.body.token)
    let dbid = req.body.dbid;
    if(userid=="-1"){
       res.status(400).send("token expired")
       return;
    }
+   
+   const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+    if(result[0]["status"]!=0){
+       //不是private不让保存
+       res.status(400).send("It's a public notebook, you need to set it to private")
+       return;
+    }
    myprint("userid:"+userid+" is newing folder");
 
     pool.getConnection(function(err,connection){
@@ -309,16 +330,23 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
  // newfile
- router.post('/newfile',urlencodedParser, function (req, res) {
+ router.post('/newfile',urlencodedParser, async (req, res) => {
    userid = getid(req.body.token)
    if(userid=="-1"){
       res.status(400).send("token expired")
       return;
    }
+   
+   var folderid = req.body.folderid;
+   var dbid = req.body.dbid;
+   const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+    if(result[0]["status"]!=0){
+       //不是private不让保存
+       res.status(400).send("It's a public notebook, you need to set it to private")
+       return;
+    }
    myprint("userid:"+userid+" is newing file");
 
-    var folderid = req.body.folderid;
-    var dbid = req.body.dbid;
     
  
     pool.getConnection(function(err,connection){
@@ -360,7 +388,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
  
  
  
- router.post('/savecatalogue',urlencodedParser, function (req, res) {//rename
+ router.post('/savecatalogue',urlencodedParser,async (req, res) => {
     var filename = req.body.filename;
     var fileid = req.body.fileid;
     var dbid = req.body.dbid;
@@ -369,6 +397,12 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       res.status(400).send("token expired")
       return;
    }
+   const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+    if(result[0]["status"]!=0){
+       //不是private不让保存
+       res.status(400).send("It's a public notebook, you need to set it to private")
+       return;
+    }
    myprint("userid:"+userid+" is saving catalogue for file " + fileid);
  
     pool.getConnection(function(err,connection){
@@ -392,7 +426,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
 
 
   
- router.post('/search',urlencodedParser, function (req, res) {//rename
+ router.post('/search',urlencodedParser,async (req, res) => {
    var key = req.body.key;
    var dbid = req.body.dbid;
    userid = getid(req.body.token)
@@ -442,8 +476,15 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
          myprint("token expired!!!!!")
          return;
       }
+      
+      const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+      if(result[0]["status"]!=0){
+         //不是private不让保存
+         res.status(400).send("It's a public notebook, you need to set it to private")
+         return;
+      }
       myprint("userid:"+userid+" is uploading file(md)");
-      const result = await query("select max(fileid) from catalogue where userid="+userid+" and dbid = "+dbid)
+      const resul = await query("select max(fileid) from catalogue where userid="+userid+" and dbid = "+dbid)
       var maxindex = (result[0]["max(fileid)"])
       myprint("maxindex in catalogue ：  "+maxindex)
       if(fields["folderid"]==-1){//不是目录，先创建一个目录
@@ -510,9 +551,16 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
          res.status(400).send("token expired")
          return;
       }
+      
+      const result = await query("select status from db where userid="+userid+" and dbid = "+dbid)
+      if(result[0]["status"]!=0){
+         //不是private不让保存
+         res.status(400).send("It's a public notebook, you need to set it to private")
+         return;
+      }
       //1.判断大小够不够 不够返回400 没空间了
       //2.够的话上传到qiniu后更新usersize和hash
-      const result = await query("select maxsize from user where userid="+userid)
+      const resul = await query("select maxsize from user where userid="+userid)
       const result1 = await query("select size from user where userid="+userid )
       leftsize = parseInt(result[0].maxsize) - parseInt(result1[0].size);
       myprint("userid:"+userid+" size left: "+leftsize)

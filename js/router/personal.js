@@ -134,7 +134,7 @@ router.post('/newdb',urlencodedParser, async (req, res) => {
   myprint("userid:"+userid+" newing database")
   const result1 = await query("select max(dbid) from db where userid="+userid);
   myprint("max db id for user"+userid+":"+result1[0]["max(dbid)"])
-  const result2 = await query("insert into db values("+userid+","+(result1[0]["max(dbid)"]+1)+",'database:"+(result1[0]["max(dbid)"]+1)+"',0,0)");
+  const result2 = await query("insert into db(userid,dbid,dbname,lastopenfileid,size) values("+userid+","+(result1[0]["max(dbid)"]+1)+",'Book: "+(result1[0]["max(dbid)"]+1)+"',0,0)");
   res.status(200).send("OK");
     
 
@@ -149,6 +149,19 @@ router.post('/imgcount',urlencodedParser, async (req, res) => {
   myprint("userid:"+userid+" getting img count")
   const result1 = await query("select count(fileid) from img  where dbid = " +req.body.dbid+ " and userid = " +userid);
   var x = {count:result1[0]["count(fileid)"]}
+  res.status(200).send(x);
+    
+
+});
+
+router.post('/checkstatus',urlencodedParser, async (req, res) => {
+  userid = getid(req.body.token)
+  if(userid=="-1"){
+    res.status(400).send("token expired")
+    return;
+}
+  const result1 = await query("select status from db  where dbid = " +req.body.dbid+ " and userid = " +userid);
+  var x = {status:result1[0]["status"],id:userid,dbid:req.body.dbid}
   res.status(200).send(x);
     
 

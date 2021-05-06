@@ -95,6 +95,17 @@ router.post('/checktoken',urlencodedParser, async (req, res) => {
   res.status(200).send("OK")
 })
 
+router.post('/review',urlencodedParser, async (req, res) => {
+
+  userid = getid(req.body.token)
+    if(userid!="-1"){
+       res.status(400).send("token expired")
+       return;
+    }
+  myprint("getreview")
+  const result = await query("select * from db where status = 1");
+  res.status(200).send(result)
+})
 
 router.post('/showpage',urlencodedParser, async (req, res) => {
   res.status(200).sendFile( path.resolve(__dirname + "/../../public/html/" + "admin.html") );
@@ -112,6 +123,31 @@ router.post('/query',urlencodedParser, async (req, res) => {
   const result = await query(req.body.query);
   res.status(200).send(result)
 })
+
+router.post('/acc',urlencodedParser, async (req, res) => {
+
+  userid = getid(req.body.token)
+    if(userid!="-1"){
+       res.status(400).send("token expired")
+       return;
+    }
+  myprint("admin acc where dbid = " +req.body.dbid+ " and userid = " +userid)
+  const result = await query("update db set status = 2  where dbid = " +req.body.dbid+ " and userid = " +req.body.userid);
+  res.status(200).send(result)
+})
+
+router.post('/rej',urlencodedParser, async (req, res) => {
+
+  userid = getid(req.body.token)
+    if(userid!="-1"){
+       res.status(400).send("token expired")
+       return;
+    }
+  myprint("admin rej where dbid = " +req.body.dbid+ " and userid = " +userid)
+  const result = await query("update db set status = 0  where dbid = " +req.body.dbid+ " and userid = " +req.body.userid);
+  res.status(200).send(result)
+})
+
 
 
 router.post('/logfile',urlencodedParser, async (req, res) => {

@@ -103,7 +103,41 @@
               
             </div>
             <div class="display" id="display--4"><span class="title">But it works!</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur aperiam, esse ex ipsa? Quibusdam itaque dolor modi laudantium quod deleniti est provident incidunt? Voluptas animi aut, non id, ipsam voluptates.</p>
+              <div class="reviewcontainer">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>
+                        userid
+                      </th>
+                      <th>
+                        dbid
+                      </th>
+                      <th>
+                        dbname
+                      </th>
+                      
+                      <th>Accept</th>
+                      <th>Reject</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="x in content">
+                      <td>
+                        {{x.userid}}
+                      </td>
+                      <td>
+                        {{x.dbid}}
+                      </td>
+                      <td>
+                        {{x.dbname}}
+                      </td>
+                      <td @click="acc(x)" style="cursor: pointer;">Accept</td>
+                      <td @click="rej(x)" style="cursor: pointer;" >Reject</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
     </body>
     <script type="text/javascript" src="public/js/admin.js"></script>

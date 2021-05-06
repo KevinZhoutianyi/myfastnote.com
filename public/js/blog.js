@@ -17,7 +17,7 @@ var vm = new Vue({
         that.folders = response.data
         console.log(response.data)
         }).catch(function (error) { // 请求失败处理
-        console.log(error);
+        alert("It's a private blog :(")
         });
 
         // axios.post('/blog/content', {
@@ -83,7 +83,7 @@ var vm = new Vue({
 var vm2 = new Vue({
     el: '#right',
     data: {
-        content:"Click any file"
+        content:""
     },
    
 });
@@ -92,7 +92,7 @@ var vm3 = new Vue({
     el: '#gomain',
     methods : {
         gomain() {
-            location.href='/'
+            location.href=''
         }
     }
 });

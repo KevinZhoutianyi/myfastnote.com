@@ -87,7 +87,9 @@ th{
     border: 3px solid var(--lefthalfcolor);  /* creates padding around scroll thumb */
 }
 .leftcontent{
-    padding: 15%;
+  padding-top: 5%;
+  padding-left: 15%;
+  padding-right: 15%;
     direction: ltr;
 }
 
@@ -137,7 +139,13 @@ th{
 
 
 
-
+.quit{
+  color: white;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 10;
+}
 .folder{
      margin-top: 50px;margin-bottom: 50px;
 }

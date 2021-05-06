@@ -9,13 +9,18 @@ function getWindowSize(params) {
     $('body').css({'zoom':zoomScale});
     
 }
-
+$(document).ready(function(){
+    localStorage.dbshowhelp = 0;
+    $("#questionxD").css('z-index', 99);
+    refreshQuestion()
+    
+})
 
 $(window).bind('resize',function(){getWindowSize()});
 var vm = new Vue({
     el: '.databaseContainer',
     data: {
-        content:"All notes are originally token in Chinese and are translated by translator in this page",
+        content:"",
         databases: [
             
         ],
@@ -140,6 +145,20 @@ var vm = new Vue({
 });
 
 
+
+
+window.addEventListener("keydown", function(e) {
+    console.log("1")
+    if(e.keyCode == 13 && localStorage.edited==1){
+        console.log("2")
+        e.preventDefault();
+        var obj  = document.getElementsByName(localStorage.contextmenudbid)
+        // console.log(obj)
+        myblur(obj);
+    }
+      
+ 
+}, false);
 /*右键的context menu*/
 document.addEventListener("click", hideMenu);
 document.addEventListener("keypress", hideMenu);
@@ -151,23 +170,49 @@ document.addEventListener("contextmenu", (e) => {
     $(".rename").css("display","none");
     $(".soloppl").css("display","none");
     $(".multippl").css("display","none");
+    $(".blog").css("display","none");
+    
+    localStorage.contextmenudbname = $(e.path[0]).attr("dbname");
+    localStorage.contextmenudbid = $(e.path[0]).attr("dbid");
     if(x=="pathUnit"||x=="pathContainer"){//右键在file上
         
         e.preventDefault();
 
         if(x=="pathUnit"){
-            $(".trash").css("display","flex");
-            $(".rename").css("display","flex");
-            $(".soloppl").css("display","flex");
-            $(".multippl").css("display","flex");
+
+            $.ajax({cache:false,
+                url:"personal/checkstatus",
+                type: "post",
+                data:{token:localStorage.token,dbid:localStorage.contextmenudbid},
+            
+                success: function (returnValue) {
+                    if(returnValue.status == 1 ){
+                        $(".soloppl").css("display","flex");
+                        $(".trash").css("display","flex");
+                        $(".rename").css("display","flex");
+
+                    }else if(returnValue.status==0){
+                        $(".multippl").css("display","flex");
+                        $(".trash").css("display","flex");
+                        $(".rename").css("display","flex");
+                    }else if(returnValue.status == 2){
+                        $(".soloppl").css("display","flex");
+                        $(".blog").css("display","flex");
+                        $(".trash").css("display","flex");
+                        $(".rename").css("display","flex");
+
+                    }
+                },
+                error: function (returnValue) {
+                }
+            })
+
         }
         
         else if(x=="pathContainer"){
             $(".newfolder").css("display","flex");
         }
         
-        localStorage.contextmenudbname = $(e.path[0]).attr("dbname");
-        localStorage.contextmenudbid = $(e.path[0]).attr("dbid");
 
         console.log(localStorage.contextmenudbname+","+localStorage.contextmenudbid)
         showMenu(e);
@@ -251,6 +296,14 @@ menus: [
         class: "multippl",
         onClick: function (e) {
             multippl();
+        },
+    },
+    
+    {
+        name: "public/png/blog2.png",
+        class: "blog",
+        onClick: function (e) {
+            blog();
         },
     },
     
@@ -457,4 +510,68 @@ function multippl(params) {
 
 }
 /*公开*/
+
+function blog(params) {
+    $.ajax({cache:false,
+        url:"personal/checkstatus",
+        type: "post",
+        data:{token:localStorage.token,dbid:localStorage.contextmenudbid},
+    
+        success: function (returnValue) {
+            if(returnValue.status == 2){
+                location.href = "/blog/"+returnValue.id+"/"+returnValue.dbid
+
+            }
+        },
+        error: function (returnValue) {
+        }
+    })
+
+}
+
+
+
+/* 右上角帮助 */
+function question(){
+    if(localStorage.dbshowhelp == 1){
+        localStorage.dbshowhelp = 0;
+        $("#questionxD").css('z-index',99);
+        $("#questionpop").hide();
+    }else{
+        localStorage.dbshowhelp = 1;
+        $("#questionxD").css('z-index', -1);
+        $("#questionpop").show();
+        // document.getElementById('md-area').focus();
+    }            
+    }
+/* 右上角帮助 */
+
+/* 帮助菜单切换 */
+
+var questionNum = 1;
+function leftclick(){
+    questionNum = questionNum -1;
+    refreshQuestion()  
+}
+function rightclick(){
+    questionNum = questionNum +1;
+    refreshQuestion()  
+}
+function refreshQuestion(){
+    // alert(questionNum)
+    // console.log($("#helpmenumid").children("#mathjaxhelp"))
+    console.log("!")
+    if(questionNum%2 == 0){
+        
+        $("#helpmenumid").children("#mathjaxhelp").show()
+        $("#helpmenumid").children("#menuhelp").hide()
+    }
+    else if(questionNum%2 == 1){
+        $("#helpmenumid").children("#mathjaxhelp").hide()
+        $("#helpmenumid").children("#menuhelp").show()
+
+    }
+}
+/* 帮助菜单切换 */
+
 

@@ -103,7 +103,7 @@
   .title {
     font-weight: 300;
     font-size: 2em;
-    margin-top: 50px ;
+    margin-top: 70px ;
     margin-bottom: 30px;
     padding: 0;
     display: block;
@@ -234,7 +234,83 @@
     z-index: 10;
 }
 
+/* question */
+#backarea{
+  width: 35%;
+   height: 100%;
+   z-index: 12;
+   position:fixed; 
+   right :0px;
+}
+#questionxD{
+  /* z-index: 99; */
+  position: fixed;
+  right: 25px;
+  top: 13px;
+  height: 30px;
+  width: 31px;
+}
+#pop,#questionpop{
+  height: 100%;
+  width: 100%;
+  z-index:10;
+  position:absolute;
+  /**透明层*/
+  background:var(--modolcolor);
 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#helpmenu{
+  position: fixed;
+  border-radius: 50px;
+  height: 70%;
+  width: 30%;
+  /* background-color: var(--helpcolor); */
+  z-index: 12; 
+  -moz-box-shadow: 10px 10px 5px rgb(0,0,0); /* 老的 Firefox */
+  box-shadow: 10px 10px 5px rgb(0,0,0);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items:flex-start;
+
+  background-image: linear-gradient(to right,#1e1e1e, var(--helpcolor), var(--helpcolor), var(--helpcolor), var(--helpcolor), var(--helpcolor),#1e1e1e);
+}
+#helpmenuleft{
+  width:20%;
+  /* border:1px black solid; */
+  height:100%;
+
+
+}
+#mathjaxhelp{
+  display:none;
+}
+#menuhelp{
+  display:none;
+}
+#helpmenumid{
+  color:var(--helpfontcolor) !important;
+  width:60%;
+  /* border:1px black solid; */
+  height:100%;
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+
+}
+#helpmenuright{
+
+  width:20%;
+  /* border:1px black solid; */
+  height:100%;
+  
+}
+/* question */
 /* context */
 .custom-context-menu{
   flex-wrap: wrap;
@@ -334,6 +410,14 @@
   display:none;
 }
 .multipplimg{
+ height:20px !important;
+ width:20px !important;
+}
+
+.blog{
+  display:none;
+}
+.blogimg{
  height:20px !important;
  width:20px !important;
 }

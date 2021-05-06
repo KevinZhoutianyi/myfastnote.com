@@ -77,7 +77,11 @@ function myprint(output){
   console.log(output)
 }
 router.post('/catalogue',urlencodedParser, async (req, res) => {
-  
+  const result1 = await query("select status from db where userid = "+req.body.userid+" and dbid =" + req.body.dbid);
+  if(result1[0]["status"]!=2){
+    res.status(400).send("It's Private")
+    return;
+  }
   const result2 = await query("select filename,isnote,level,fileid,fatherid from catalogue where userid = "+req.body.userid+" and dbid =" + req.body.dbid);
   ret = []
   
@@ -110,6 +114,11 @@ router.post('/checkip',urlencodedParser, function (req, res) {
 
 })
 router.post('/content',urlencodedParser, async (req, res) => {
+  const result1 = await query("select status from db where userid = "+req.body.userid+" and dbid =" + req.body.dbid);
+  if(result1[0]["status"]!=2){
+    res.status(400).send("It's Private")
+    return;
+  }
   
   const result2 = await query("select content from note where userid =" +req.body.userid+ " and fileid = "+req.body.fileid+" and dbid = " +req.body.dbid);
  

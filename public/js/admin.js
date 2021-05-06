@@ -198,6 +198,7 @@ Vue.component('demo-grid', {
                                 $('body').html($(result));
                                 isLogin = 1;
                                 demo.getcatalogue()
+                                review.getreview()
                                 // display3.logfile()
                                 $('.modal').hide()
                             },
@@ -212,6 +213,77 @@ Vue.component('demo-grid', {
             });
     
     }
+    }
+    
+  })
+
+
+  var review = new Vue({
+    el: '.reviewcontainer',
+    data: {
+      content:[]
+    },
+    created () {
+     
+      
+      
+    },
+    methods:{
+      getreview(){
+        var that = this;
+        console.log("review")
+        $.ajax({
+            //几个参数需要注意一下
+                type: "POST",//方法类型
+                url: "/admin/review" ,//url
+                data:{token:localStorage.adminToken},
+                success: function (result) {
+                  that.content = (result)
+                  console.log(that.content)
+                  // that.$forceUpdate();
+                    
+                },
+                error : function(result) {
+                    alert("fail");
+                }
+            });
+    
+    },
+    
+      rej(x){
+        var that = this
+        $.ajax({
+          //几个参数需要注意一下
+              type: "POST",//方法类型
+              url: "/admin/rej" ,//url
+              data:{token:localStorage.adminToken,userid:x.userid,dbid:x.dbid},
+              success: function (result) {
+                console.log("ok")
+                  
+                that.getreview()
+              },
+              error : function(result) {
+                  alert("fail");
+              }
+          });
+      },
+      acc(x){
+        var that = this
+        $.ajax({
+          //几个参数需要注意一下
+              type: "POST",//方法类型
+              url: "/admin/acc" ,//url
+              data:{token:localStorage.adminToken,userid:x.userid,dbid:x.dbid},
+              success: function (result) {
+                console.log("ok")
+                that.getreview()
+                  
+              },
+              error : function(result) {
+                  alert("fail");
+              }
+          });
+      },
     }
     
   })

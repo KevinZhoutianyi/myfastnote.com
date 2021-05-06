@@ -1,14 +1,18 @@
 
 <html>
-    <div id='makeitcenter' style='position:fixed;
-    top:48%; left:48%;z-index:1;'>
-        Loading...
+    <div style="background-color:rgb(60,60,60); width:500%; height:500%; position:fixed;
+    top:0; left:0;z-index:1; ">
+        <div id='makeitcenter' style='position:fixed;
+        top:48%; left:48%;z-index:1; ' >
+            Loading...
+        </div>
     </div>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/public/css/blog.css">
         <!-- <link rel="stylesheet" href="/public/css/notepage.css"> -->
         <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!-- <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script> -->
         <!-- <script src="https://ip.ws.126.net/ipquery"></script> -->
@@ -54,11 +58,12 @@
                 <div id="rightcontent" class="rightcontent">{{content}}
                 </div>
             </div>
-            <img src="/public/png/gomain.png" id="gomain" style="position: fixed; top:30px; right:30px; height:30px; width:30px; z-index:12;" v-on:click="gomain()">
+            <!-- <img src="/public/png/gomain.png" id="gomain" style="position: fixed; top:30px; right:30px; height:30px; width:30px; z-index:12;" v-on:click="gomain()"> -->
         </div>
 
         <script type="text/javascript" src="/public/js/blog.js"   ></script>
             
+        <i class="fa fa-sign-out fa-2x quit" onclick="window.history.back(); "></i>
     </body>
     <script>
         document.getElementById('makeitcenter').style.visibility='hidden';

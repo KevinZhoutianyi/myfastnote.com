@@ -713,7 +713,7 @@ function savecatalogue(filename,fileid) {
                 loadcatalogue();
             },
             error: function (returnValue) {
-                alert(returnValue.responseText);;
+                // alert(returnValue.responseText);;
                 location.href = "/"
                                     savecontent();
             }
@@ -736,7 +736,7 @@ function newfolder(){
                 setTimeout("rename()", 100 )
             },
             error: function (returnValue) {
-                alert(returnValue.responseText);;
+                // alert(returnValue.responseText);;
                 location.href = "/"
                                     savecontent();
             }
@@ -763,7 +763,7 @@ function opfile(data) {
                         loadcatalogue();
                     },
                     error: function (returnValue) {
-                alert(returnValue.responseText);;
+                // alert(returnValue.responseText);;
                         location.href = "/"
                                     savecontent();
                     }
@@ -785,7 +785,7 @@ function opfile(data) {
                         loadcatalogue();
                     },
                     error: function (returnValue) {
-                        alert(returnValue.responseText);;
+                        // alert(returnValue.responseText);;
                         location.href = "/"
                                     savecontent();
                     }
@@ -812,7 +812,7 @@ function opfile(data) {
                     setTimeout("rename()", 100 )
                 },
                 error: function (returnValue) {
-                    alert(returnValue.responseText);;
+                    // alert(returnValue.responseText);;
                     location.href = "/"
                                     savecontent();
                 }
