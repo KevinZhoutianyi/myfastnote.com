@@ -38,7 +38,7 @@ app.use('/personal', require('./js/router/personal'));
 
 let query = function( sql, values ) {
    // 返回一个 Promise
-   // console.log(sql)
+  //  console.log(sql)
    return new Promise(( resolve, reject ) => {
      pool.getConnection(function(err, connection) {
        if (err) {
@@ -86,6 +86,34 @@ app.post('/login',urlencodedParser, async (req, res) => {
   }else{
     res.status(400).send("fail")
   }  
+})
+
+app.post('/Signup',urlencodedParser, async (req, res) => {
+  console.log(req.body.username+","+req.body.password+" try to Sign up\n")
+  const result = await query("select username from user where username = '"+req.body.username+"'");
+  if(result.length != 0){//是否该用户名已经注册
+    console.log("400")
+    res.status(400).send("fail") //已经注册返回400
+  }else{
+    
+    const result2 = await query("insert into user(username,password,size,maxsize,nowopendbid) values('"+req.body.username+"','"+req.body.password+"',"+0+","+104857600+","+0+") ")
+    // console.log(result2)
+    const result3 = await query("select userid from user where username = '"+req.body.username+"'")
+    // console.log(result3)
+    const result4 = await query("insert into db(userid,dbid,dbname,lastopenfileid,size) values("+result3[0]["userid"]+","+0+",'Book: "+0+"',0,0)");
+    // console.log(result4)
+    
+    res.status(200).send("ok")
+  }
+  //   var content = {id:result[0].userid}
+  //   let jwt = new JwtUtil(content);
+  //   let token = jwt.generateToken();
+  //   console.log("userid "+result[0].userid+" login success"+",his token is "+token)
+  //   res.status(200).send(token)
+
+  // }else{
+  //   res.status(400).send("fail")
+  // }  
 })
 
 

@@ -1,3 +1,5 @@
+
+var zoomScale = 1
 function getWindowSize(params) {
     let windowWidth=$(window).width();
     let windowHeigh=$(window).height();
@@ -13,6 +15,7 @@ $(document).ready(function(){
     localStorage.dbshowhelp = 0;
     $("#questionxD").css('z-index', 99);
     refreshQuestion()
+    getWindowSize()
     
 })
 
@@ -314,10 +317,11 @@ menus: [
 const menus = menuSinglton.getInstance();//加载的时候先创建一次 不然bug
 function showMenu(e) {
     const menus = menuSinglton.getInstance();
-    menus.style.top = `${e.clientY/1+5}px`;
-    menus.style.left = `${e.clientX/1+5}px`;
+    menus.style.top = `${e.clientY/zoomScale+5}px`;
+    menus.style.left = `${e.clientX/zoomScale+5}px`;
     menus.style.display = "flex";
 }
+
 
 function hideMenu(e) {
     const menus = menuSinglton.getInstance();
