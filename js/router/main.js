@@ -485,7 +485,7 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
       }
       myprint("userid:"+userid+" is uploading file(md)");
       const resul = await query("select max(fileid) from catalogue where userid="+userid+" and dbid = "+dbid)
-      var maxindex = (result[0]["max(fileid)"])
+      var maxindex = (resul[0]["max(fileid)"])
       myprint("maxindex in catalogue ：  "+maxindex)
       if(fields["folderid"]==-1){//不是目录，先创建一个目录
          result2 = await query( "INSERT INTO catalogue(userid,fileid,filename,isnote,level,fatherid,dbid) VALUES("+userid +","+(maxindex+1)+",'newfolder',0,0,null,"+dbid+")")
@@ -498,12 +498,12 @@ router.post('/getdata',urlencodedParser, async (req, res) => {
                res.send("fail")
 
             }
-            result2 = await query( "INSERT INTO catalogue VALUES("+userid +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+","+dbid+")")
+            result2 = await query( "INSERT INTO catalogue(userid,fileid,filename,isnote,level,fatherid,dbid) VALUES("+userid +","+(maxindex+index)+",'"+filename+"',1,1,"+(maxindex+1)+","+dbid+")")
             var data = fs.readFileSync(file["file"][index-2]["path"], 'utf-8');
             data = data.replace(/\\/g,"\\\\");
                 data = data.replace(/\"/g,"\'\'");
                 data =data.replace(/\'/g,"\"");
-            result3 = await query( "INSERT INTO note VALUES("+(maxindex+index)+",'"+data+"',"+userid+","+(maxindex+1)+","+dbid+")")
+            result3 = await query( "INSERT INTO note(fileid,content,userid,fatherid,dbid) VALUES("+(maxindex+index)+",'"+data+"',"+userid+","+(maxindex+1)+","+dbid+")")
             
          }
          res.send("success")

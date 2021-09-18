@@ -40,9 +40,9 @@ function getWindowSize(){
         let windowHeigh=$(window).height();
         let documentWidth = 1800;
         zoomScale=windowWidth/documentWidth;
-        // console.log(zoomScale)
-        // console.log(documentWidth)
-        // console.log(windowWidth)
+        console.log(zoomScale)
+        console.log(documentWidth)
+        console.log(windowWidth)
         $('body').css({'zoom':zoomScale});
         
         localStorage.isfull = 1//非手机界面大小的时候 resize之后 设置成 notfullscreen
@@ -495,7 +495,14 @@ function fullscreen(){
         m.style.height='auto';
         m.style.height = m.scrollHeight + 100 + 'px';
         $("#right").scrollTop(localStorage.rightscrolltop);//调整高度后 不移动到最下面
-        
+        let windowWidth=$(window).width();
+        let windowHeigh=$(window).height();
+        let documentWidth = 1800;
+        zoomScale=windowWidth/documentWidth;
+        console.log(zoomScale)
+        console.log(documentWidth)
+        console.log(windowWidth)
+        $('body').css({'zoom':zoomScale});
         //防止 全屏 换文件 小屏 后 left高度不对
     }else{
         localStorage.isfull = 1;
@@ -505,6 +512,8 @@ function fullscreen(){
         $("#right").css("width","100%");
         $("#show-area").css("width","70%");
         $("#seperateline").hide();
+        zoomScale = zoomScale*1.2;
+        $('body').css({'zoom':zoomScale});
     }   
   }
   

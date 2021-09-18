@@ -54,9 +54,11 @@ function signup() {
     $(".left").css("width","0%");
     $(".right").css("width","100%");
     $("#btn").html("Sign Up")
-    $("#myform").html('<input type="text" name="username" id="name1" value="kevin" spellcheck="false"><input type="password" name="password" id="name2" class="firstPW" value="zhoutianyi" spellcheck="false"><input type="password" class="secondPW" name="password2" id="name2" value="zhoutianyi" spellcheck="false">')
+    $("#myform").html('<input type="text" name="username" id="name1" value="" spellcheck="false"><input type="password" name="password" id="name2" class="firstPW" value="" spellcheck="false"><input type="password" class="secondPW" name="password2" id="name2" value="" spellcheck="false">')
 }
-
+function forget() {
+    alert("Closed beta");
+}
  
  $(document).ready(function(){
      
