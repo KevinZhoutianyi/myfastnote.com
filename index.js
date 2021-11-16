@@ -102,6 +102,7 @@ app.post('/Signup',urlencodedParser, async (req, res) => {
     // console.log(result3)
     const result4 = await query("insert into db(userid,dbid,dbname,lastopenfileid,size) values("+result3[0]["userid"]+","+0+",'Book: "+0+"',0,0)");
     // console.log(result4)
+    const result5 = await query("insert into catalogue(userid,fileid,filename,isnote,level,fatherid,dbid)  values("+result3[0]["userid"]+",0,'TryRightClick:)',0,0,null,"+0+");");
     
     res.status(200).send("ok")
   }

@@ -351,7 +351,7 @@ function CheckBox(index){
 var cycle = 10
 function mdSwitch() {
     var mdValue = document.getElementById("md-area").value;
-    var html = marked(mdValue.replace(/\\n/g, '\n'))
+    var html = marked.parse(mdValue.replace(/\\n/g, '\n'))
     for (let index = 0; index < 10; index++) {
         html += "<br>";
     }
